@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     java
     kotlin("jvm") version "1.3.31"
-    id("org.jlleitschuh.gradle.ktlint") version "4.1.0"
+    id("org.jmailen.kotlinter") version "1.26.0"
     id("com.moonlitdoor.git-version") version "0.1.1"
 }
 

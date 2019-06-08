@@ -23,7 +23,7 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.ServerConnector
 import org.eclipse.jetty.util.thread.QueuedThreadPool
 
-fun server(port: Int) : Server {
+fun server(port: Int): Server {
 
     return Server(threadPool).apply {
         handler = ServletBuilder.build()

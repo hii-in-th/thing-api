@@ -47,4 +47,3 @@ class ThingApiServer(val args: Array<String>) {
         }
     }
 }
-
