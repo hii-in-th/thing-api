@@ -4,10 +4,11 @@ plugins {
     java
     kotlin("jvm") version "1.3.31"
     id("org.jlleitschuh.gradle.ktlint") version "4.1.0"
+    id("com.moonlitdoor.git-version") version "0.1.1"
 }
 
 group = "hii"
-version = "1.0-SNAPSHOT"
+version = gitVersion
 
 repositories {
     mavenCentral()
