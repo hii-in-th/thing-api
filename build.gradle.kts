@@ -1,3 +1,4 @@
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -11,14 +12,25 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
-dependencies { //Application dependency block
+dependencies {
+    //Application dependency block
     compile(kotlin("stdlib-jdk8"))
     compile("args4j:args4j:2.33")
 }
 
-dependencies { //Core framework dependency block
+dependencies {
+    //Database dependency block
+    compile("redis.clients:jedis:3.0.1")
+    compile("org.jetbrains.exposed:exposed:0.13.7")
+    compile("org.postgresql:postgresql:42.2.5")
+    testImplementation("com.github.fppt:jedis-mock:0.1.13")
+    testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
+}
+dependencies {
+    //Core framework dependency block
     val jerseyVersion = "2.28"
     compile("org.glassfish.jersey.core:jersey-common:$jerseyVersion")
     compile("org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion")
