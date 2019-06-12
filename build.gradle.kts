@@ -44,6 +44,8 @@ dependencies {
     val log4jVersion = "2.11.1"
     compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
     compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
+
+    testImplementation("junit:junit:4.12")
 }
 
 tasks.withType<KotlinCompile> {
