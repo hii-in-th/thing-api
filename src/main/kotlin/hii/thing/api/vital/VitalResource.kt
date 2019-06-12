@@ -29,7 +29,7 @@ import javax.ws.rs.core.MediaType
 class VitalResource {
 
     @GET
-    fun sample() : String {
+    fun sample(): String {
         return "Helllllllooooooooooo"
     }
 }
