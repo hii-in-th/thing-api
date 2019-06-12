@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao
+package hii.thing.api.vital.dao
 
 interface Dao

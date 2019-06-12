@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.pgsql
+package hii.thing.api.vital.dao.pgsql
+
+import org.jetbrains.exposed.sql.Table
 
 object Message : Table() {
     val time = datetime("time")

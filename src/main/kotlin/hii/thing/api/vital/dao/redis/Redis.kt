@@ -15,7 +15,10 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.redis
+package hii.thing.api.vital.dao.redis
+
+import redis.clients.jedis.HostAndPort
+import redis.clients.jedis.Jedis
 
 class Redis(jedisClusterNodes: Set<HostAndPort>, val expireSec: Int) {
     // private val jc = JedisCluster(jedisClusterNodes) // for production.

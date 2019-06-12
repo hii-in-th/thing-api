@@ -15,7 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.pgsql
+package hii.thing.api.vital.dao.pgsql
+
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 
 class Postgresql(pgUrl: String, username: String, password: String) {
     init {
