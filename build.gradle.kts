@@ -1,4 +1,3 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -19,16 +18,14 @@ dependencies {
     //Application dependency block
     compile(kotlin("stdlib-jdk8"))
     compile("args4j:args4j:2.33")
-}
 
-dependencies {
-    //Database dependency block
     compile("redis.clients:jedis:3.0.1")
     compile("org.jetbrains.exposed:exposed:0.13.7")
     compile("org.postgresql:postgresql:42.2.5")
     testImplementation("com.github.fppt:jedis-mock:0.1.13")
     testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
 }
+
 dependencies {
     //Core framework dependency block
     val jerseyVersion = "2.28"
@@ -43,6 +40,10 @@ dependencies {
     compile("org.eclipse.jetty:jetty-server:$jettyVersion")
     compile("org.eclipse.jetty:jetty-servlet:$jettyVersion")
     compile("org.eclipse.jetty:jetty-http:$jettyVersion")
+
+    val log4jVersion = "2.11.1"
+    compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
+    compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
 }
 
 tasks.withType<KotlinCompile> {
