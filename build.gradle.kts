@@ -45,8 +45,11 @@ dependencies {
     compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
     compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
 
+    compile("com.google.code.gson:gson:2.8.5")
+
     testImplementation("junit:junit:4.12")
     testImplementation("org.mockito:mockito-core:2.28.2")
+    testImplementation("org.amshove.kluent:kluent:1.48")
 }
 
 tasks.withType<KotlinCompile> {
