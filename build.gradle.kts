@@ -46,6 +46,7 @@ dependencies {
     compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
 
     testImplementation("junit:junit:4.12")
+    testImplementation("org.mockito:mockito-core:2.28.2")
 }
 
 tasks.withType<KotlinCompile> {
