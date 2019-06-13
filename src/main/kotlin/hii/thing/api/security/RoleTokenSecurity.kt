@@ -35,7 +35,7 @@ import javax.ws.rs.ext.Provider
 class RoleTokenSecurity : ContainerRequestFilter {
 
     @Context
-    private lateinit var resourceInfo: ResourceInfo
+    lateinit var resourceInfo: ResourceInfo
 
     // TODO ยังไม่ได้กำหนด TokenManager
     lateinit var tokenManager: TokenManager
@@ -52,8 +52,13 @@ class RoleTokenSecurity : ContainerRequestFilter {
         logger.debug("requestToken:$clientToken")
         check(tokenManager.isAccessToken(clientToken)) { "ไม่ใช่ Access token" }
         check(!tokenManager.isExpire(clientToken)) { "access token หมดอายุ" }
+
+        val clientRole = tokenManager.getUserRole(clientToken)
+        check(clientRole.containsSome(rolesAllowed!!.value.toList()))
+
         // Token ที่ดึงจาก securityContext จะได้เป็น access token
-        requestContext.securityContext = TokenSecurityContext(clientToken, requestContext.uriInfo.baseUri.scheme)
+        requestContext.securityContext =
+            TokenSecurityContext(clientToken, requestContext.uriInfo.baseUri.scheme, tokenManager)
 
         logger.info(
             "Name: ${tokenManager.getName(clientToken)} " +
@@ -79,6 +84,13 @@ class RoleTokenSecurity : ContainerRequestFilter {
         const val AUTHORIZATION_HEADER = "Authorization"
         const val BEARER_SCHEME = "Bearer "
         private val logger = getLogger()
+    }
+
+    private fun List<String>.containsSome(list: List<String>): Boolean {
+        forEach {
+            if (list.contains(it)) return true
+        }
+        return false
     }
 
     class DummyChallenge

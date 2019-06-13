@@ -34,6 +34,7 @@ dependencies {
     compile("org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion")
     compile("org.glassfish.jersey.containers:jersey-container-servlet-core:$jerseyVersion")
     compile("org.glassfish.jersey.containers:jersey-container-jetty-servlet:$jerseyVersion")
+    compile("org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion")
     testImplementation("org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVersion")
     testImplementation("org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:$jerseyVersion")
 

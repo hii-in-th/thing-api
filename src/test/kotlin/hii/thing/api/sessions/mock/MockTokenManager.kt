@@ -15,25 +15,23 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api.sessions.mock
 
-import java.security.Principal
-import javax.ws.rs.core.SecurityContext
+import hii.thing.api.security.token.TokenManager
+import hii.thing.api.sessions.SessionsResourceTest
 
-class TokenSecurityContext(
-    val token: String,
-    private val scheme: String,
-    val tokenManager: TokenManager
-) :
-    SecurityContext {
+class MockTokenManager : TokenManager {
 
-    override fun isUserInRole(role: String): Boolean {
-        return tokenManager.getUserRole(token).contains(role)
+    override fun isExpire(token: String): Boolean = false
+
+    override fun isAccessToken(token: String): Boolean = true
+
+    override fun getUserRole(token: String): List<String> {
+        return if (token == SessionsResourceTest.accessToken)
+            listOf("MACHINE")
+        else
+            listOf("HAHAHA")
     }
 
-    override fun getAuthenticationScheme(): String = "Bearer"
-
-    override fun getUserPrincipal(): Principal = Principal { token }
-
-    override fun isSecure() = true
+    override fun getName(token: String): String = "M Machine"
 }

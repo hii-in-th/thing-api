@@ -15,25 +15,6 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api.sessions
 
-import java.security.Principal
-import javax.ws.rs.core.SecurityContext
-
-class TokenSecurityContext(
-    val token: String,
-    private val scheme: String,
-    val tokenManager: TokenManager
-) :
-    SecurityContext {
-
-    override fun isUserInRole(role: String): Boolean {
-        return tokenManager.getUserRole(token).contains(role)
-    }
-
-    override fun getAuthenticationScheme(): String = "Bearer"
-
-    override fun getUserPrincipal(): Principal = Principal { token }
-
-    override fun isSecure() = true
-}
+data class Session(val sessionId: String, val subject: String)
