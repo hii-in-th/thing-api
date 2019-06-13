@@ -52,6 +52,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
         logger.debug("requestToken:$clientToken")
         check(tokenManager.isAccessToken(clientToken)) { "ไม่ใช่ Access token" }
         check(!tokenManager.isExpire(clientToken)) { "access token หมดอายุ" }
+        // Token ที่ดึงจาก securityContext จะได้เป็น access token
         requestContext.securityContext = TokenSecurityContext(clientToken, requestContext.uriInfo.baseUri.scheme)
 
         logger.info(
@@ -61,6 +62,10 @@ class RoleTokenSecurity : ContainerRequestFilter {
         )
     }
 
+    /**
+     * ดึง token ออกมาจาก header
+     * @return Token
+     */
     val ContainerRequestContext.token: String?
         get() {
             val authHeaders = headers[AUTHORIZATION_HEADER]
