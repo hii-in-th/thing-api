@@ -17,7 +17,7 @@
 
 package hii.thing.api.auth
 
-interface TokenManager {
+interface AccessTokenManager {
     fun create(baseToken: String): AccessToken
 
     class NotFoundToken(message: String, cause: Throwable? = null) : Exception(message, cause)

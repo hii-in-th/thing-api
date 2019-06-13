@@ -31,7 +31,9 @@ import javax.ws.rs.core.MediaType
 @Path("/auth/tokens")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-class AccessTokenResource(val manager: TokenManager) {
+
+// TODO ยังไม่ได้กำหนด managerAccess
+class AccessTokenResource(private val managerAccess: AccessTokenManager) {
 
     @Context
     lateinit var req: HttpServletRequest
@@ -52,7 +54,7 @@ class AccessTokenResource(val manager: TokenManager) {
         check(bearer.startsWith("Bearer ")) { "รูปแบบ Authorization ใน http header ไม่ถูกต้อง" }
         check(baseKey != null) { "ไม่พบ Base token ใน Authorization" }
 
-        return manager.create(baseKey)
+        return managerAccess.create(baseKey)
     }
 
     companion object {

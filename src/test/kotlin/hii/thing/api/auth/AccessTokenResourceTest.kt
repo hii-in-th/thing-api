@@ -28,7 +28,7 @@ import javax.ws.rs.client.Entity
 import javax.ws.rs.core.Application
 
 class AccessTokenResourceTest : JerseyTest() {
-    lateinit var mouckTokenManager: TokenManager
+    lateinit var mouckAccessTokenManager: AccessTokenManager
 
     /* ktlint-disable max-line-length */
     val baseKey =
@@ -38,17 +38,17 @@ class AccessTokenResourceTest : JerseyTest() {
     /* ktlint-enable max-line-length */
 
     override fun configure(): Application {
-        mouckTokenManager = object : TokenManager {
+        mouckAccessTokenManager = object : AccessTokenManager {
             override fun create(baseToken: String): AccessToken {
                 if (baseToken == baseKey)
                     return AccessToken(accessToken)
                 else
-                    throw TokenManager.NotFoundToken("Cannot found base token.")
+                    throw AccessTokenManager.NotFoundToken("Cannot found base token.")
             }
         }
         return ResourceConfig()
             .register(GsonJerseyProvider::class.java)
-            .register(AccessTokenResource(mouckTokenManager))
+            .register(AccessTokenResource(mouckAccessTokenManager))
     }
 
     @Test
