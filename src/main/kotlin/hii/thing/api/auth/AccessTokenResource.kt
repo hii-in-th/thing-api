@@ -46,13 +46,13 @@ class AccessTokenResource(private val managerAccess: AccessTokenManager) {
         logger.info("Create access token by ip:${ignore { req.remoteAddr }}")
 
         val bearer = headers.getHeaderString("Authorization")?.takeIf { it.isNotBlank() }
+        require(bearer != null) { "ไม่พบส่วนของ Authorization ใน http header" }
+        require(bearer.startsWith("Bearer ")) { "รูปแบบ Authorization ใน http header ไม่ถูกต้อง" }
         logger.debug("Bearer $bearer")
-        val baseKey = bearer?.replaceFirst("Bearer ", "")?.trim()?.takeIf { it.isNotBlank() }
-        logger.debug("Base token $baseKey")
 
-        check(bearer != null) { "ไม่พบส่วนของ Authorization ใน http header" }
-        check(bearer.startsWith("Bearer ")) { "รูปแบบ Authorization ใน http header ไม่ถูกต้อง" }
-        check(baseKey != null) { "ไม่พบ Base token ใน Authorization" }
+        val baseKey = bearer.replaceFirst("Bearer ", "").trim().takeIf { it.isNotBlank() }
+        require(!baseKey.isNullOrBlank()) { "ไม่พบ Base token ใน Authorization" }
+        logger.debug("Base token $baseKey")
 
         return managerAccess.create(baseKey)
     }
