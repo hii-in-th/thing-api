@@ -34,7 +34,7 @@ class JwtAccessTokenManagerTest {
         """eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoLmhpaS5pbi50aCIsImlhdCI6MTU1OTcxMzA2NSwiZXhwIjoxNTkxMjQ5MTk3LCJhdWQiOiJhdXRoLmhpaS5pbi50aCIsInN1YiI6ImRldmljZXMvMTA1NDg3MTExIiwicm9sZSI6Imtpb3NrIiwianRpIjoiNWI5YmNmNDMtZWRhOC00MjAwLWI5MzgtY2RiMDUwNjMxMmRkIn0.YpGLky41UHwtLGBlbhUUYerKz0SD0-Ff3PapUde-JhDphf9LzfiJ9NfCjUdqagat7YY_HAWv_RJf6xNUcl3ZLw""".trimIndent()
     /* ktlint-enable max-line-length */
 
-    val tokenDao = object : TokenDao {
+    val tokenDao = object : ApiKeyDao {
         override fun getDeviceBy(baseToken: String): Device {
             return if (baseToken == baseKey) Device(
                 "hii/d121",

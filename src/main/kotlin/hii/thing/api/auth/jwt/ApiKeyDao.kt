@@ -19,6 +19,6 @@ package hii.thing.api.auth.jwt
 
 import hii.thing.api.auth.Device
 
-interface TokenDao {
+interface ApiKeyDao {
     fun getDeviceBy(baseToken: String): Device
 }

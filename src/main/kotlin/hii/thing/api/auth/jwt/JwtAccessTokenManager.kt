@@ -28,10 +28,10 @@ import java.security.interfaces.RSAPublicKey
 import java.util.Date
 import java.util.UUID
 
-// TODO ยังไม่ได้กำหนด tokenDao
-class JwtAccessTokenManager(val tokenDao: TokenDao) : AccessTokenManager {
+// TODO ยังไม่ได้กำหนด apiKeyDao
+class JwtAccessTokenManager(val apiKeyDao: ApiKeyDao) : AccessTokenManager {
     override fun create(baseToken: String): AccessToken {
-        val device = tokenDao.getDeviceBy(baseToken)
+        val device = apiKeyDao.getDeviceBy(baseToken)
         val jwtId = UUID.randomUUID().toString()
 
         val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
