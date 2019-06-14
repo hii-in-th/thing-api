@@ -17,6 +17,10 @@
 
 package hii.thing.api.auth
 
-interface AccessTokenManager {
-    fun create(baseToken: String): AccessToken
-}
+data class Device(
+    val deviceName: String, // sub
+    val baseToken: String,
+    val audience: String,
+    val roles: List<String>,
+    val scope: List<String>
+)

@@ -15,8 +15,13 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth
+package hii.thing.api
 
-interface AccessTokenManager {
-    fun create(baseToken: String): AccessToken
+import java.security.KeyPairGenerator
+
+class JwtConst private constructor() {
+    companion object {
+        val keyPair = KeyPairGenerator.getInstance("RSA").apply { initialize(4096) }.genKeyPair()!!
+        const val issuer = "auth.hii.in.th"
+    }
 }

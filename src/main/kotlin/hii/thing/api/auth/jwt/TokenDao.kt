@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth
+package hii.thing.api.auth.jwt
 
-interface AccessTokenManager {
-    fun create(baseToken: String): AccessToken
+import hii.thing.api.auth.Device
+
+interface TokenDao {
+    fun getDeviceBy(baseToken: String): Device
 }

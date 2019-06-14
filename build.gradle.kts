@@ -49,6 +49,8 @@ dependencies {
 
     compile("com.google.code.gson:gson:2.8.5")
 
+    compile("com.auth0:java-jwt:3.8.1")
+
     testImplementation("junit:junit:4.12")
     testImplementation("org.mockito:mockito-core:2.28.2")
     testImplementation("org.amshove.kluent:kluent:1.48")

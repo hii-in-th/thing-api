@@ -43,7 +43,7 @@ class AccessTokenResourceTest : JerseyTest() {
                 if (baseToken == baseKey)
                     return AccessToken(accessToken)
                 else
-                    throw AccessTokenManager.NotFoundToken("Cannot found base token.")
+                    throw NotFoundToken("Cannot found base token.")
             }
         }
         return ResourceConfig()
