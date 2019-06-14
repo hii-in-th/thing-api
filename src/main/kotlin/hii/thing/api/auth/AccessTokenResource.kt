@@ -17,6 +17,8 @@
 
 package hii.thing.api.auth
 
+import hii.thing.api.auth.jwt.DemoApiKeyDao
+import hii.thing.api.auth.jwt.JwtAccessTokenManager
 import hii.thing.api.getLogger
 import hii.thing.api.ignore
 import javax.servlet.http.HttpServletRequest
@@ -32,8 +34,9 @@ import javax.ws.rs.core.MediaType
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 
-// TODO ยังไม่ได้กำหนด managerAccess
-class AccessTokenResource(private val managerAccess: AccessTokenManager) {
+class AccessTokenResource(
+    private val managerAccess: AccessTokenManager = JwtAccessTokenManager(DemoApiKeyDao())
+) {
 
     @Context
     lateinit var req: HttpServletRequest
