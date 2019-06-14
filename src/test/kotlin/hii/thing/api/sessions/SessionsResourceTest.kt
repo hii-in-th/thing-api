@@ -49,7 +49,7 @@ class SessionsResourceTest : JerseyTest() {
     override fun configure(): Application {
         mockSessionsManager = object : SessionsManager {
             override fun create(detail: CreateSessionDetail): Session = Session(session, "dev")
-            override fun getDeviceId(token: String): String = deviceId
+            override fun getDetailFrom(token: String): CreateSessionDetail = CreateSessionDetail(deviceId, "", "", "")
         }
         val sessionsResource = SessionsResource(mockSessionsManager)
         sessionsResource.context = MockTokenSecurityContext(accessToken, mockTokenManager)

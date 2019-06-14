@@ -40,7 +40,8 @@ class SessionsResource(private val sessionsManager: SessionsManager) {
     @RolesAllowed("MACHINE")
     fun newSessions(detail: CreateSessionDetail): Session {
         val accessToken = context.userPrincipal.name
-        check(sessionsManager.getDeviceId(accessToken) == detail.deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
+        val detailFromToken = sessionsManager.getDetailFrom(accessToken)
+        require(detailFromToken.deviceId == detail.deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
 
         return sessionsManager.create(detail)
     }
