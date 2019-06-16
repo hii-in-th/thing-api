@@ -15,10 +15,14 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.jwt
+package hii.thing.api.dao
 
-import hii.thing.api.auth.Device
+// Postgres configuration
+val pgUrl by lazy { System.getenv("PG_URL") }
+val pgUsername by lazy { System.getenv("PG_USER") }
+val pgPassword by lazy { System.getenv("PG_PASSWORD") }
 
-interface ApiKeyDao {
-    fun getDeviceBy(baseToken: String): Device
-}
+// Redis configuration.
+val redisHost by lazy { System.getenv("RE_HOST") }
+val redisPort by lazy { System.getenv("RE_PORT").toInt() }
+val redisExpireSec by lazy { System.getenv("RE_EXPIRE_SEC").toInt() }

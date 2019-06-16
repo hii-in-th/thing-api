@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth
+package hii.thing.api.dao.pgsql
 
-import java.util.UUID
+import org.jetbrains.exposed.sql.Table
 
-data class Device(
-    val deviceName: String, // sub
-    val baseToken: String,
-    val audience: String,
-    val roles: List<String>,
-    val scope: List<String>,
-    val deviceID: String = UUID.randomUUID().toString()
-)
+internal object SqlDevice : Table() {
+    val deviceId = varchar("deviceid", 36).primaryKey()
+
+    val deviceName = varchar("name", 255) // sub
+    val baseToken = varchar("apikey", 500)
+    val audience = varchar("audience", 32)
+    val roles = varchar("roles", 255)
+    val scope = varchar("scope", 255)
+}

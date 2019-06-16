@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth
+package hii.thing.api.dao
 
-import java.util.UUID
+import hii.thing.api.auth.Device
 
-data class Device(
-    val deviceName: String, // sub
-    val baseToken: String,
-    val audience: String,
-    val roles: List<String>,
-    val scope: List<String>,
-    val deviceID: String = UUID.randomUUID().toString()
-)
+interface ApiKeyDao {
+    fun getDeviceBy(baseToken: String): Device
+    fun registerDevice(device: Device): Device
+}

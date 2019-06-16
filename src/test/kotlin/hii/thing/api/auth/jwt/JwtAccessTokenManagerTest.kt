@@ -18,14 +18,12 @@
 package hii.thing.api.auth.jwt
 
 import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.JwtConst
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
+import hii.thing.api.dao.ApiKeyDao
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
 
 class JwtAccessTokenManagerTest {
 
@@ -46,14 +44,15 @@ class JwtAccessTokenManagerTest {
             else
                 throw NotFoundToken("Not found token")
         }
+
+        override fun registerDevice(device: Device): Device = device
     }
     val jwtAccessTokenManager = JwtAccessTokenManager(tokenDao)
 
     @Test
     fun createAndJWTVerifier() {
         val accessToken = jwtAccessTokenManager.create(baseKey).accessToken
-
-        verify(accessToken)
+        JwtConst.verify(accessToken)
     }
 
     @Test
@@ -63,16 +62,5 @@ class JwtAccessTokenManagerTest {
 
         jwtDecode.subject!! `should be equal to` "hii/d121"
         jwtDecode.audience.first() `should be equal to` "api.ffc.in.th"
-    }
-
-    private fun verify(accessToken: String) {
-        val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
-        val privateKey: RSAPrivateKey = JwtConst.keyPair.private as RSAPrivateKey
-        val algorithm = Algorithm.RSA512(publicKey, privateKey)
-
-        val verifier = JWT.require(algorithm)
-            .withIssuer(JwtConst.issuer)
-            .build() // Reusable verifier instance
-        verifier.verify(accessToken)
     }
 }

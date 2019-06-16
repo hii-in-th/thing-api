@@ -17,7 +17,6 @@
 
 package hii.thing.api.auth
 
-import hii.thing.api.auth.jwt.DemoApiKeyDao
 import hii.thing.api.auth.jwt.JwtAccessTokenManager
 import hii.thing.api.getLogger
 import hii.thing.api.ignore
@@ -35,7 +34,7 @@ import javax.ws.rs.core.MediaType
 @Consumes(MediaType.APPLICATION_JSON)
 
 class AccessTokenResource(
-    private val managerAccess: AccessTokenManager = JwtAccessTokenManager(DemoApiKeyDao())
+    private val managerAccess: AccessTokenManager = JwtAccessTokenManager()
 ) {
 
     @Context
