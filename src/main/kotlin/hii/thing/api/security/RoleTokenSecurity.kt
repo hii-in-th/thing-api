@@ -20,6 +20,7 @@ package hii.thing.api.security
 import hii.thing.api.getLogger
 import hii.thing.api.security.token.TokenManager
 import hii.thing.api.security.token.TokenSecurityContext
+import hii.thing.api.security.token.jwt.JwtTokenManager
 import javax.annotation.Priority
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.NotAuthorizedException
@@ -37,8 +38,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
     @Context
     lateinit var resourceInfo: ResourceInfo
 
-    // TODO ยังไม่ได้กำหนด TokenManager
-    lateinit var tokenManager: TokenManager
+    var tokenManager: TokenManager = JwtTokenManager()
 
     override fun filter(requestContext: ContainerRequestContext) {
         val rolesAllowed: RolesAllowed? = resourceInfo.resourceMethod.getAnnotation(RolesAllowed::class.java)
@@ -50,8 +50,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
             return
 
         logger.debug("requestToken:$clientToken")
-        check(tokenManager.isAccessToken(clientToken)) { "ไม่ใช่ Access token" }
-        check(!tokenManager.isExpire(clientToken)) { "access token หมดอายุ" }
+        check(tokenManager.verify(clientToken)) { "Verify token ผิดพลาด" }
 
         val clientRole = tokenManager.getUserRole(clientToken)
         check(clientRole.containsSome(rolesAllowed!!.value.toList()))

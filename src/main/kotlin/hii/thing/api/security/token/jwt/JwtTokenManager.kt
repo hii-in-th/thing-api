@@ -15,10 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api.security.token.jwt
 
-interface TokenManager {
-    fun verify(token: String): Boolean
-    fun getUserRole(token: String): List<String>
-    fun getName(token: String): String
+import hii.thing.api.JwtConst
+import hii.thing.api.security.token.TokenManager
+
+class JwtTokenManager : TokenManager {
+    override fun verify(token: String): Boolean = JwtConst.verify(token)
+
+    override fun getUserRole(token: String): List<String> =
+        JwtConst.decode(token).getClaim("role")!!.asList(String::class.java)!!
+
+    override fun getName(token: String): String = JwtConst.decode(token).subject!!
 }

@@ -17,11 +17,41 @@
 
 package hii.thing.api
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.security.KeyPairGenerator
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 
 class JwtConst private constructor() {
     companion object {
         val keyPair = KeyPairGenerator.getInstance("RSA").apply { initialize(4096) }.genKeyPair()!!
         const val issuer = "auth.hii.in.th"
+
+        fun decodeAndVerify(accessToken: String): DecodedJWT {
+            var decodedJWT: DecodedJWT? = null
+            runBlocking {
+                launch { verify(accessToken) }
+                launch { decodedJWT = decode(accessToken) }
+            }
+            return decodedJWT!!
+        }
+
+        fun decode(accessToken: String): DecodedJWT = JWT.decode(accessToken)
+
+        fun verify(accessToken: String): Boolean {
+            val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
+            val privateKey: RSAPrivateKey = JwtConst.keyPair.private as RSAPrivateKey
+            val algorithm = Algorithm.RSA512(publicKey, privateKey)
+
+            val verifier = JWT.require(algorithm)
+                .withIssuer(issuer)
+                .build() // Reusable verifier instance
+            verifier.verify(accessToken)
+            return true
+        }
     }
 }

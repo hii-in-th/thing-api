@@ -15,10 +15,23 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api
 
-interface TokenManager {
-    fun verify(token: String): Boolean
-    fun getUserRole(token: String): List<String>
-    fun getName(token: String): String
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+
+fun String.hashText(): String {
+    try {
+        val md = MessageDigest.getInstance("SHA-1")
+        val messageDigest = md.digest(this.toByteArray())
+        val no = BigInteger(1, messageDigest)
+        var hashtext = no.toString(16)
+        while (hashtext.length < 32) {
+            hashtext = "0$hashtext"
+        }
+        return hashtext
+    } catch (e: NoSuchAlgorithmException) {
+        throw RuntimeException(e)
+    }
 }
