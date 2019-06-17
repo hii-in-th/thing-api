@@ -20,6 +20,7 @@ package hii.thing.api
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.auth0.jwt.interfaces.RSAKeyProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.security.KeyPairGenerator
@@ -45,8 +46,11 @@ class JwtConst private constructor() {
 
         fun verify(accessToken: String): Boolean {
             val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
-            val privateKey: RSAPrivateKey = JwtConst.keyPair.private as RSAPrivateKey
-            val algorithm = Algorithm.RSA512(publicKey, privateKey)
+            val algorithm = Algorithm.RSA512(object : RSAKeyProvider {
+                override fun getPrivateKeyId(): String = ""
+                override fun getPrivateKey(): RSAPrivateKey? = null
+                override fun getPublicKeyById(keyId: String?): RSAPublicKey = publicKey
+            })
 
             val verifier = JWT.require(algorithm)
                 .withIssuer(issuer)
