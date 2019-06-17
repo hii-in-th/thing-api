@@ -15,54 +15,56 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.jwt
+package hii.thing.api.sessions.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.JwtConst
-import hii.thing.api.auth.AccessToken
-import hii.thing.api.auth.AccessTokenManager
-import hii.thing.api.dao.ApiKeyDao
-import hii.thing.api.dao.apikey.PgSqlApiKeyDao
-import hii.thing.api.dao.pgPassword
-import hii.thing.api.dao.pgUrl
-import hii.thing.api.dao.pgUsername
-import hii.thing.api.getLogger
+import hii.thing.api.dao.SessionsDao
+import hii.thing.api.sessions.SessionsManager
+import org.amshove.kluent.`should be greater than`
+import org.junit.Test
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.util.Date
 import java.util.UUID
 
-class JwtAccessTokenManager(
-    val apiKeyDao: ApiKeyDao = PgSqlApiKeyDao(pgUrl, pgUsername, pgPassword)
-) : AccessTokenManager {
-    override fun create(baseToken: String): AccessToken {
-        val device = apiKeyDao.getDeviceBy(baseToken)
-        val jwtId = UUID.randomUUID().toString()
+class JwtSessionsManagerTest {
+    val mockSessionDao: SessionsDao = object : SessionsDao {
+        private var ss = ""
+        override fun save(token: String, session: String) {
+            ss = session
+        }
 
+        override fun get(token: String): String = ss
+
+        override fun remove(token: String) {
+            ss = ""
+        }
+    }
+    val sessionsManager: SessionsManager = JwtSessionsManager(mockSessionDao)
+
+    @Test
+    fun create() {
+        val session = sessionsManager.create(createAccessToken())
+        session.length `should be greater than` 20
+        println("Session $session")
+    }
+
+    private fun createAccessToken(expire: Long = 1000000, issuer: String = JwtConst.issuer): String {
         val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
         val privateKey: RSAPrivateKey = JwtConst.keyPair.private as RSAPrivateKey
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
         val date = Date()
 
-        val accessToken = JWT.create()
-            .withIssuer(JwtConst.issuer)
+        return JWT.create()
+            .withIssuer(issuer)
             .withIssuedAt(date)
-            .withExpiresAt(Date(date.time + 323234))
-            .withAudience(device.audience)
-            .withSubject(device.deviceName)
-            .withJWTId(jwtId)
-            .withArrayClaim("role", device.roles.toTypedArray())
-            .withArrayClaim("scopt", device.scope.toTypedArray())
+            .withExpiresAt(Date(date.time + expire))
+            .withJWTId(UUID.randomUUID().toString())
             .withNotBefore(date)
+            .withClaim("int", 10)
+            .withClaim("string", "thanachai")
             .sign(algorithm)
-
-        logger.info("Register access token by ${device.deviceName} jwtId:$jwtId")
-
-        return AccessToken(accessToken)
-    }
-
-    companion object {
-        private val logger by lazy { getLogger() }
     }
 }

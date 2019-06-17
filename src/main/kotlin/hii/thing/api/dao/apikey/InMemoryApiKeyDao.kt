@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.inmemory
+package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken

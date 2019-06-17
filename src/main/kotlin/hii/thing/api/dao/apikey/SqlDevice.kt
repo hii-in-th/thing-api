@@ -15,6 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.dao.apikey
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+import org.jetbrains.exposed.sql.Table
+
+internal object SqlDevice : Table() {
+    val deviceId = varchar("deviceid", 36).primaryKey()
+
+    val deviceName = varchar("name", 255) // sub
+    val baseToken = varchar("apikey", 500)
+    val audience = varchar("audience", 32)
+    val roles = varchar("roles", 255)
+    val scope = varchar("scope", 255)
+}

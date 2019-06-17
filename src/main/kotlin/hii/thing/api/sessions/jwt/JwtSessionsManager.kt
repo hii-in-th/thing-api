@@ -15,6 +15,21 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.sessions.jwt
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+import hii.thing.api.dao.SessionsDao
+import hii.thing.api.dao.session.RedisSessionDao
+import hii.thing.api.hashText
+import hii.thing.api.sessions.SessionsManager
+import java.util.UUID
+
+class JwtSessionsManager(
+    val sessionsDao: SessionsDao = RedisSessionDao(setOf())
+) : SessionsManager {
+
+    override fun create(token: String): String {
+        val session = UUID.randomUUID().toString()
+        sessionsDao.save(token.hashText(), session)
+        return session
+    }
+}

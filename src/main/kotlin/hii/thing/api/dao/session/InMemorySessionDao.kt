@@ -15,6 +15,24 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.dao.session
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+import hii.thing.api.dao.SessionsDao
+
+class InMemorySessionDao : SessionsDao {
+    override fun save(token: String, session: String) {
+        storage[token] = session
+    }
+
+    override fun get(token: String): String {
+        return storage[token]!!
+    }
+
+    companion object {
+        val storage = LinkedHashMap<String, String>()
+    }
+
+    override fun remove(token: String) {
+        storage.remove(token)
+    }
+}

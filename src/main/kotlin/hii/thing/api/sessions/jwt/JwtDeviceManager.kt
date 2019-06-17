@@ -15,6 +15,11 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.sessions.jwt
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+import hii.thing.api.JwtConst
+import hii.thing.api.sessions.DeviceManager
+
+class JwtDeviceManager : DeviceManager {
+    override fun getDeviceIdFrom(token: String): String = JwtConst.decode(token).id
+}

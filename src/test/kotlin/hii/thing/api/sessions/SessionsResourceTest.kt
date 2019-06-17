@@ -34,7 +34,6 @@ import javax.ws.rs.core.MediaType
 
 class SessionsResourceTest : JerseyTest() {
 
-    lateinit var mockSessionsManager: SessionsManager
     private val session = UUID.randomUUID().toString()
     private val deviceId = "aabbcc-aabbee"
 
@@ -47,11 +46,13 @@ class SessionsResourceTest : JerseyTest() {
     /* ktlint-enable max-line-length */
 
     override fun configure(): Application {
-        mockSessionsManager = object : SessionsManager {
-            override fun create(detail: CreateSessionDetail): Session = Session(session, "dev")
-            override fun getDetailFrom(token: String): CreateSessionDetail = CreateSessionDetail(deviceId, "", "", "")
+        val mockSessionsManager = object : SessionsManager {
+            override fun create(token: String): String = session
         }
-        val sessionsResource = SessionsResource(mockSessionsManager)
+        val mockDeviceManager = object : DeviceManager {
+            override fun getDeviceIdFrom(token: String): String = deviceId
+        }
+        val sessionsResource = SessionsResource(mockSessionsManager, mockDeviceManager)
         sessionsResource.context = MockTokenSecurityContext(accessToken, mockTokenManager)
 
         return ResourceConfig()
@@ -63,7 +64,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsOk() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65", accessToken)
 
         val res = target("/sessions").request()
             .header("Authorization", "Bearer $accessToken")
@@ -77,7 +78,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsNotUserInRole() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65", accessToken)
         val res = target("/sessions").request()
             .header("Authorization", "Bearer sdfsdf")
             .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))

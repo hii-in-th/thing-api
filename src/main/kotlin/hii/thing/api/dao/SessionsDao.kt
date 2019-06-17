@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.dao
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+interface SessionsDao {
+    fun save(token: String, session: String)
+    fun get(token: String): String
+    fun remove(token: String)
+}

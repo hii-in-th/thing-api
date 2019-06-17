@@ -22,9 +22,7 @@ import hii.thing.api.sessions.SessionsResourceTest
 
 class MockTokenManager : TokenManager {
 
-    override fun isExpire(token: String): Boolean = false
-
-    override fun isAccessToken(token: String): Boolean = true
+    override fun verify(token: String): Boolean = true
 
     override fun getUserRole(token: String): List<String> {
         return if (token == SessionsResourceTest.accessToken)

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.pgsql
+package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
 import hii.thing.api.dao.ApiKeyDao

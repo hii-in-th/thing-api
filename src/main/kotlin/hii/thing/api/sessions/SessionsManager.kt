@@ -18,6 +18,5 @@
 package hii.thing.api.sessions
 
 interface SessionsManager {
-    fun create(detail: CreateSessionDetail): Session
-    fun getDetailFrom(token: String): CreateSessionDetail
+    fun create(token: String): String
 }

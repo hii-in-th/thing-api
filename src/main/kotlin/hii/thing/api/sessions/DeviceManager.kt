@@ -17,4 +17,6 @@
 
 package hii.thing.api.sessions
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+interface DeviceManager {
+    fun getDeviceIdFrom(token: String): String
+}

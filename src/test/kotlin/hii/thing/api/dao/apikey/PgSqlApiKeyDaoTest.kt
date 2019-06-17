@@ -15,17 +15,26 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.inmemory
+package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
 import hii.thing.api.dao.ApiKeyDao
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
+import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
-class InMemoryApiKeyDaoTest {
+class PgSqlApiKeyDaoTest {
+    val pgsql = EmbeddedPostgres()
+    lateinit var apiKeyDao: ApiKeyDao
 
-    val apiKeyDao: ApiKeyDao = InMemoryApiKeyDao()
+    @Before
+    fun setUp() {
+        val url = pgsql.start()
+        apiKeyDao = PgSqlApiKeyDao(url, "postgres", "postgres")
+    }
 
     val device = Device(
         "hii/007",
@@ -51,5 +60,10 @@ class InMemoryApiKeyDaoTest {
         getDevice.baseToken `should be equal to` device.baseToken
         getDevice.roles `should equal` device.roles
         getDevice.scope `should equal` device.scope
+    }
+
+    @After
+    fun tearDown() {
+        pgsql.stop()
     }
 }
