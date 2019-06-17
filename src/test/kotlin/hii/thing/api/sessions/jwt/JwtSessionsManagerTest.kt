@@ -60,12 +60,24 @@ class JwtSessionsManagerTest {
         sessionsManager.getBy(token) `should be equal to` session
     }
 
+    @Test(expected = Exception::class)
+    fun getByEmptyFail() {
+        val token = createAccessToken(expire = 2000)
+
+        sessionsManager.getBy(token)
+    }
+
     @Test
     fun updateCreate() {
         val session = sessionsManager.create(createAccessToken(), createDetail)
         val update = sessionsManager.updateCreate(session, CreateSessionDetail(deviceId, null, null, null))
 
         update.citizenIdInput `should equal` null
+    }
+
+    @Test(expected = Exception::class)
+    fun updateEmptyFail() {
+        sessionsManager.updateCreate("sdfsdf", CreateSessionDetail(deviceId, null, null, null))
     }
 
     private fun createAccessToken(expire: Long = 1000000, issuer: String = JwtConst.issuer): String {
