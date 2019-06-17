@@ -15,13 +15,11 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao
+package hii.thing.api.dao.apikey
 
-/**
- * การใช้งานควรใช้ผ่าน SessionManager
- */
-interface SessionsDao {
-    fun save(token: String, session: String)
-    fun get(token: String): String
-    fun remove(token: String)
+import hii.thing.api.auth.Device
+
+interface ApiKeyDao {
+    fun getDeviceBy(baseToken: String): Device
+    fun registerDevice(device: Device): Device
 }

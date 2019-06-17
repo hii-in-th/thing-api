@@ -17,8 +17,6 @@
 
 package hii.thing.api.dao.session
 
-import hii.thing.api.dao.SessionsDao
-
 class InMemorySessionDao : SessionsDao {
     override fun save(token: String, session: String) {
         storage[token] = session

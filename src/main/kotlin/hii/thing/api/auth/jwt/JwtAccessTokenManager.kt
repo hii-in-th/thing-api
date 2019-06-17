@@ -22,7 +22,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.JwtConst
 import hii.thing.api.auth.AccessToken
 import hii.thing.api.auth.AccessTokenManager
-import hii.thing.api.dao.ApiKeyDao
+import hii.thing.api.dao.apikey.ApiKeyDao
 import hii.thing.api.dao.apikey.PgSqlApiKeyDao
 import hii.thing.api.dao.pgPassword
 import hii.thing.api.dao.pgUrl

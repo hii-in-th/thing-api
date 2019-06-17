@@ -18,7 +18,6 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
-import hii.thing.api.dao.ApiKeyDao
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.junit.Test

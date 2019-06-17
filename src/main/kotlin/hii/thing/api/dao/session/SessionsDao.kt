@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao
+package hii.thing.api.dao.session
 
-interface VitalDao {
-    var heigh: Float
-    var weight: Float
-    var systolic: Float
-    var diastolic: Float
+/**
+ * การใช้งานควรใช้ผ่าน SessionManager
+ */
+interface SessionsDao {
+    fun save(token: String, session: String)
+    fun get(token: String): String
+    fun remove(token: String)
 }

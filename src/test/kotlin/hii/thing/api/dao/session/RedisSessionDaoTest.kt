@@ -18,7 +18,6 @@
 package hii.thing.api.dao.session
 
 import com.github.fppt.jedismock.RedisServer
-import hii.thing.api.dao.SessionsDao
 import org.amshove.kluent.`should be equal to`
 import org.junit.After
 import org.junit.Before

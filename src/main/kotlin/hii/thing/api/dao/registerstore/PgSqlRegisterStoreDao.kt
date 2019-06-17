@@ -17,7 +17,6 @@
 
 package hii.thing.api.dao.registerstore
 
-import hii.thing.api.dao.RegisterStoreDao
 import hii.thing.api.sessions.CreateSessionDetail
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
@@ -28,7 +27,8 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-class PgSqlRegisterStoreDao(pgUrl: String, username: String, password: String) : RegisterStoreDao {
+class PgSqlRegisterStoreDao(pgUrl: String, username: String, password: String) :
+    RegisterStoreDao {
 
     init {
         Database.connect(

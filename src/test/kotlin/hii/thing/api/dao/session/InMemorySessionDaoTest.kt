@@ -17,7 +17,6 @@
 
 package hii.thing.api.dao.session
 
-import hii.thing.api.dao.SessionsDao
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
 

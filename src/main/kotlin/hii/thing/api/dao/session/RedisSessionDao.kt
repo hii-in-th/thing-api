@@ -17,7 +17,6 @@
 
 package hii.thing.api.dao.session
 
-import hii.thing.api.dao.SessionsDao
 import redis.clients.jedis.HostAndPort
 import redis.clients.jedis.Jedis
 

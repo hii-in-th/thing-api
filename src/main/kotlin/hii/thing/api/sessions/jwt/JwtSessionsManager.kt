@@ -18,8 +18,8 @@
 package hii.thing.api.sessions.jwt
 
 import hii.thing.api.JwtConst
-import hii.thing.api.dao.RegisterStoreDao
-import hii.thing.api.dao.SessionsDao
+import hii.thing.api.dao.registerstore.RegisterStoreDao
+import hii.thing.api.dao.session.SessionsDao
 import hii.thing.api.dao.pgPassword
 import hii.thing.api.dao.pgUrl
 import hii.thing.api.dao.pgUsername

@@ -18,7 +18,6 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
-import hii.thing.api.dao.ApiKeyDao
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils

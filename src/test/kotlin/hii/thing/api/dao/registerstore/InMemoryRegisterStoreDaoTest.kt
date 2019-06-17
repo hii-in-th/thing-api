@@ -17,7 +17,6 @@
 
 package hii.thing.api.dao.registerstore
 
-import hii.thing.api.dao.RegisterStoreDao
 import hii.thing.api.sessions.CreateSessionDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`

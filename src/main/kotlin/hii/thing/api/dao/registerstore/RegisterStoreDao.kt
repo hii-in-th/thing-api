@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao
+package hii.thing.api.dao.registerstore
 
-import hii.thing.api.auth.Device
+import hii.thing.api.sessions.CreateSessionDetail
 
-interface ApiKeyDao {
-    fun getDeviceBy(baseToken: String): Device
-    fun registerDevice(device: Device): Device
+interface RegisterStoreDao {
+    fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun update(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun get(citizenId: String): Map<String, CreateSessionDetail>
 }

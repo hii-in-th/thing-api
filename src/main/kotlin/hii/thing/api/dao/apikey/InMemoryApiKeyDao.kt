@@ -19,7 +19,6 @@ package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
-import hii.thing.api.dao.ApiKeyDao
 
 class InMemoryApiKeyDao : ApiKeyDao {
     override fun getDeviceBy(baseToken: String): Device {
