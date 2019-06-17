@@ -21,13 +21,20 @@ import hii.thing.api.dao.RegisterStoreDao
 import hii.thing.api.sessions.CreateSessionDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
-class InMemoryRegisterStoreDaoTest {
+class PgSqlRegisterStoreDaoTest {
+    val pgsql = EmbeddedPostgres()
+    lateinit var registerStoreDao: RegisterStoreDao
 
-    val inmemory = InMemoryRegisterStoreDao()
-    val registerStoreDao: RegisterStoreDao = InMemoryRegisterStoreDao()
+    @Before
+    fun setUp() {
+        val url = pgsql.start()
+        registerStoreDao = PgSqlRegisterStoreDao(url, "postgres", "postgres")
+    }
 
     val sessionId = "12384-sdf-b-a-2-321-32-4"
     val createSessionDetail = CreateSessionDetail(
@@ -42,11 +49,6 @@ class InMemoryRegisterStoreDaoTest {
         null,
         null
     )
-
-    @Before
-    fun setUp() {
-        inmemory.cleanAll()
-    }
 
     @Test
     fun register() {
@@ -89,5 +91,10 @@ class InMemoryRegisterStoreDaoTest {
 
         getReg.size `should be equal to` 1
         getReg[sessionId]!!.deviceId `should be equal to` createSessionDetail.deviceId
+    }
+
+    @After
+    fun tearDown() {
+        pgsql.stop()
     }
 }

@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.dao.registerstore
 
-data class CreateSessionDetail(
-    val deviceId: String,
-    val citizenId: String?,
-    val citizenIdInput: String?,
-    val birthDate: String?
-)
+import org.jetbrains.exposed.sql.Table
+
+internal object SqlRegisterDetail : Table() {
+    val sessionId = varchar("sessionid", 36).primaryKey()
+    val deviceId = varchar("deviceid", 36)
+    val citizenId = varchar("citizenid", 36).nullable()
+    val citizenIdInput = varchar("citizenidinput", 10).nullable()
+    val birthDate = varchar("birthdate", 10).nullable()
+}

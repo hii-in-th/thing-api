@@ -54,7 +54,7 @@ class SessionsResourceTest : JerseyTest() {
             override fun getBy(token: String): String = session
 
             override fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail =
-                CreateSessionDetail(deviceId, "", "", "", accessToken)
+                CreateSessionDetail(deviceId, "", "", "")
         }
         val sessionsResource = SessionsResource(mockSessionsManager)
         sessionsResource.context = MockTokenSecurityContext(accessToken, mockTokenManager)
@@ -68,7 +68,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsOk() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65", accessToken)
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
 
         val res = target("/sessions").request()
             .header("Authorization", "Bearer $accessToken")
@@ -82,7 +82,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsNotUserInRole() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65", accessToken)
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
         val res = target("/sessions").request()
             .header("Authorization", "Bearer sdfsdf")
             .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
