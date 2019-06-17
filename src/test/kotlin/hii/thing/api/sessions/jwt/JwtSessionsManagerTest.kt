@@ -42,11 +42,14 @@ class JwtSessionsManagerTest {
             ss = ""
         }
     }
+
+    val deviceId = "98439-32423-fgd-gfd-gdsg-fds"
+
     val sessionsManager: SessionsManager = JwtSessionsManager(mockSessionDao)
 
     @Test
     fun create() {
-        val session = sessionsManager.create(createAccessToken())
+        val session = sessionsManager.anonymousCreate(createAccessToken(), deviceId)
         session.length `should be greater than` 20
         println("Session $session")
     }
@@ -63,6 +66,7 @@ class JwtSessionsManagerTest {
             .withExpiresAt(Date(date.time + expire))
             .withJWTId(UUID.randomUUID().toString())
             .withNotBefore(date)
+            .withJWTId(deviceId)
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
             .sign(algorithm)

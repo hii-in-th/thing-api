@@ -28,6 +28,7 @@ import java.security.interfaces.RSAPublicKey
 
 class JwtConst private constructor() {
     companion object {
+        // TODO ("ใช้เป็นไฟล์")
         val keyPair = KeyPairGenerator.getInstance("RSA").apply { initialize(4096) }.genKeyPair()!!
         const val issuer = "auth.hii.in.th"
 

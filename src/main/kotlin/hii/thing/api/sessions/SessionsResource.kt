@@ -17,7 +17,6 @@
 
 package hii.thing.api.sessions
 
-import hii.thing.api.sessions.jwt.JwtDeviceManager
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -33,8 +32,7 @@ import javax.ws.rs.core.SecurityContext
 @Consumes(MediaType.APPLICATION_JSON)
 
 class SessionsResource(
-    private val sessionsManager: SessionsManager = JwtSessionsManager(),
-    private val deviceManager: DeviceManager = JwtDeviceManager()
+    private val sessionsManager: SessionsManager = JwtSessionsManager()
 ) {
 
     @Context
@@ -44,10 +42,9 @@ class SessionsResource(
     @RolesAllowed("MACHINE")
     fun newSessions(detail: CreateSessionDetail): Session {
         val accessToken = context.userPrincipal.name!!
-        val deviceId = deviceManager.getDeviceIdFrom(accessToken)
-        require(deviceId == detail.deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
+        // session create
         return Session(
-            sessionsManager.create(accessToken)
+            sessionsManager.anonymousCreate(accessToken, detail.deviceId)
             // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
         )
     }

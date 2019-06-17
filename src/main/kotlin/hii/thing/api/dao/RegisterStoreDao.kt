@@ -15,8 +15,12 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.dao
 
-interface DeviceManager {
-    fun getDeviceIdFrom(token: String): String
+import hii.thing.api.sessions.CreateSessionDetail
+
+interface RegisterStoreDao {
+    fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun update(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun get(citizenId: String): Map<String, CreateSessionDetail>
 }

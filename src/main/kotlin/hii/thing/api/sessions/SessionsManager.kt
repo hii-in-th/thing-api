@@ -18,5 +18,8 @@
 package hii.thing.api.sessions
 
 interface SessionsManager {
-    fun create(token: String): String
+    fun anonymousCreate(token: String, deviceId: String): String
+    fun create(token: String, sessionDetail: CreateSessionDetail): String
+    fun getBy(token: String): String
+    fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
 }

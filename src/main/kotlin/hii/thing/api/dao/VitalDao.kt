@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions.jwt
+package hii.thing.api.dao
 
-import hii.thing.api.JwtConst
-import hii.thing.api.sessions.DeviceManager
-
-class JwtDeviceManager : DeviceManager {
-    override fun getDeviceIdFrom(token: String): String = JwtConst.decode(token).id
+interface VitalDao {
+    var heigh: Float
+    var weight: Float
+    var systolic: Float
+    var diastolic: Float
 }

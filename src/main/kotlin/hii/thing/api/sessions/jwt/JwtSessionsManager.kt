@@ -17,19 +17,39 @@
 
 package hii.thing.api.sessions.jwt
 
+import hii.thing.api.JwtConst
+import hii.thing.api.dao.RegisterStoreDao
 import hii.thing.api.dao.SessionsDao
+import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.session.RedisSessionDao
 import hii.thing.api.hashText
+import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
 import java.util.UUID
 
 class JwtSessionsManager(
-    val sessionsDao: SessionsDao = RedisSessionDao(setOf())
+    val sessionsDao: SessionsDao = RedisSessionDao(setOf()),
+    val registerStoreManager: RegisterStoreDao = InMemoryRegisterStoreDao()
 ) : SessionsManager {
 
-    override fun create(token: String): String {
+    override fun anonymousCreate(token: String, deviceId: String): String {
+        require(JwtConst.decode(token).id == deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
         val session = UUID.randomUUID().toString()
         sessionsDao.save(token.hashText(), session)
         return session
+    }
+
+    override fun create(token: String, sessionDetail: CreateSessionDetail): String {
+        val session = anonymousCreate(token, sessionDetail.deviceId)
+        registerStoreManager.register(session, sessionDetail)
+        return session
+    }
+
+    override fun getBy(token: String): String {
+        return sessionsDao.get(token.hashText())
+    }
+
+    override fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
+        return registerStoreManager.update(session, sessionDetail)
     }
 }
