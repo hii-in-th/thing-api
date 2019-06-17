@@ -61,18 +61,27 @@ class InMemoryRegisterStoreDaoTest {
         reg.token `should be equal to` createSessionDetail.token
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun registerDuplicate() {
+        registerStoreDao.register(sessionId, createSessionDetail)
+        registerStoreDao.register(sessionId, anonymous)
+    }
+
     @Test
     fun update() {
         registerStoreDao.register(sessionId, createSessionDetail)
-        val update = registerStoreDao.update(
-            sessionId, anonymous
-        )
+        val update = registerStoreDao.update(sessionId, anonymous)
 
         update.deviceId `should be equal to` "aaa/000"
         update.citizenId `should equal` null
         update.citizenIdInput `should equal` null
         update.birthDate `should equal` null
         update.token `should be equal to` "thanachai"
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun updateEmptySession() {
+        registerStoreDao.update(sessionId, anonymous)
     }
 
     @Test

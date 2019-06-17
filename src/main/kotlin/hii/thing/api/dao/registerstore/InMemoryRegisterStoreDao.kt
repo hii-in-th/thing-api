@@ -28,7 +28,7 @@ class InMemoryRegisterStoreDao : RegisterStoreDao {
     }
 
     override fun update(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
-        require(store[sessionId] != null)
+        require(store[sessionId] != null) { "Empty session update." }
         store[sessionId] = sessionDetail
         return sessionDetail
     }
