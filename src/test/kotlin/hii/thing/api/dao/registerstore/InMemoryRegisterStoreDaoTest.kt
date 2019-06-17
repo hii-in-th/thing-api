@@ -57,7 +57,7 @@ class InMemoryRegisterStoreDaoTest {
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test(expected = Exception::class)
     fun registerDuplicate() {
         registerStoreDao.register(sessionId, createSessionDetail)
         registerStoreDao.register(sessionId, anonymous)
@@ -74,9 +74,20 @@ class InMemoryRegisterStoreDaoTest {
         update.birthDate `should equal` null
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test(expected = Exception::class)
     fun updateEmptySession() {
         registerStoreDao.update(sessionId, anonymous)
+    }
+
+    @Test
+    fun getBy() {
+        registerStoreDao.register(sessionId, createSessionDetail)
+        registerStoreDao.register("xam-sds", anonymous)
+
+        val getReg = registerStoreDao.getBy(createSessionDetail.citizenId!!)
+
+        getReg.size `should be equal to` 1
+        getReg[sessionId]!!.deviceId `should be equal to` createSessionDetail.deviceId
     }
 
     @Test
@@ -84,9 +95,7 @@ class InMemoryRegisterStoreDaoTest {
         registerStoreDao.register(sessionId, createSessionDetail)
         registerStoreDao.register("xam-sds", anonymous)
 
-        val getReg = registerStoreDao.get(createSessionDetail.citizenId!!)
-
-        getReg.size `should be equal to` 1
-        getReg[sessionId]!!.deviceId `should be equal to` createSessionDetail.deviceId
+        val getReg = registerStoreDao.get(sessionId)
+        getReg.deviceId `should be equal to` createSessionDetail.deviceId
     }
 }

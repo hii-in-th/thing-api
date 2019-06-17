@@ -82,14 +82,23 @@ class PgSqlRegisterStoreDaoTest {
     }
 
     @Test
+    fun getBy() {
+        registerStoreDao.register(sessionId, createSessionDetail)
+        registerStoreDao.register("xam-sds", anonymous)
+
+        val getReg = registerStoreDao.getBy(createSessionDetail.citizenId!!)
+
+        getReg.size `should be equal to` 1
+        getReg[sessionId]!!.deviceId `should be equal to` createSessionDetail.deviceId
+    }
+
+    @Test
     fun get() {
         registerStoreDao.register(sessionId, createSessionDetail)
         registerStoreDao.register("xam-sds", anonymous)
 
-        val getReg = registerStoreDao.get(createSessionDetail.citizenId!!)
-
-        getReg.size `should be equal to` 1
-        getReg[sessionId]!!.deviceId `should be equal to` createSessionDetail.deviceId
+        val getReg = registerStoreDao.get(sessionId)
+        getReg.deviceId `should be equal to` createSessionDetail.deviceId
     }
 
     @After

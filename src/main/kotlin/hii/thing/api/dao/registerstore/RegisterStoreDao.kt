@@ -22,5 +22,6 @@ import hii.thing.api.sessions.CreateSessionDetail
 interface RegisterStoreDao {
     fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
     fun update(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
-    fun get(citizenId: String): Map<String, CreateSessionDetail>
+    fun getBy(citizenId: String): Map<String, CreateSessionDetail>
+    fun get(sessionId: String): CreateSessionDetail
 }

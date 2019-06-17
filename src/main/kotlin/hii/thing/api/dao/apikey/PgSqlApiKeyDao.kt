@@ -18,6 +18,9 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
+import hii.thing.api.dao.pgPassword
+import hii.thing.api.dao.pgUrl
+import hii.thing.api.dao.pgUsername
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -25,11 +28,11 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class PgSqlApiKeyDao(pgUrl: String, username: String, password: String) : ApiKeyDao {
+class PgSqlApiKeyDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) : ApiKeyDao {
 
     init {
         Database.connect(
-            url = pgUrl,
+            url = url,
             driver = "org.postgresql.Driver",
             user = username,
             password = password

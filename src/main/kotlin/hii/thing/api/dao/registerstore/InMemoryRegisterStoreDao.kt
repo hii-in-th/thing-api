@@ -32,7 +32,7 @@ class InMemoryRegisterStoreDao : RegisterStoreDao {
         return sessionDetail
     }
 
-    override fun get(citizenId: String): Map<String, CreateSessionDetail> {
+    override fun getBy(citizenId: String): Map<String, CreateSessionDetail> {
         return store.filter {
             it.value.citizenId == citizenId
         }.takeIf { it.isNotEmpty() }!!
@@ -40,6 +40,11 @@ class InMemoryRegisterStoreDao : RegisterStoreDao {
 
     companion object {
         private val store = LinkedHashMap<String, CreateSessionDetail>()
+    }
+
+    override fun get(sessionId: String): CreateSessionDetail {
+        require(store[sessionId] != null) { "Empty session update." }
+        return store[sessionId]!!
     }
 
     fun cleanAll() {

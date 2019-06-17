@@ -17,6 +17,9 @@
 
 package hii.thing.api.dao.registerstore
 
+import hii.thing.api.dao.pgPassword
+import hii.thing.api.dao.pgUrl
+import hii.thing.api.dao.pgUsername
 import hii.thing.api.sessions.CreateSessionDetail
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
@@ -27,12 +30,12 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
-class PgSqlRegisterStoreDao(pgUrl: String, username: String, password: String) :
+class PgSqlRegisterStoreDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) :
     RegisterStoreDao {
 
     init {
         Database.connect(
-            url = pgUrl,
+            url = url,
             driver = "org.postgresql.Driver",
             user = username,
             password = password
@@ -91,7 +94,7 @@ class PgSqlRegisterStoreDao(pgUrl: String, username: String, password: String) :
         return reg!!
     }
 
-    override fun get(citizenId: String): Map<String, CreateSessionDetail> {
+    override fun getBy(citizenId: String): Map<String, CreateSessionDetail> {
         val resultAll = hashMapOf<String, CreateSessionDetail>()
         transaction {
             SqlRegisterDetail.select { SqlRegisterDetail.citizenId eq citizenId }
@@ -100,5 +103,14 @@ class PgSqlRegisterStoreDao(pgUrl: String, username: String, password: String) :
                 }
         }
         return resultAll.takeIf { it.isNotEmpty() }!!
+    }
+
+    override fun get(sessionId: String): CreateSessionDetail {
+        var reg: CreateSessionDetail? = null
+        transaction {
+            SqlRegisterDetail.select { SqlRegisterDetail.sessionId eq sessionId }.limit(1)
+                .map { reg = mapResult(it) }
+        }
+        return reg!!
     }
 }
