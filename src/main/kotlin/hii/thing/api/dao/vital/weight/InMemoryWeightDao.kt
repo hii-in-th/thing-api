@@ -15,11 +15,28 @@
  * limitations under the License.
  */
 
-package hii.thing.api.vital.dao.pgsql
+package hii.thing.api.dao.vital.weight
 
-import org.jetbrains.exposed.sql.Table
+import hii.thing.api.vital.Weight
 
-object Message : Table() {
-    val time = datetime("time")
-    val message = varchar("messaged", 255)
+class InMemoryWeightDao : WeightDao {
+    override fun save(session: String, weight: Weight): Weight {
+        require(store[session] == null)
+        store[session] = Weight(weight.weight, session)
+        return store[session]!!
+    }
+
+    override fun getBy(session: String): Weight {
+        val weight = store[session]
+        require(weight != null)
+        return weight
+    }
+
+    companion object {
+        private val store = LinkedHashMap<String, Weight>()
+    }
+
+    fun clearAll() {
+        store.clear()
+    }
 }

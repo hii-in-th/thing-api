@@ -15,29 +15,24 @@
  * limitations under the License.
  */
 
-package hii.thing.api.vital.dao.redis
+package hii.thing.api.dao.vital.height
 
-import redis.clients.jedis.HostAndPort
-import redis.clients.jedis.Jedis
+import hii.thing.api.dao.SQL_SESSION_LENGTH
+import hii.thing.api.dao.toJavaTime
+import hii.thing.api.vital.Height
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.Table
 
-class Redis(jedisClusterNodes: Set<HostAndPort>, val expireSec: Int) {
-    // private val jc = JedisCluster(jedisClusterNodes) // for production.
-    private val jc = Jedis(jedisClusterNodes.first()) // for unit test.
+internal object SqlHeight : Table("height") {
+    val sessionId = varchar("sessionid", SQL_SESSION_LENGTH).primaryKey(0).primaryKey(1)
+    val time = datetime("time").primaryKey(0)
+    var height = float("height")
 
-    fun set(key: String, value: String) {
-        jc[key] = value
-        jc.expire(key, expireSec)
-    }
-
-    fun get(key: String): String {
-        return jc[key]
-    }
-
-    fun remove(key: String) {
-        jc.del(key)
-    }
-
-    fun removeAll() {
-        jc.flushDB()
+    fun getResult(it: ResultRow): Height {
+        return Height(
+            it[height],
+            it[sessionId],
+            it[time].toJavaTime()
+        )
     }
 }

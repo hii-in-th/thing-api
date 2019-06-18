@@ -15,58 +15,50 @@
  * limitations under the License.
  */
 
-package hii.thing.api.vital.dao.pgsql
+package hii.thing.api.dao.vital.weight
 
+import hii.thing.api.dao.pgPassword
+import hii.thing.api.dao.pgUrl
+import hii.thing.api.dao.pgUsername
+import hii.thing.api.vital.Weight
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
 
-class Postgresql(pgUrl: String, username: String, password: String) {
+class PgSqlWeightDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) : WeightDao {
     init {
         Database.connect(
-            url = pgUrl,
+            url = url,
             driver = "org.postgresql.Driver",
             user = username,
             password = password
         )
     }
 
-    fun add(message: String) {
+    override fun save(session: String, weight: Weight): Weight {
+        var weightOut: Weight? = null
         transaction {
-            SchemaUtils.create(Message)
-            val time = Message.insert {
+            SchemaUtils.create(SqlWeight)
+            require(runCatching { getBy(session) }.isFailure)
+
+            SqlWeight.insert {
+                it[sessionId] = session
+                it[SqlWeight.weight] = weight.weight
                 it[time] = DateTime.now()
-                it[Message.message] = message
-            } get Message.time
-        }
-    }
-
-    fun get(): Map<DateTime, String> {
-        val output = hashMapOf<DateTime, String>()
-        transaction {
-            for (message in Message.selectAll()) {
-                output[message[Message.time]] = message[Message.message]
             }
+            weightOut = getBy(session)
         }
-        return output.toMap()
+        return weightOut!!
     }
 
-    fun remove(message: String) {
+    override fun getBy(session: String): Weight {
+        var weightOut: Weight? = null
         transaction {
-            Message.deleteWhere {
-                Message.message like message
-            }
+            SqlWeight.select { SqlWeight.sessionId eq session }.limit(1).map { weightOut = SqlWeight.getResult(it) }
         }
-    }
-
-    fun removeAll() {
-        transaction {
-            Message.deleteAll()
-        }
+        return weightOut!!
     }
 }

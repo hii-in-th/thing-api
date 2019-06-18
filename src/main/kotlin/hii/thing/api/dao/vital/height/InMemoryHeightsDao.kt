@@ -15,6 +15,28 @@
  * limitations under the License.
  */
 
-package hii.thing.api.vital.dao
+package hii.thing.api.dao.vital.height
 
-interface Dao
+import hii.thing.api.vital.Height
+
+class InMemoryHeightsDao : HeightsDao {
+    override fun save(session: String, height: Height): Height {
+        require(store[session] == null)
+        store[session] = Height(height.height, session, height.time)
+        return store[session]!!
+    }
+
+    override fun getBy(session: String): Height {
+        val height = store[session]
+        require(height != null)
+        return height
+    }
+
+    companion object {
+        private val store = LinkedHashMap<String, Height>()
+    }
+
+    fun cleanAll() {
+        store.clear()
+    }
+}
