@@ -19,9 +19,9 @@ package hii.thing.api.dao.apikey
 
 import org.jetbrains.exposed.sql.Table
 
-internal object SqlDevice : Table() {
-    val deviceId = varchar("deviceid", 36).primaryKey()
-
+internal object SqlDevice : Table("device") {
+    val deviceId = varchar("deviceid", 36).primaryKey(0).primaryKey(1)
+    val time = datetime("time").primaryKey(0)
     val deviceName = varchar("name", 255) // sub
     val baseToken = varchar("apikey", 500)
     val audience = varchar("audience", 32)

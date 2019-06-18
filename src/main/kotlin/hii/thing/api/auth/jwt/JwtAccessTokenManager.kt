@@ -34,7 +34,11 @@ import java.util.Date
 import java.util.UUID
 
 class JwtAccessTokenManager(
-    val apiKeyDao: ApiKeyDao = PgSqlApiKeyDao(pgUrl, pgUsername, pgPassword)
+    val apiKeyDao: ApiKeyDao = PgSqlApiKeyDao(
+        pgUrl,
+        pgUsername,
+        pgPassword
+    )
 ) : AccessTokenManager {
     override fun create(baseToken: String): AccessToken {
         val device = apiKeyDao.getDeviceBy(baseToken)

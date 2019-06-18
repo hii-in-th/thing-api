@@ -17,6 +17,13 @@
 
 package hii.thing.api.dao
 
+import org.joda.time.DateTime
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+
+// sql config
+const val SQL_SESSION_LENGTH = 36
+
 // Postgres configuration
 val pgUrl by lazy { System.getenv("PG_URL") }
 val pgUsername by lazy { System.getenv("PG_USER") }
@@ -26,3 +33,6 @@ val pgPassword by lazy { System.getenv("PG_PASSWORD") }
 val redisHost by lazy { System.getenv("RE_HOST") }
 val redisPort by lazy { System.getenv("RE_PORT").toInt() }
 val redisExpireSec by lazy { System.getenv("RE_EXPIRE_SEC").toInt() }
+
+internal fun LocalDateTime.toSqlTime(): DateTime = DateTime(this.toEpochSecond(ZoneOffset.UTC))
+internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.ofEpochSecond(this.millis, 0, ZoneOffset.UTC)

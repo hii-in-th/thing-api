@@ -29,6 +29,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import org.joda.time.DateTime
 
 class PgSqlRegisterStoreDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) :
     RegisterStoreDao {
@@ -46,15 +47,15 @@ class PgSqlRegisterStoreDao(url: String = pgUrl, username: String = pgUsername, 
         var reg: CreateSessionDetail? = null
         transaction {
             SchemaUtils.create(SqlRegisterDetail)
-
+            require(runCatching { get(sessionId) }.isFailure)
             try {
-
                 SqlRegisterDetail.insert {
                     it[SqlRegisterDetail.sessionId] = sessionId
                     it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput
                     it[birthDate] = sessionDetail.birthDate
+                    it[time] = DateTime.now()
                 }
             } catch (ex: ExposedSQLException) {
                 require(false)

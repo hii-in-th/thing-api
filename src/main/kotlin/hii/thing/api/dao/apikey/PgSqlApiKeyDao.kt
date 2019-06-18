@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.joda.time.DateTime
 
 class PgSqlApiKeyDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) : ApiKeyDao {
 
@@ -63,6 +64,7 @@ class PgSqlApiKeyDao(url: String = pgUrl, username: String = pgUsername, passwor
         var deviceOut: Device? = null
         transaction {
             SchemaUtils.create(SqlDevice)
+            require(runCatching { get(device.deviceID) }.isFailure)
             SqlDevice.insert {
                 it[deviceId] = device.deviceID
                 it[deviceName] = device.deviceName
@@ -70,9 +72,19 @@ class PgSqlApiKeyDao(url: String = pgUrl, username: String = pgUsername, passwor
                 it[audience] = device.audience
                 it[roles] = device.roles.toStringRawText()
                 it[scope] = device.scope.toStringRawText()
+                it[time] = DateTime.now()
             }
             SqlDevice.select { SqlDevice.deviceId eq device.deviceID }.limit(1)
                 .map { deviceOut = mapResult(it) }
+        }
+        return deviceOut!!
+    }
+
+    private fun get(deviceId: String): Device {
+        var deviceOut: Device? = null
+        transaction {
+            SchemaUtils.create(SqlDevice)
+            SqlDevice.select { SqlDevice.deviceId eq deviceId }.map { deviceOut = mapResult(it) }
         }
         return deviceOut!!
     }
