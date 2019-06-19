@@ -23,11 +23,20 @@ import java.time.ZoneOffset
 
 // sql config
 const val SQL_SESSION_LENGTH = 36
+val dataSourcePool by lazy { DataSource() }
 
-// Postgres configuration
-val pgUrl by lazy { System.getenv("PG_URL") }
-val pgUsername by lazy { System.getenv("PG_USER") }
-val pgPassword by lazy { System.getenv("PG_PASSWORD") }
+// Database configuration
+val dbUrl by lazy { System.getenv("DB_URL") }
+val dbUsername by lazy { System.getenv("DB_USER") }
+val dbPassword by lazy { System.getenv("DB_PASSWORD") }
+val dbDriver = "org.postgresql.Driver"
+val dbProperties by lazy {
+    hashMapOf(
+        "MinPoolSize" to "0",
+        "MaxPoolSize" to "10",
+        "MaxIdleTime" to "0"
+    )
+}
 
 // Redis configuration.
 val redisHost by lazy { System.getenv("RE_HOST") }

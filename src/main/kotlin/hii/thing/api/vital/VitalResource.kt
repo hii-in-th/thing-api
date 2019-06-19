@@ -17,6 +17,7 @@
 
 package hii.thing.api.vital
 
+import hii.thing.api.dao.dataSourcePool
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.bp.PgSqlBloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
@@ -37,10 +38,10 @@ import javax.ws.rs.core.SecurityContext
 @Produces(MediaType.APPLICATION_JSON)
 
 class VitalResource(
-    val pbDao: BloodPressuresDao = PgSqlBloodPressuresDao(),
+    val pbDao: BloodPressuresDao = PgSqlBloodPressuresDao { dataSourcePool.getConnection() },
     // TODO heightsDao
-    val heightsDao: HeightsDao = PgSqlHeightsDao(),
-    val weightDao: WeightDao = PgSqlWeightDao(),
+    val heightsDao: HeightsDao = PgSqlHeightsDao { dataSourcePool.getConnection() },
+    val weightDao: WeightDao = PgSqlWeightDao { dataSourcePool.getConnection() },
     val sessionsManager: SessionsManager = JwtSessionsManager()
 ) {
 

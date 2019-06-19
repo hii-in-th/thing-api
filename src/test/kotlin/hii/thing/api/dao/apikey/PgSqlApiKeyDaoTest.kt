@@ -18,6 +18,7 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
+import hii.thing.api.dao.DataSource
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.junit.After
@@ -28,11 +29,13 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 class PgSqlApiKeyDaoTest {
     val pgsql = EmbeddedPostgres()
     lateinit var apiKeyDao: ApiKeyDao
+    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
         val url = pgsql.start()
-        apiKeyDao = PgSqlApiKeyDao(url, "postgres", "postgres")
+        ds = DataSource(url, "postgres", "postgres")
+        apiKeyDao = PgSqlApiKeyDao { ds.getConnection() }
     }
 
     val device = Device(

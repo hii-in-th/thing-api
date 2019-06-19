@@ -17,9 +17,6 @@
 
 package hii.thing.api.dao.vital.height
 
-import hii.thing.api.dao.pgPassword
-import hii.thing.api.dao.pgUrl
-import hii.thing.api.dao.pgUsername
 import hii.thing.api.vital.Height
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -27,15 +24,11 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import java.sql.Connection
 
-class PgSqlHeightsDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) : HeightsDao {
+class PgSqlHeightsDao(connection: () -> Connection) : HeightsDao {
     init {
-        Database.connect(
-            url = url,
-            driver = "org.postgresql.Driver",
-            user = username,
-            password = password
-        )
+        Database.connect(connection)
     }
 
     override fun save(session: String, height: Height): Height {

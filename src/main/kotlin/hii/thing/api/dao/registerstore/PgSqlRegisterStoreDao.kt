@@ -17,9 +17,6 @@
 
 package hii.thing.api.dao.registerstore
 
-import hii.thing.api.dao.pgPassword
-import hii.thing.api.dao.pgUrl
-import hii.thing.api.dao.pgUsername
 import hii.thing.api.sessions.CreateSessionDetail
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
@@ -30,17 +27,13 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
+import java.sql.Connection
 
-class PgSqlRegisterStoreDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) :
+class PgSqlRegisterStoreDao(connection: () -> Connection) :
     RegisterStoreDao {
 
     init {
-        Database.connect(
-            url = url,
-            driver = "org.postgresql.Driver",
-            user = username,
-            password = password
-        )
+        Database.connect(connection)
     }
 
     override fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {

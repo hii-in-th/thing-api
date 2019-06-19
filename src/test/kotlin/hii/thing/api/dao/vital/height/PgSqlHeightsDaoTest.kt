@@ -17,6 +17,7 @@
 
 package hii.thing.api.dao.vital.height
 
+import hii.thing.api.dao.DataSource
 import hii.thing.api.getLogger
 import hii.thing.api.vital.Height
 import org.amshove.kluent.`should be equal to`
@@ -28,11 +29,13 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 class PgSqlHeightsDaoTest {
     val pgsql = EmbeddedPostgres()
     lateinit var heightsDao: HeightsDao
+    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
         val url = pgsql.start()
-        heightsDao = PgSqlHeightsDao(url, "postgres", "postgres")
+        ds = DataSource(url, "postgres", "postgres")
+        heightsDao = PgSqlHeightsDao { ds.getConnection() }
     }
 
     @After

@@ -18,9 +18,6 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
-import hii.thing.api.dao.pgPassword
-import hii.thing.api.dao.pgUrl
-import hii.thing.api.dao.pgUsername
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -28,16 +25,12 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import java.sql.Connection
 
-class PgSqlApiKeyDao(url: String = pgUrl, username: String = pgUsername, password: String = pgPassword) : ApiKeyDao {
+class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
 
     init {
-        Database.connect(
-            url = url,
-            driver = "org.postgresql.Driver",
-            user = username,
-            password = password
-        )
+        Database.connect(connection)
     }
 
     override fun getDeviceBy(baseToken: String): Device {

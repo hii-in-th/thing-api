@@ -17,6 +17,7 @@
 
 package hii.thing.api.dao.vital.bp
 
+import hii.thing.api.dao.DataSource
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
 import org.junit.After
@@ -27,11 +28,13 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 class PgSqlBloodPressuresDaoTest {
     val pgsql = EmbeddedPostgres()
     lateinit var pbDao: PgSqlBloodPressuresDao
+    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
         val url = pgsql.start()
-        pbDao = PgSqlBloodPressuresDao(url, "postgres", "postgres")
+        ds = DataSource(url, "postgres", "postgres")
+        pbDao = PgSqlBloodPressuresDao { ds.getConnection() }
     }
 
     @After

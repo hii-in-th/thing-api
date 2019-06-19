@@ -17,6 +17,7 @@
 
 package hii.thing.api.dao.vital.weight
 
+import hii.thing.api.dao.DataSource
 import hii.thing.api.vital.Weight
 import org.amshove.kluent.`should be equal to`
 import org.junit.After
@@ -27,11 +28,13 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 class PgSqlWeightDaoTest {
     val pgsql = EmbeddedPostgres()
     lateinit var weightDao: WeightDao
+    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
         val url = pgsql.start()
-        weightDao = PgSqlWeightDao(url, "postgres", "postgres")
+        ds = DataSource(url, "postgres", "postgres")
+        weightDao = PgSqlWeightDao { ds.getConnection() }
     }
 
     @After

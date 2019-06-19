@@ -24,9 +24,7 @@ import hii.thing.api.auth.AccessToken
 import hii.thing.api.auth.AccessTokenManager
 import hii.thing.api.dao.apikey.ApiKeyDao
 import hii.thing.api.dao.apikey.PgSqlApiKeyDao
-import hii.thing.api.dao.pgPassword
-import hii.thing.api.dao.pgUrl
-import hii.thing.api.dao.pgUsername
+import hii.thing.api.dao.dataSourcePool
 import hii.thing.api.getLogger
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -34,11 +32,7 @@ import java.util.Date
 import java.util.UUID
 
 class JwtAccessTokenManager(
-    val apiKeyDao: ApiKeyDao = PgSqlApiKeyDao(
-        pgUrl,
-        pgUsername,
-        pgPassword
-    )
+    val apiKeyDao: ApiKeyDao = PgSqlApiKeyDao { dataSourcePool.getConnection() }
 ) : AccessTokenManager {
     override fun create(baseToken: String): AccessToken {
         val device = apiKeyDao.getDeviceBy(baseToken)

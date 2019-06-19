@@ -18,6 +18,7 @@
 package hii.thing.api.sessions.jwt
 
 import hii.thing.api.JwtConst
+import hii.thing.api.dao.dataSourcePool
 import hii.thing.api.dao.registerstore.PgSqlRegisterStoreDao
 import hii.thing.api.dao.registerstore.RegisterStoreDao
 import hii.thing.api.dao.session.RedisSessionDao
@@ -29,7 +30,7 @@ import java.util.UUID
 
 class JwtSessionsManager(
     val sessionsDao: SessionsDao = RedisSessionDao(setOf()),
-    val registerStoreManager: RegisterStoreDao = PgSqlRegisterStoreDao()
+    val registerStoreManager: RegisterStoreDao = PgSqlRegisterStoreDao { dataSourcePool.getConnection() }
 ) : SessionsManager {
 
     override fun anonymousCreate(token: String, deviceId: String): String {

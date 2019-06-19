@@ -17,6 +17,7 @@
 
 package hii.thing.api.dao.registerstore
 
+import hii.thing.api.dao.DataSource
 import hii.thing.api.sessions.CreateSessionDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
@@ -28,11 +29,13 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 class PgSqlRegisterStoreDaoTest {
     val pgsql = EmbeddedPostgres()
     lateinit var registerStoreDao: RegisterStoreDao
+    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
         val url = pgsql.start()
-        registerStoreDao = PgSqlRegisterStoreDao(url, "postgres", "postgres")
+        ds = DataSource(url, "postgres", "postgres")
+        registerStoreDao = PgSqlRegisterStoreDao { ds.getConnection() }
     }
 
     val sessionId = "12384-sdf-b-a-2-321-32-4"
