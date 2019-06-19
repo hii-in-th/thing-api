@@ -17,16 +17,14 @@
 
 package hii.thing.api.vital
 
-import hii.thing.api.dao.dataSourcePool
+import hii.thing.api.dao.getDao
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
-import hii.thing.api.dao.vital.bp.PgSqlBloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
-import hii.thing.api.dao.vital.height.PgSqlHeightsDao
-import hii.thing.api.dao.vital.weight.PgSqlWeightDao
 import hii.thing.api.dao.vital.weight.WeightDao
 import hii.thing.api.sessions.SessionsManager
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.ws.rs.Consumes
+import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
@@ -38,10 +36,10 @@ import javax.ws.rs.core.SecurityContext
 @Produces(MediaType.APPLICATION_JSON)
 
 class VitalResource(
-    val pbDao: BloodPressuresDao = PgSqlBloodPressuresDao { dataSourcePool.getConnection() },
+    val pbDao: BloodPressuresDao = getDao(),
     // TODO heightsDao
-    val heightsDao: HeightsDao = PgSqlHeightsDao { dataSourcePool.getConnection() },
-    val weightDao: WeightDao = PgSqlWeightDao { dataSourcePool.getConnection() },
+    val heightsDao: HeightsDao = getDao(),
+    val weightDao: WeightDao = getDao(),
     val sessionsManager: SessionsManager = JwtSessionsManager()
 ) {
 
@@ -73,5 +71,10 @@ class VitalResource(
         val session = sessionsManager.getBy(accessToken)
         weight.sessionId = session
         return weightDao.save(session, weight)
+    }
+
+    @GET
+    @Path("/weight")
+    fun getResult() {
     }
 }

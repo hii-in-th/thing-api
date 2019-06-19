@@ -17,9 +17,10 @@
 
 package hii.thing.api.dao.vital.weight
 
+import hii.thing.api.dao.Dao
 import hii.thing.api.vital.Weight
 
-interface WeightDao {
+interface WeightDao : Dao {
     fun save(session: String, weight: Weight): Weight
     fun getBy(session: String): Weight
 }

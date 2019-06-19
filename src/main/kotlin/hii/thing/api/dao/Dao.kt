@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.apikey
+package hii.thing.api.dao
 
-import hii.thing.api.auth.Device
-import hii.thing.api.dao.Dao
-
-interface ApiKeyDao : Dao {
-    fun getDeviceBy(baseToken: String): Device
-    fun registerDevice(device: Device): Device
-}
+/**
+ * ใช้สำหรับในการคัดแยก class Dao
+ * Dao(Data access object) ทั้งหมดต้อง implement interface Dao
+ * @see Dao
+ *
+ * และหากต้องการใช้งาน getDao อย่าลืมสร้างชุดสร้างใน getDao() ด้วย
+ * @see getDao
+ */
+interface Dao

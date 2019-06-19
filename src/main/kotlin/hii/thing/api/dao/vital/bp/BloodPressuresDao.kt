@@ -17,9 +17,10 @@
 
 package hii.thing.api.dao.vital.bp
 
+import hii.thing.api.dao.Dao
 import hii.thing.api.vital.BloodPressures
 
-interface BloodPressuresDao {
+interface BloodPressuresDao : Dao {
     fun save(session: String, bp: BloodPressures): BloodPressures
     fun getBy(session: String): BloodPressures
 }

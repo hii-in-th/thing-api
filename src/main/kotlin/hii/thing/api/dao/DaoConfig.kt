@@ -17,10 +17,30 @@
 
 package hii.thing.api.dao
 
+import hii.thing.api.dao.apikey.ApiKeyDao
+import hii.thing.api.dao.apikey.InMemoryApiKeyDao
+import hii.thing.api.dao.apikey.PgSqlApiKeyDao
+import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
+import hii.thing.api.dao.registerstore.PgSqlRegisterStoreDao
+import hii.thing.api.dao.registerstore.RegisterStoreDao
+import hii.thing.api.dao.session.InMemorySessionDao
+import hii.thing.api.dao.session.RedisSessionDao
+import hii.thing.api.dao.session.SessionsDao
+import hii.thing.api.dao.vital.bp.BloodPressuresDao
+import hii.thing.api.dao.vital.bp.InMemoryBloodPressuresDao
+import hii.thing.api.dao.vital.bp.PgSqlBloodPressuresDao
+import hii.thing.api.dao.vital.height.HeightsDao
+import hii.thing.api.dao.vital.height.InMemoryHeightsDao
+import hii.thing.api.dao.vital.height.PgSqlHeightsDao
+import hii.thing.api.dao.vital.weight.InMemoryWeightDao
+import hii.thing.api.dao.vital.weight.PgSqlWeightDao
+import hii.thing.api.dao.vital.weight.WeightDao
 import org.joda.time.DateTime
+import redis.clients.jedis.HostAndPort
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+val standalone = System.getenv("HII_ALONE") != null
 // sql config
 const val SQL_SESSION_LENGTH = 36
 val dataSourcePool by lazy { DataSource() }
@@ -42,6 +62,24 @@ val dbProperties by lazy {
 val redisHost by lazy { System.getenv("RE_HOST") }
 val redisPort by lazy { System.getenv("RE_PORT").toInt() }
 val redisExpireSec by lazy { System.getenv("RE_EXPIRE_SEC").toInt() }
+
+inline fun <reified T : Dao> getDao(): T {
+    val dao = when (T::class) {
+        ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else PgSqlApiKeyDao { dataSourcePool.getConnection() }
+        RegisterStoreDao::class -> if (standalone) InMemoryRegisterStoreDao() else PgSqlRegisterStoreDao { dataSourcePool.getConnection() }
+        SessionsDao::class -> if (standalone) InMemorySessionDao() else RedisSessionDao(
+            setOf(HostAndPort(redisHost, redisPort)), redisExpireSec
+        )
+        BloodPressuresDao::class -> if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
+        HeightsDao::class -> if (standalone) InMemoryHeightsDao() else PgSqlHeightsDao { dataSourcePool.getConnection() }
+        WeightDao::class -> if (standalone) InMemoryWeightDao() else PgSqlWeightDao { dataSourcePool.getConnection() }
+        else -> throw TypeCastException("Cannot type dao.")
+    }
+    return dao as T
+}
+
+fun BloodPressuresDao.getDao(): BloodPressuresDao =
+    if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
 
 internal fun LocalDateTime.toSqlTime(): DateTime = DateTime(this.toEpochSecond(ZoneOffset.UTC))
 internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.ofEpochSecond(this.millis, 0, ZoneOffset.UTC)

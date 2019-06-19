@@ -17,10 +17,12 @@
 
 package hii.thing.api.dao.session
 
+import hii.thing.api.dao.Dao
+
 /**
  * การใช้งานควรใช้ผ่าน SessionManager
  */
-interface SessionsDao {
+interface SessionsDao : Dao {
     fun save(token: String, session: String)
     fun get(token: String): String
     fun remove(token: String)

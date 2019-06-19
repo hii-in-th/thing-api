@@ -17,9 +17,10 @@
 
 package hii.thing.api.dao.vital.height
 
+import hii.thing.api.dao.Dao
 import hii.thing.api.vital.Height
 
-interface HeightsDao {
+interface HeightsDao : Dao {
     fun save(session: String, height: Height): Height
     fun getBy(session: String): Height
 }

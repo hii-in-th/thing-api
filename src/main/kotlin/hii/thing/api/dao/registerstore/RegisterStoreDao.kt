@@ -17,9 +17,10 @@
 
 package hii.thing.api.dao.registerstore
 
+import hii.thing.api.dao.Dao
 import hii.thing.api.sessions.CreateSessionDetail
 
-interface RegisterStoreDao {
+interface RegisterStoreDao : Dao {
     fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
     fun update(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
     fun getBy(citizenId: String): Map<String, CreateSessionDetail>

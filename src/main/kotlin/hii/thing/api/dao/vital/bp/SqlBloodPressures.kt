@@ -17,13 +17,14 @@
 
 package hii.thing.api.dao.vital.bp
 
+import hii.thing.api.dao.SQL_SESSION_LENGTH
 import hii.thing.api.dao.toJavaTime
 import hii.thing.api.vital.BloodPressures
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlBloodPressures : Table("bloodpressures") {
-    val sessionId = varchar("sessionid", 36).primaryKey(0).primaryKey(1)
+    val sessionId = varchar("sessionid", SQL_SESSION_LENGTH).primaryKey(0).primaryKey(1)
     val time = datetime("time").primaryKey(0)
     val sys = float("sys")
     val dia = float("dia")
