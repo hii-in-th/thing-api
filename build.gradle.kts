@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     java
     kotlin("jvm") version "1.3.31"
@@ -22,7 +24,7 @@ dependencies {
     compile("org.jetbrains.exposed:exposed:0.13.7")
     compile("org.postgresql:postgresql:42.2.5")
     compile("com.zaxxer:HikariCP:3.3.1")
-    
+
     testImplementation("com.github.fppt:jedis-mock:0.1.13")
     testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
 }
