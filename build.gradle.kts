@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -10,11 +9,6 @@ plugins {
 
 group = "hii"
 version = gitVersion
-
-sourceSets["main"].java.srcDir("src/main/java")
-sourceSets["main"].withConvention(KotlinSourceSet::class) {
-    kotlin.srcDir("src/main/kotlin")
-}
 
 repositories {
     mavenCentral()
@@ -69,10 +63,19 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-tasks.named<Jar>("jar") {
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allJava)
+}
 
-    archiveName = "${project.name}.jar"
-    destinationDir = file("$rootDir/build/bin")
+tasks.named<Jar>("jar") {
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        configurations.compileClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+
+    this.archiveName = "${project.name}.jar"
+    this.destinationDir = file("$rootDir/build/bin")
 
     manifest { attributes["Main-Class"] = "hii.thing.api.ThingApiServer" }
 
