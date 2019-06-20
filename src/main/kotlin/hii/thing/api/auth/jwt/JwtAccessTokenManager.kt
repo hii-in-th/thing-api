@@ -46,7 +46,7 @@ class JwtAccessTokenManager(
             .withIssuer(JwtConst.issuer)
             .withIssuedAt(date)
             .withExpiresAt(Date(date.time + 323234))
-            .withAudience(device.audience)
+            .withAudience(JwtConst.audience)
             .withSubject(device.deviceName)
             .withJWTId(jwtId)
             .withArrayClaim("role", device.roles.toTypedArray())

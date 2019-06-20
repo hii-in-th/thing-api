@@ -27,11 +27,13 @@ import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
+// TODO ย้ายไปรวมกับ auth
 class JwtConst private constructor() {
     companion object {
         // TODO ("ใช้เป็นไฟล์")
         val keyPair = KeyPairGenerator.getInstance("RSA").apply { initialize(4096) }.genKeyPair()!!
         const val issuer = "auth.hii.in.th"
+        const val audience = "hii.in.th"
 
         fun decodeAndVerify(accessToken: String): DecodedJWT {
             var decodedJWT: DecodedJWT? = null

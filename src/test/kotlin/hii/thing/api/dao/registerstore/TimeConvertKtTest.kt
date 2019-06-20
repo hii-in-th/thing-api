@@ -15,38 +15,31 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.apikey
+package hii.thing.api.dao.registerstore
 
-import hii.thing.api.auth.Device
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.joda.time.DateTime
 import org.junit.Test
+import java.time.LocalDateTime
 
-class InMemoryApiKeyDaoTest {
-
-    val apiKeyDao: ApiKeyDao = InMemoryApiKeyDao()
-
-    val device = Device(
-        "hii/007",
-        "abcde",
-        listOf("kios"),
-        listOf("/vital", "/height", "/bmi")
-    )
+class TimeConvertKtTest {
+    val stringDate = "1976-06-05"
+    val javaTime = LocalDateTime.of(1976, 6, 5, 0, 0)
+    val sqlDateTime = DateTime(1976, 6, 5, 0, 0)
 
     @Test
-    fun registerDevice() {
-        apiKeyDao.registerDevice(device)
+    fun stringToJavaTime() {
+        stringDate.toJavaTime() `should equal` javaTime
     }
 
     @Test
-    fun registerAndGet() {
-        apiKeyDao.registerDevice(device)
-        val getDevice = apiKeyDao.getDeviceBy(device.baseToken)
+    fun javaTimeToSqlTime() {
+        javaTime.toSqlTime() `should equal` sqlDateTime
+    }
 
-        getDevice.deviceID `should be equal to` device.deviceID
-        getDevice.deviceName `should be equal to` device.deviceName
-        getDevice.baseToken `should be equal to` device.baseToken
-        getDevice.roles `should equal` device.roles
-        getDevice.scope `should equal` device.scope
+    @Test
+    fun sqlDateTimeToStringDate() {
+        sqlDateTime.toStringDate() `should be equal to` stringDate
     }
 }

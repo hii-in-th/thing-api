@@ -26,5 +26,5 @@ internal object SqlRegisterDetail : Table("register") {
     val deviceId = varchar("deviceid", 36)
     val citizenId = varchar("citizenid", 36).nullable()
     val citizenIdInput = varchar("citizenidinput", 10).nullable()
-    val birthDate = varchar("birthdate", 10).nullable()
+    val birthDate = date("birthdate").nullable()
 }

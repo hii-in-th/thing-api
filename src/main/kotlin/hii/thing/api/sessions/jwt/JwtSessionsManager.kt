@@ -51,4 +51,8 @@ class JwtSessionsManager(
     override fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
         return registerStoreManager.update(session, sessionDetail)
     }
+
+    override fun getDetail(session: String): CreateSessionDetail {
+        return registerStoreManager.get(session)
+    }
 }

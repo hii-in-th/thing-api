@@ -78,8 +78,4 @@ inline fun <reified T : Dao> getDao(): T {
     return dao as T
 }
 
-fun BloodPressuresDao.getDao(): BloodPressuresDao =
-    if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
-
-internal fun LocalDateTime.toSqlTime(): DateTime = DateTime(this.toEpochSecond(ZoneOffset.UTC))
 internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.ofEpochSecond(this.millis, 0, ZoneOffset.UTC)

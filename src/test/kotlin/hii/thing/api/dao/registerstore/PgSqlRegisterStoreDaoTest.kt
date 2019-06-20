@@ -43,7 +43,7 @@ class PgSqlRegisterStoreDaoTest {
         "max-199-991",
         "1234122345634",
         "CARD",
-        "10-10-2562"
+        "1970-10-13"
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",

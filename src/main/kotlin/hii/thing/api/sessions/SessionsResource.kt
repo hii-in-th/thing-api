@@ -39,13 +39,19 @@ class SessionsResource(
     lateinit var context: SecurityContext
 
     @POST
-    @RolesAllowed("MACHINE")
+    @RolesAllowed("MACHINE", "KIOS", "kios")
     fun newSessions(detail: CreateSessionDetail): Session {
         val accessToken = context.userPrincipal.name!!
-        // session create
-        return Session(
-            sessionsManager.anonymousCreate(accessToken, detail.deviceId)
-            // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
-        )
+
+        return if (!detail.citizenId.isNullOrBlank())
+            Session(
+                sessionsManager.create(accessToken, detail)
+                // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
+            )
+        else
+            Session(
+                sessionsManager.anonymousCreate(accessToken, detail.deviceId)
+                // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
+            )
     }
 }

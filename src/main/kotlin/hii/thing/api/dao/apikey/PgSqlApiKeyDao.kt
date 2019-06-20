@@ -46,7 +46,6 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
         return Device(
             it[SqlDevice.deviceName],
             it[SqlDevice.baseToken],
-            it[SqlDevice.audience],
             it[SqlDevice.roles].toList(),
             it[SqlDevice.scope].toList(),
             it[SqlDevice.deviceId]
@@ -62,7 +61,6 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
                 it[deviceId] = device.deviceID
                 it[deviceName] = device.deviceName
                 it[baseToken] = device.baseToken
-                it[audience] = device.audience
                 it[roles] = device.roles.toStringRawText()
                 it[scope] = device.scope.toStringRawText()
                 it[time] = DateTime.now()

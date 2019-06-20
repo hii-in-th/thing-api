@@ -22,4 +22,5 @@ interface SessionsManager {
     fun create(token: String, sessionDetail: CreateSessionDetail): String
     fun getBy(token: String): String
     fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun getDetail(session: String): CreateSessionDetail
 }

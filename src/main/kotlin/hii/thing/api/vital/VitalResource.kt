@@ -18,6 +18,7 @@
 package hii.thing.api.vital
 
 import hii.thing.api.dao.getDao
+import hii.thing.api.dao.registerstore.toJavaTime
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
 import hii.thing.api.dao.vital.weight.WeightDao
@@ -37,7 +38,6 @@ import javax.ws.rs.core.SecurityContext
 
 class VitalResource(
     val pbDao: BloodPressuresDao = getDao(),
-    // TODO heightsDao
     val heightsDao: HeightsDao = getDao(),
     val weightDao: WeightDao = getDao(),
     val sessionsManager: SessionsManager = JwtSessionsManager()
@@ -74,7 +74,20 @@ class VitalResource(
     }
 
     @GET
-    @Path("/weight")
-    fun getResult() {
+    @Path("/result")
+    fun getResult(): Result {
+        val accessToken = context.userPrincipal.name!!
+        val session = sessionsManager.getBy(accessToken)
+        val height = heightsDao.getBy(session)
+        val weight = weightDao.getBy(session)
+        val bp = pbDao.getBy(session)
+        val userDetail = sessionsManager.getDetail(session)
+
+        var age: Int? = null
+        userDetail.birthDate?.let {
+            age = calAge(it.toJavaTime())
+        }
+
+        return Result(age, height.height, weight.weight, bp)
     }
 }

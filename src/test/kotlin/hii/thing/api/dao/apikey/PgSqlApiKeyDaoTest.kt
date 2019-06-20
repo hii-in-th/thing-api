@@ -41,7 +41,6 @@ class PgSqlApiKeyDaoTest {
     val device = Device(
         "hii/007",
         "abcde",
-        "api.ffc.in.th",
         listOf("kios"),
         listOf("/vital", "/height", "/bmi")
     )
@@ -58,7 +57,6 @@ class PgSqlApiKeyDaoTest {
 
         getDevice.deviceID `should be equal to` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName
-        getDevice.audience `should be equal to` device.audience
         getDevice.baseToken `should be equal to` device.baseToken
         getDevice.roles `should equal` device.roles
         getDevice.scope `should equal` device.scope

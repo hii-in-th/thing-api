@@ -15,14 +15,15 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth
+package hii.thing.api.vital
 
-import java.util.UUID
+import com.google.gson.Gson
+import org.junit.Test
 
-data class Device(
-    val deviceName: String, // sub
-    val baseToken: String,
-    val roles: List<String>,
-    val scope: List<String>,
-    val deviceID: String = UUID.randomUUID().toString()
-)
+class ResultTest {
+    @Test
+    fun create() {
+        val result = Result(15, 170.1F, 69F, null)
+        println(Gson().toJson(result))
+    }
+}

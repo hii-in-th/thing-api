@@ -37,7 +37,6 @@ class JwtAccessTokenManagerTest {
             return if (baseToken == baseKey) Device(
                 "hii/d121",
                 baseToken,
-                "api.ffc.in.th",
                 listOf("kios"),
                 listOf("sdf")
             )
@@ -61,6 +60,6 @@ class JwtAccessTokenManagerTest {
         val jwtDecode = JWT.decode(accessToken)
 
         jwtDecode.subject!! `should be equal to` "hii/d121"
-        jwtDecode.audience.first() `should be equal to` "api.ffc.in.th"
+        jwtDecode.audience.first() `should be equal to` JwtConst.audience
     }
 }

@@ -24,7 +24,6 @@ internal object SqlDevice : Table("device") {
     val time = datetime("time").primaryKey(0)
     val deviceName = varchar("name", 255) // sub
     val baseToken = varchar("apikey", 500)
-    val audience = varchar("audience", 32)
     val roles = varchar("roles", 255)
     val scope = varchar("scope", 255)
 }
