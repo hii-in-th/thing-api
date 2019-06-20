@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -9,6 +10,11 @@ plugins {
 
 group = "hii"
 version = gitVersion
+
+sourceSets["main"].java.srcDir("src/main/java")
+sourceSets["main"].withConvention(KotlinSourceSet::class) {
+    kotlin.srcDir("src/main/kotlin")
+}
 
 repositories {
     mavenCentral()
@@ -64,12 +70,11 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.named<Jar>("jar") {
-    configurations.compile.forEach { if (it.isDirectory) from(it) else from(zipTree(it)) }
 
     archiveName = "${project.name}.jar"
     destinationDir = file("$rootDir/build/bin")
 
-    manifest { attributes.put("Main-Class", "hii.thing.api.ThingApiServer") }
+    manifest { attributes["Main-Class"] = "hii.thing.api.ThingApiServer" }
 
     exclude(
         "META-INF/*.RSA",
