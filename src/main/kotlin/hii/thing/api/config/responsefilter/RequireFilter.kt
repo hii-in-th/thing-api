@@ -15,13 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api
+package hii.thing.api.config.responsefilter
 
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import javax.ws.rs.WebApplicationException
+import javax.ws.rs.core.Response
+import javax.ws.rs.ext.ExceptionMapper
+import javax.ws.rs.ext.Provider
 
-inline fun <reified T> T.getLogger(): Logger {
-    return LogManager.getLogger(T::class.java)
+@Provider
+class RequireFilter : ExceptionMapper<IllegalArgumentException> {
+    override fun toResponse(exception: IllegalArgumentException): Response {
+        return ErrorDetail.build(WebApplicationException(exception.message, exception, 400))
+    }
 }
-
-val logLevel get() = Any().getLogger().level

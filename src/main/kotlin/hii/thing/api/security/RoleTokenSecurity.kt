@@ -50,17 +50,18 @@ class RoleTokenSecurity : ContainerRequestFilter {
             return
 
         logger.debug("requestToken:$clientToken")
-        check(tokenManager.verify(clientToken)) { "Verify token ผิดพลาด" }
+        if (rolesAllowed != null) {
+            require(requestContext.isCsrf) { "CSRF" }
+            require(tokenManager.verify(clientToken)) { "Verify token ผิดพลาด" }
 
-        val clientRole = tokenManager.getUserRole(clientToken)
-        check(clientRole.containsSome(rolesAllowed!!.value.toList()))
-
+            val clientRole = tokenManager.getUserRole(clientToken)
+            require(clientRole.containsSome(rolesAllowed.value.toList())) { "ไม่มีสิทธิในการใช้งาน" }
+        }
         // Token ที่ดึงจาก securityContext จะได้เป็น access token
         requestContext.securityContext =
             TokenSecurityContext(clientToken, requestContext.uriInfo.baseUri.scheme, tokenManager)
-
         logger.info(
-            "Name: ${tokenManager.getName(clientToken)} " +
+            "Name: ${if (rolesAllowed != null) tokenManager.getName(clientToken) else clientToken} " +
                 "Access:${requestContext.method} " +
                 "Path:${requestContext.uriInfo.path}"
         )
@@ -79,10 +80,20 @@ class RoleTokenSecurity : ContainerRequestFilter {
             return bearer?.replaceFirst(BEARER_SCHEME, "")?.trim()?.takeIf { it.isNotBlank() }
         }
 
+    val ContainerRequestContext.isCsrf: Boolean
+        get() {
+            val hiiXreq = headers["X-Requested-By"]
+            val token = this.token
+            if (hiiXreq.isNullOrEmpty() || token.isNullOrEmpty())
+                return false
+            val name = tokenManager.getName(token)
+            return !hiiXreq.find { it == name }.isNullOrEmpty()
+        }
+
     companion object {
         const val AUTHORIZATION_HEADER = "Authorization"
         const val BEARER_SCHEME = "Bearer "
-        private val logger = getLogger()
+        private val logger = RoleTokenSecurity.getLogger()
     }
 
     private fun List<String>.containsSome(list: List<String>): Boolean {

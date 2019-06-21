@@ -15,13 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api
+package hii.thing.api.config.responsefilter
 
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import javax.ws.rs.ForbiddenException
+import javax.ws.rs.core.Response
+import javax.ws.rs.ext.ExceptionMapper
+import javax.ws.rs.ext.Provider
 
-inline fun <reified T> T.getLogger(): Logger {
-    return LogManager.getLogger(T::class.java)
+@Provider
+class ForbiddenFilter : ExceptionMapper<ForbiddenException> {
+    override fun toResponse(exception: ForbiddenException): Response {
+        return ErrorDetail.build(exception)
+    }
 }
-
-val logLevel get() = Any().getLogger().level
