@@ -21,6 +21,7 @@ import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
 import javax.ws.rs.core.Context
@@ -53,5 +54,15 @@ class SessionsResource(
                 sessionsManager.anonymousCreate(accessToken, detail.deviceId)
                 // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
             )
+    }
+
+    @PUT
+    @RolesAllowed("MACHINE", "KIOS", "kios")
+    fun updateSessions(detail: CreateSessionDetail): Session {
+        val accessToken = context.userPrincipal.name!!
+        val session = sessionsManager.getBy(accessToken)
+        val create = sessionsManager.updateCreate(accessToken, detail)
+
+        return Session(session, PersonalResult(mapOf("create" to create)))
     }
 }

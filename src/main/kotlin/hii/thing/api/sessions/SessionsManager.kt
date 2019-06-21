@@ -21,6 +21,6 @@ interface SessionsManager {
     fun anonymousCreate(token: String, deviceId: String): String
     fun create(token: String, sessionDetail: CreateSessionDetail): String
     fun getBy(token: String): String
-    fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun updateCreate(token: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
     fun getDetail(session: String): CreateSessionDetail
 }

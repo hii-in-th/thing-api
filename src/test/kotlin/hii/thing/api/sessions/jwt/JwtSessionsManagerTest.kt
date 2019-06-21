@@ -69,10 +69,11 @@ class JwtSessionsManagerTest {
 
     @Test
     fun updateCreate() {
-        val session = sessionsManager.create(createAccessToken(), createDetail)
-        val update = sessionsManager.updateCreate(session, CreateSessionDetail(deviceId, null, null, null))
+        val token = createAccessToken()
+        sessionsManager.create(token, CreateSessionDetail(deviceId))
+        val update = sessionsManager.updateCreate(token, createDetail)
 
-        update.citizenIdInput `should equal` null
+        update.citizenId `should equal` "1234"
     }
 
     @Test(expected = Exception::class)
@@ -92,7 +93,8 @@ class JwtSessionsManagerTest {
             .withExpiresAt(Date(date.time + expire))
             .withJWTId(UUID.randomUUID().toString())
             .withNotBefore(date)
-            .withJWTId(deviceId)
+            .withSubject(deviceId)
+            .withJWTId(UUID.randomUUID().toString())
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
             .sign(algorithm)

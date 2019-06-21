@@ -32,7 +32,7 @@ class JwtSessionsManager(
 ) : SessionsManager {
 
     override fun anonymousCreate(token: String, deviceId: String): String {
-        require(JwtConst.decode(token).id == deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
+        require(JwtConst.decode(token).subject == deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
         val session = UUID.randomUUID().toString()
         sessionsDao.save(token.hashText(), session)
         return session
@@ -48,7 +48,9 @@ class JwtSessionsManager(
         return sessionsDao.get(token.hashText())
     }
 
-    override fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
+    override fun updateCreate(token: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
+        require(JwtConst.decode(token).subject == sessionDetail.deviceId)
+        val session = getBy(token)
         return registerStoreManager.update(session, sessionDetail)
     }
 

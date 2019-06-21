@@ -26,10 +26,10 @@ class MockTokenManager : TokenManager {
 
     override fun getUserRole(token: String): List<String> {
         return if (token == SessionsResourceTest.accessToken)
-            listOf("MACHINE")
+            listOf("MACHINE", "kios")
         else
             listOf("HAHAHA")
     }
 
-    override fun getName(token: String): String = "M Machine"
+    override fun getName(token: String): String = "devices/105487111"
 }

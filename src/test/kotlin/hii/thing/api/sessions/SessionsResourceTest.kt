@@ -36,6 +36,7 @@ class SessionsResourceTest : JerseyTest() {
 
     private val session = UUID.randomUUID().toString()
     private val deviceId = "aabbcc-aabbee"
+    val devicename = "devices/105487111"
 
     /* ktlint-disable max-line-length */
     companion object {
@@ -53,7 +54,7 @@ class SessionsResourceTest : JerseyTest() {
 
             override fun getBy(token: String): String = session
 
-            override fun updateCreate(session: String, sessionDetail: CreateSessionDetail): CreateSessionDetail =
+            override fun updateCreate(token: String, sessionDetail: CreateSessionDetail): CreateSessionDetail =
                 CreateSessionDetail(deviceId, "", "", "")
 
             override fun getDetail(session: String): CreateSessionDetail = CreateSessionDetail(deviceId, "", "", "")
@@ -74,6 +75,7 @@ class SessionsResourceTest : JerseyTest() {
 
         val res = target("/sessions").request()
             .header("Authorization", "Bearer $accessToken")
+            .header("X-Requested-By", devicename)
             .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
 
         val sessionResponse = Gson().fromJson<Session>(res.readEntity(String::class.java), Session::class.java)
@@ -83,12 +85,36 @@ class SessionsResourceTest : JerseyTest() {
     }
 
     @Test
+    fun sessionsDontName() {
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+
+        val res = target("/sessions").request()
+            .header("Authorization", "Bearer $accessToken")
+            .header("X-Requested-By", "hahaha")
+            .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
+
+        res.status `should equal` 403
+    }
+
+    @Test
+    fun sessionsDontXreq() {
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+
+        val res = target("/sessions").request()
+            .header("Authorization", "Bearer $accessToken")
+            .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
+
+        res.status `should equal` 403
+    }
+
+    @Test
     fun sessionsNotUserInRole() {
         val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
         val res = target("/sessions").request()
             .header("Authorization", "Bearer sdfsdf")
+            .header("X-Requested-By", devicename)
             .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
 
-        res.status `should equal` 500
+        res.status `should equal` 403
     }
 }
