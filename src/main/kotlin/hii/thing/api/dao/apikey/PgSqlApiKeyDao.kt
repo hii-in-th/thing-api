@@ -18,6 +18,7 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
+import hii.thing.api.auth.NotFoundToken
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -39,7 +40,7 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
             SqlDevice.select { SqlDevice.baseToken eq baseToken }.limit(1)
                 .map { deviceOut = mapResult(it) }
         }
-        return deviceOut!!
+        return deviceOut ?: throw NotFoundToken("ไม่พบ Api key")
     }
 
     private fun mapResult(it: ResultRow): Device {

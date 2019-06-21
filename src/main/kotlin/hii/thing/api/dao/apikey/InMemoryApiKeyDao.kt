@@ -22,7 +22,7 @@ import hii.thing.api.auth.NotFoundToken
 
 class InMemoryApiKeyDao : ApiKeyDao {
     override fun getDeviceBy(baseToken: String): Device {
-        return storage[baseToken] ?: throw NotFoundToken("ไม่พบ Token")
+        return storage[baseToken] ?: throw NotFoundToken("ไม่พบ Api key")
     }
 
     override fun registerDevice(device: Device): Device {
