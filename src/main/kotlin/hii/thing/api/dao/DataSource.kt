@@ -25,9 +25,10 @@ import java.sql.SQLException
 class DataSource(url: String = dbUrl, username: String = dbUsername, password: String = dbPassword) {
 
     private val ds: HikariDataSource = HikariDataSource(HikariConfig().apply {
-        jdbcUrl = url
+        jdbcUrl = url.trim()
         this.username = username
         this.password = password
+        this.driverClassName = dbDriver
         addDataSourceProperty("dataSourceClassName", dbDriver)
         dbProperties.forEach { (key, value) -> addDataSourceProperty(key, value) }
     })
