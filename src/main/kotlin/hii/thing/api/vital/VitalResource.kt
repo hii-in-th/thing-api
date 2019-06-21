@@ -24,6 +24,7 @@ import hii.thing.api.dao.vital.height.HeightsDao
 import hii.thing.api.dao.vital.weight.WeightDao
 import hii.thing.api.sessions.SessionsManager
 import hii.thing.api.sessions.jwt.JwtSessionsManager
+import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -33,6 +34,7 @@ import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.SecurityContext
 
+@Path("")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 
@@ -48,7 +50,9 @@ class VitalResource(
 
     @POST
     @Path("/blood-pressures")
-    fun bpMeasure(bp: BloodPressures): BloodPressures {
+    @RolesAllowed("MACHINE", "KIOS", "kios")
+    fun bpMeasure(map: Map<String, String>): BloodPressures {
+        val bp = BloodPressures(map.getValue("sys").toFloat(), map.getValue("dia").toFloat())
         val accessToken = context.userPrincipal.name!!
         val session = sessionsManager.getBy(accessToken)
         bp.sessionId = session
@@ -57,7 +61,9 @@ class VitalResource(
 
     @POST
     @Path("/heights")
-    fun heightsMeasure(height: Height): Height {
+    @RolesAllowed("MACHINE", "KIOS", "kios")
+    fun heightsMeasure(map: Map<String, String>): Height {
+        val height = Height(map.getValue("height").toFloat())
         val accessToken = context.userPrincipal.name!!
         val session = sessionsManager.getBy(accessToken)
         height.sessionId = session
@@ -65,8 +71,10 @@ class VitalResource(
     }
 
     @POST
-    @Path("/weight")
-    fun weightMeasure(weight: Weight): Weight {
+    @Path("/weights")
+    @RolesAllowed("MACHINE", "KIOS", "kios")
+    fun weightMeasure(map: Map<String, String>): Weight {
+        val weight = Weight(map.getValue("weight").toFloat())
         val accessToken = context.userPrincipal.name!!
         val session = sessionsManager.getBy(accessToken)
         weight.sessionId = session
@@ -75,6 +83,7 @@ class VitalResource(
 
     @GET
     @Path("/result")
+    @RolesAllowed("MACHINE", "KIOS", "kios")
     fun getResult(): Result {
         val accessToken = context.userPrincipal.name!!
         val session = sessionsManager.getBy(accessToken)
