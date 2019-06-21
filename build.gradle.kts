@@ -54,6 +54,8 @@ dependencies {
     compile("com.auth0:java-jwt:3.8.1")
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
 
+    compile("commons-codec:commons-codec:1.12")
+
     testImplementation("junit:junit:4.12")
     testImplementation("org.mockito:mockito-core:2.28.2")
     testImplementation("org.amshove.kluent:kluent:1.48")
@@ -69,9 +71,16 @@ tasks.register<Jar>("sourcesJar") {
 }
 
 tasks.named<Jar>("jar") {
+    val list = ArrayList<File>()
+    list.addAll(configurations.compileClasspath.get())
+    list.addAll(configurations.runtimeClasspath.get())
     from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-        configurations.compileClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        list.map {
+            if (it.isDirectory)
+                it
+            else
+                zipTree(it)
+        }
     })
 
     this.archiveName = "${project.name}.jar"
