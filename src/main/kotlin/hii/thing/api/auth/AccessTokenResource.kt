@@ -29,7 +29,7 @@ import javax.ws.rs.core.Context
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 
-@Path("/auth/tokens")
+@Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 
@@ -44,6 +44,7 @@ class AccessTokenResource(
     lateinit var headers: HttpHeaders
 
     @POST
+    @Path("/tokens")
     fun createAccessToken(): AccessToken {
         logger.info("Create access token by ip:${ignore { req.remoteAddr }}")
 
