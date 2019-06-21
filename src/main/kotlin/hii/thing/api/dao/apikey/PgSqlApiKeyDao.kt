@@ -37,6 +37,7 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
     override fun getDeviceBy(baseToken: String): Device {
         var deviceOut: Device? = null
         transaction {
+            SchemaUtils.create(SqlDevice)
             SqlDevice.select { SqlDevice.baseToken eq baseToken }.limit(1)
                 .map { deviceOut = mapResult(it) }
         }
