@@ -14,6 +14,10 @@
     RE_HOST       ->  ip ของ server redis
     RE_PORT       ->  port ของ server redis
     RE_EXPIRE_SEC ->  ระบบลบอัตโนมัติของ redis หน่วยเป็นวินาที
+    
+    //Redis rsa key store. ถ้าไม่กำหนดจะใช้ค่าเดียวกับด้านบน
+    RE_KEY_HOST   ->  ip ของ server redis
+    RE_KEY_PORT   ->  port ของ server redis
 ``` 
 
 ## เชิงเทคนิค

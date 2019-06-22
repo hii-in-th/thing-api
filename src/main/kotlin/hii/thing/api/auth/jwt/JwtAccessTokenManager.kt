@@ -37,8 +37,8 @@ class JwtAccessTokenManager(
         val device = apiKeyDao.getDeviceBy(baseToken)
         val jwtId = UUID.randomUUID().toString()
 
-        val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
-        val privateKey: RSAPrivateKey = JwtConst.keyPair.private as RSAPrivateKey
+        val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
+        val privateKey: RSAPrivateKey = JwtConst.keyPair.privateKey
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
         val date = Date()
 

@@ -21,9 +21,10 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.RSAKeyProvider
+import hii.thing.api.security.keypair.KeyPair
+import hii.thing.api.security.keypair.KeyPairManage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
@@ -31,7 +32,7 @@ import java.security.interfaces.RSAPublicKey
 class JwtConst private constructor() {
     companion object {
         // TODO ("ใช้เป็นไฟล์")
-        val keyPair = KeyPairGenerator.getInstance("RSA").apply { initialize(4096) }.genKeyPair()!!
+        val keyPair: KeyPair = KeyPairManage
         const val issuer = "auth.hii.in.th"
         const val audience = "hii.in.th"
 
@@ -47,7 +48,7 @@ class JwtConst private constructor() {
         fun decode(accessToken: String): DecodedJWT = JWT.decode(accessToken)
 
         fun verify(accessToken: String): Boolean {
-            val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
+            val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
             val algorithm = Algorithm.RSA512(object : RSAKeyProvider {
                 override fun getPrivateKeyId(): String = ""
                 override fun getPrivateKey(): RSAPrivateKey? = null

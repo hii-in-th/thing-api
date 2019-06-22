@@ -24,6 +24,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be equal to`
+import org.junit.Before
 import org.junit.Test
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -31,6 +32,7 @@ import java.util.Date
 import java.util.UUID
 
 class JwtConstTest {
+
     @Test
     fun verifyOk() {
         val accessToken = createAccessToken()
@@ -64,8 +66,8 @@ class JwtConstTest {
     }
 
     private fun createAccessToken(expire: Long = 1000000, issuer: String = JwtConst.issuer): String {
-        val publicKey: RSAPublicKey = JwtConst.keyPair.public as RSAPublicKey
-        val privateKey: RSAPrivateKey = JwtConst.keyPair.private as RSAPrivateKey
+        val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
+        val privateKey: RSAPrivateKey = JwtConst.keyPair.privateKey
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
         val date = Date()
 
@@ -78,5 +80,10 @@ class JwtConstTest {
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
             .sign(algorithm)
+    }
+
+    @Before
+    fun setUp() {
+        // setEnv(mapOf("HII_ALONE" to "true"))
     }
 }
