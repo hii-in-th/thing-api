@@ -5,4 +5,5 @@ RUN     cd /home/hii/src && \
         mv ./build/bin/*.jar ..
 FROM openjdk:8-jre-slim
 COPY --from=0  /home/hii/thing-api.jar /home/hii/thing-api.jar
-CMD java -jar /home/hii/thing-api.jar
+WORKDIR /home/hii/
+CMD java -jar thing-api.jar
