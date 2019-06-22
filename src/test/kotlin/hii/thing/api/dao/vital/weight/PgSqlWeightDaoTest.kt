@@ -17,29 +17,22 @@
 
 package hii.thing.api.dao.vital.weight
 
-import hii.thing.api.dao.DataSource
+import hii.thing.api.PgSqlTestRule
 import hii.thing.api.vital.Weight
 import org.amshove.kluent.`should be equal to`
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
 class PgSqlWeightDaoTest {
-    val pgsql = EmbeddedPostgres()
+    @JvmField
+    @Rule
+    val pgsql = PgSqlTestRule(SqlWeight)
     lateinit var weightDao: WeightDao
-    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
-        val url = pgsql.start()
-        ds = DataSource(url, "postgres", "postgres")
-        weightDao = PgSqlWeightDao { ds.getConnection() }
-    }
-
-    @After
-    fun tearDown() {
-        pgsql.stop()
+        weightDao = PgSqlWeightDao(pgsql.connection)
     }
 
     val sessionId = "max-199-991-888"

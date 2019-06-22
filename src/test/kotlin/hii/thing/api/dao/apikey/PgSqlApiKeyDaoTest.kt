@@ -17,25 +17,23 @@
 
 package hii.thing.api.dao.apikey
 
+import hii.thing.api.PgSqlTestRule
 import hii.thing.api.auth.Device
-import hii.thing.api.dao.DataSource
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
 class PgSqlApiKeyDaoTest {
-    val pgsql = EmbeddedPostgres()
+    @JvmField
+    @Rule
+    val pgsql = PgSqlTestRule(SqlDevice)
     lateinit var apiKeyDao: ApiKeyDao
-    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
-        val url = pgsql.start()
-        ds = DataSource(url, "postgres", "postgres")
-        apiKeyDao = PgSqlApiKeyDao { ds.getConnection() }
+        apiKeyDao = PgSqlApiKeyDao(pgsql.connection)
     }
 
     val device = Device(
@@ -60,10 +58,5 @@ class PgSqlApiKeyDaoTest {
         getDevice.baseToken `should be equal to` device.baseToken
         getDevice.roles `should equal` device.roles
         getDevice.scope `should equal` device.scope
-    }
-
-    @After
-    fun tearDown() {
-        pgsql.stop()
     }
 }

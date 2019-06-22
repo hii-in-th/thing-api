@@ -17,29 +17,23 @@
 
 package hii.thing.api.dao.vital.bp
 
-import hii.thing.api.dao.DataSource
+import hii.thing.api.PgSqlTestRule
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
 class PgSqlBloodPressuresDaoTest {
-    val pgsql = EmbeddedPostgres()
+    @JvmField
+    @Rule
+    val pgsql = PgSqlTestRule(SqlBloodPressures)
+
     lateinit var pbDao: PgSqlBloodPressuresDao
-    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
-        val url = pgsql.start()
-        ds = DataSource(url, "postgres", "postgres")
-        pbDao = PgSqlBloodPressuresDao { ds.getConnection() }
-    }
-
-    @After
-    fun tearDown() {
-        pgsql.stop()
+        pbDao = PgSqlBloodPressuresDao(pgsql.connection)
     }
 
     val sessionId = "13432-sdfdsf-dsf-344435"

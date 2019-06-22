@@ -23,7 +23,7 @@ import hii.thing.api.vital.Height
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
-internal object SqlHeight : Table("height") {
+object SqlHeight : Table("height") {
     val sessionId = varchar("sessionid", SQL_SESSION_LENGTH).primaryKey(0).primaryKey(1)
     val time = datetime("time").primaryKey(0)
     var height = float("height")

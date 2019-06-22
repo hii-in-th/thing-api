@@ -22,7 +22,12 @@ import com.zaxxer.hikari.HikariDataSource
 import java.sql.Connection
 import java.sql.SQLException
 
-class DataSource(url: String = dbUrl, username: String = dbUsername, password: String = dbPassword) {
+class DataSource(
+    url: String = dbUrl,
+    username: String = dbUsername,
+    password: String = dbPassword,
+    maxPool: Int = 10
+) {
 
     private val ds: HikariDataSource = HikariDataSource(HikariConfig().apply {
         jdbcUrl = url.trim()
@@ -30,6 +35,7 @@ class DataSource(url: String = dbUrl, username: String = dbUsername, password: S
         this.password = password
         this.driverClassName = dbDriver
         addDataSourceProperty("dataSourceClassName", dbDriver)
+        this.maximumPoolSize = maxPool
         dbProperties.forEach { (key, value) -> addDataSourceProperty(key, value) }
     })
 

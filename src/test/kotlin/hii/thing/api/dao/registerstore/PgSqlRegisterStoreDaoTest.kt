@@ -17,25 +17,23 @@
 
 package hii.thing.api.dao.registerstore
 
-import hii.thing.api.dao.DataSource
+import hii.thing.api.PgSqlTestRule
 import hii.thing.api.sessions.CreateSessionDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
 class PgSqlRegisterStoreDaoTest {
-    val pgsql = EmbeddedPostgres()
+    @JvmField
+    @Rule
+    val pgsql = PgSqlTestRule(SqlRegisterDetail)
     lateinit var registerStoreDao: RegisterStoreDao
-    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
-        val url = pgsql.start()
-        ds = DataSource(url, "postgres", "postgres")
-        registerStoreDao = PgSqlRegisterStoreDao { ds.getConnection() }
+        registerStoreDao = PgSqlRegisterStoreDao(pgsql.connection)
     }
 
     val sessionId = "12384-sdf-b-a-2-321-32-4"
@@ -102,10 +100,5 @@ class PgSqlRegisterStoreDaoTest {
 
         val getReg = registerStoreDao.get(sessionId)
         getReg.deviceId `should be equal to` createSessionDetail.deviceId
-    }
-
-    @After
-    fun tearDown() {
-        pgsql.stop()
     }
 }

@@ -20,7 +20,7 @@ package hii.thing.api.dao.registerstore
 import hii.thing.api.dao.SQL_SESSION_LENGTH
 import org.jetbrains.exposed.sql.Table
 
-internal object SqlRegisterDetail : Table("register") {
+object SqlRegisterDetail : Table("register") {
     val sessionId = varchar("sessionid", SQL_SESSION_LENGTH).primaryKey(0).primaryKey(1)
     val time = datetime("time").primaryKey(0)
     val deviceId = varchar("deviceid", 36)

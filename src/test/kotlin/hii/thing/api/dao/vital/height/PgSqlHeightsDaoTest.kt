@@ -17,30 +17,23 @@
 
 package hii.thing.api.dao.vital.height
 
-import hii.thing.api.dao.DataSource
+import hii.thing.api.PgSqlTestRule
 import hii.thing.api.getLogger
 import hii.thing.api.vital.Height
 import org.amshove.kluent.`should be equal to`
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 
 class PgSqlHeightsDaoTest {
-    val pgsql = EmbeddedPostgres()
+    @JvmField
+    @Rule
+    val pgsql = PgSqlTestRule(SqlHeight)
     lateinit var heightsDao: HeightsDao
-    lateinit var ds: DataSource
 
     @Before
     fun setUp() {
-        val url = pgsql.start()
-        ds = DataSource(url, "postgres", "postgres")
-        heightsDao = PgSqlHeightsDao { ds.getConnection() }
-    }
-
-    @After
-    fun tearDown() {
-        pgsql.stop()
+        heightsDao = PgSqlHeightsDao(pgsql.connection)
     }
 
     val sessionId = "max-999-888-111"
