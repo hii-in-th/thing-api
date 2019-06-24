@@ -88,29 +88,6 @@ class SessionsResourceTest : JerseyTest() {
     }
 
     @Test
-    fun sessionsDontName() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
-
-        val res = target("/sessions").request()
-            .header("Authorization", "Bearer $accessToken")
-            .header("X-Requested-By", "hahaha")
-            .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
-
-        res.status `should equal` 403
-    }
-
-    @Test
-    fun sessionsDontXreq() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
-
-        val res = target("/sessions").request()
-            .header("Authorization", "Bearer $accessToken")
-            .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
-
-        res.status `should equal` 403
-    }
-
-    @Test
     fun sessionsNotUserInRole() {
         val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
         val res = target("/sessions").request()

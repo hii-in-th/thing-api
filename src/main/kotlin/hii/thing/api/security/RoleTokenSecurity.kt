@@ -51,7 +51,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
 
         logger.debug("requestToken:$clientToken")
         if (rolesAllowed != null) {
-            require(requestContext.isCsrf) { "CSRF" }
+            // require(requestContext.isCsrf) { "CSRF" }
             require(tokenManager.verify(clientToken)) { "Verify token ผิดพลาด" }
 
             val clientRole = tokenManager.getUserRole(clientToken)
@@ -80,6 +80,9 @@ class RoleTokenSecurity : ContainerRequestFilter {
             return bearer?.replaceFirst(BEARER_SCHEME, "")?.trim()?.takeIf { it.isNotBlank() }
         }
 
+    /**
+     * ตรวจสอบ Csrf
+     */
     val ContainerRequestContext.isCsrf: Boolean
         get() {
             val hiiXreq = headers["X-Requested-By"]
