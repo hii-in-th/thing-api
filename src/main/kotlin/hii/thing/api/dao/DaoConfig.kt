@@ -41,7 +41,6 @@ import hii.thing.api.dao.vital.weight.WeightDao
 import org.joda.time.DateTime
 import redis.clients.jedis.HostAndPort
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 val standalone = System.getenv("HII_ALONE") != null
 // sql config
@@ -95,4 +94,11 @@ inline fun <reified T : Dao> getDao(): T {
     return dao as T
 }
 
-internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.ofEpochSecond(this.millis, 0, ZoneOffset.UTC)
+internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.of(
+    this.year,
+    this.monthOfYear,
+    this.dayOfMonth,
+    this.hourOfDay,
+    this.minuteOfHour,
+    this.secondOfMinute
+)
