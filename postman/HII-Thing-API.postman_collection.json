@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f2115a47-0c5c-4a4c-ad5a-d4a6ef44afa3",
+    "_postman_id": "ff3642ab-b8bf-4fc8-be3a-114bc38e9d7a",
 		"name": "HII-Thing-API",
 		"description": "API ที่เกี่ยวข้องกับส่วนของ Kiosk",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -43,6 +43,17 @@
 						"key": "Accept",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "kios",
+            "type": "text"
 					}
 				],
 				"url": {
@@ -149,11 +160,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\"\n}"
+          "raw": "{\n\t\"deviceId\": \"hii/07\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\"\n}"
 				},
 				"url": {
 					"raw": "{{url}}/sessions",
@@ -168,7 +184,7 @@
 			},
 			"response": [
 				{
-					"name": "New session without CitizenId",
+          "name": "New session by typing citizen id",
 					"originalRequest": {
 						"method": "POST",
 						"header": [
@@ -186,7 +202,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"deviceId\": \"105487111\"\n}"
+              "raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"TYPING\" \n}"
 						},
 						"url": {
 							"raw": "{{url}}/sessions",
@@ -260,10 +276,10 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\"\n}"
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"height\": 170\n    }\n}"
 				},
 				{
-					"name": "New session by typing citizen id",
+          "name": "New session without CitizenId",
 					"originalRequest": {
 						"method": "POST",
 						"header": [
@@ -281,7 +297,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"TYPING\" \n}"
+              "raw": "{\n\t\"deviceId\": \"105487111\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}/sessions",
@@ -355,7 +371,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"height\": 170\n    }\n}"
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\"\n}"
 				},
 				{
 					"name": "New session with citizen card",
@@ -452,6 +468,11 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
@@ -564,6 +585,11 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
@@ -677,6 +703,11 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
@@ -761,11 +792,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\"\n}"
+          "raw": "{\n\t\"deviceId\": \"hii/7\",\n\t\"citizenId\": \"1101401444875\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1970-06-05\"\n}"
 				},
 				"url": {
 					"raw": "{{url}}/sessions",
@@ -774,6 +810,13 @@
 					],
 					"path": [
 						"sessions"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "disabled": true
+            }
 					]
 				},
 				"description": "สำหรับผู้ใช้ที่เปลี่ยนใจให้ข้อมูลด้วยการพิมพ์ หรือเสียบบัตรประชาชนภายหลัง เพื่อให้ได้รับข้อมูลมากขึ้น"
@@ -850,7 +893,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+        "header": [
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
+          }
+        ],
 				"url": {
 					"raw": "{{url}}/result",
 					"host": [
