@@ -20,10 +20,20 @@ dependencies {
     compile(kotlin("stdlib-jdk8"))
     compile("args4j:args4j:2.33")
 
+    val log4jVersion = "2.11.1"
+    compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
+    compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
+
     compile("redis.clients:jedis:3.0.1")
     compile("org.jetbrains.exposed:exposed:0.13.7")
     compile("org.postgresql:postgresql:42.2.5")
     compile("com.zaxxer:HikariCP:3.3.1")
+
+    compile("com.google.code.gson:gson:2.8.5")
+
+    compile("com.auth0:java-jwt:3.8.1")
+    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
+    compile("commons-codec:commons-codec:1.12")
 
     testImplementation("com.github.fppt:jedis-mock:0.1.13")
     testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
@@ -36,6 +46,7 @@ dependencies {
     compile("org.glassfish.jersey.inject:jersey-hk2:$jerseyVersion")
     compile("org.glassfish.jersey.containers:jersey-container-servlet-core:$jerseyVersion")
     compile("org.glassfish.jersey.containers:jersey-container-jetty-servlet:$jerseyVersion")
+    // Remove jersey-media-json-jackson production
     compile("org.glassfish.jersey.media:jersey-media-json-jackson:$jerseyVersion")
     testImplementation("org.glassfish.jersey.test-framework:jersey-test-framework-core:$jerseyVersion")
     testImplementation("org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:$jerseyVersion")
@@ -44,17 +55,6 @@ dependencies {
     compile("org.eclipse.jetty:jetty-server:$jettyVersion")
     compile("org.eclipse.jetty:jetty-servlet:$jettyVersion")
     compile("org.eclipse.jetty:jetty-http:$jettyVersion")
-
-    val log4jVersion = "2.11.1"
-    compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
-    compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
-
-    compile("com.google.code.gson:gson:2.8.5")
-
-    compile("com.auth0:java-jwt:3.8.1")
-    compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
-
-    compile("commons-codec:commons-codec:1.12")
 
     testImplementation("junit:junit:4.12")
     testImplementation("org.mockito:mockito-core:2.28.2")
@@ -71,18 +71,8 @@ tasks.register<Jar>("sourcesJar") {
 }
 
 tasks.named<Jar>("jar") {
-    val list = ArrayList<File>()
-    list.addAll(configurations.compileClasspath.get())
-    list.addAll(configurations.runtimeClasspath.get())
-    from({
-        list.map {
-            if (it.isDirectory)
-                it
-            else
-                zipTree(it)
-        }
-    })
-
+    configurations.compileClasspath.get().forEach { if (it.isDirectory) from(it) else from(zipTree(it)) }
+    
     this.archiveName = "${project.name}.jar"
     this.destinationDir = file("$rootDir/build/bin")
 
