@@ -17,7 +17,16 @@
 
 package hii.thing.api.config
 
+import com.fatboyindustrial.gsonjavatime.InstantConverter
+import com.fatboyindustrial.gsonjavatime.LocalDateConverter
+import com.fatboyindustrial.gsonjavatime.LocalDateTimeConverter
+import com.fatboyindustrial.gsonjavatime.LocalTimeConverter
+import com.fatboyindustrial.gsonjavatime.OffsetDateTimeConverter
+import com.fatboyindustrial.gsonjavatime.OffsetTimeConverter
+import com.fatboyindustrial.gsonjavatime.ZonedDateTimeConverter
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import hii.thing.api.getLogger
 import java.io.IOException
 import java.io.InputStream
@@ -25,6 +34,13 @@ import java.io.InputStreamReader
 import java.io.OutputStream
 import java.io.OutputStreamWriter
 import java.lang.reflect.Type
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.OffsetDateTime
+import java.time.OffsetTime
+import java.time.ZonedDateTime
 import javax.ws.rs.BadRequestException
 import javax.ws.rs.Consumes
 import javax.ws.rs.Produces
@@ -108,6 +124,22 @@ class GsonJerseyProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
 
     companion object {
         private val UTF_8 = "UTF-8"
-        private val gson = Gson()
+        private val gson: Gson by lazy {
+            GsonBuilder()
+                .adapterFor<LocalDate>(LocalDateConverter())
+                .adapterFor<LocalDateTime>(LocalDateTimeConverter())
+                .adapterFor<LocalTime>(LocalTimeConverter())
+                .adapterFor<OffsetDateTime>(OffsetDateTimeConverter())
+                .adapterFor<OffsetTime>(OffsetTimeConverter())
+                .adapterFor<ZonedDateTime>(ZonedDateTimeConverter())
+                .adapterFor<Instant>(InstantConverter())
+                .create()
+        }
     }
 }
+
+private inline fun <reified T> GsonBuilder.adapterFor(adapter: Any): GsonBuilder {
+    return registerTypeAdapter(typeTokenOf<T>(), adapter)
+}
+
+inline fun <reified T> typeTokenOf(): Type = object : TypeToken<T>() {}.type

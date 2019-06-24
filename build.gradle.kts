@@ -34,6 +34,7 @@ dependencies {
     compile("com.auth0:java-jwt:3.8.1")
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
     compile("commons-codec:commons-codec:1.12")
+    compile("com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1")
 
     testImplementation("com.github.fppt:jedis-mock:0.1.13")
     testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
