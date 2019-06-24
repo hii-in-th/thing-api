@@ -22,6 +22,7 @@ import hii.thing.api.dao.registerstore.toJavaTime
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
 import hii.thing.api.dao.vital.weight.WeightDao
+import hii.thing.api.ignore
 import hii.thing.api.sessions.SessionsManager
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.annotation.security.RolesAllowed
@@ -87,9 +88,9 @@ class VitalResource(
     fun getResult(): Result {
         val userPrincipal = context.userPrincipal
         val session = sessionsManager.getBy(userPrincipal)
-        val height = heightsDao.getBy(session)
-        val weight = weightDao.getBy(session)
-        val bp = pbDao.getBy(session)
+        val height = ignore { heightsDao.getBy(session) }
+        val weight = ignore { weightDao.getBy(session) }
+        val bp = ignore { pbDao.getBy(session) }
         val userDetail = sessionsManager.getDetail(session)
 
         var age: Int? = null
@@ -97,6 +98,6 @@ class VitalResource(
             age = calAge(it.toJavaTime())
         }
 
-        return Result(age, height.height, weight.weight, bp)
+        return Result(age, height?.height, weight?.weight, bp)
     }
 }
