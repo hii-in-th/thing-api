@@ -19,7 +19,7 @@ package hii.thing.api.security.token.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.JwtConst
+import hii.thing.api.security.JwtConst
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.junit.Test

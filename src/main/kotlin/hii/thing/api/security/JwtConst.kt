@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package hii.thing.api
+package hii.thing.api.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -31,7 +31,6 @@ import java.security.interfaces.RSAPublicKey
 // TODO ย้ายไปรวมกับ auth
 class JwtConst private constructor() {
     companion object {
-        // TODO ("ใช้เป็นไฟล์")
         val keyPair: KeyPair = KeyPairManage
         const val issuer = "auth.hii.in.th"
         const val audience = "hii.in.th"
@@ -48,7 +47,7 @@ class JwtConst private constructor() {
         fun decode(accessToken: String): DecodedJWT = JWT.decode(accessToken)
 
         fun verify(accessToken: String): Boolean {
-            val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
+            val publicKey: RSAPublicKey = keyPair.publicKey
             val algorithm = Algorithm.RSA512(object : RSAKeyProvider {
                 override fun getPrivateKeyId(): String = ""
                 override fun getPrivateKey(): RSAPrivateKey? = null

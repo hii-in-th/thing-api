@@ -53,8 +53,8 @@ class VitalResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun bpMeasure(map: Map<String, String>): BloodPressures {
         val bp = BloodPressures(map.getValue("sys").toFloat(), map.getValue("dia").toFloat())
-        val accessToken = context.userPrincipal.name!!
-        val session = sessionsManager.getBy(accessToken)
+        val userPrincipal = context.userPrincipal
+        val session = sessionsManager.getBy(userPrincipal)
         bp.sessionId = session
         return pbDao.save(session, bp)
     }
@@ -64,8 +64,8 @@ class VitalResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun heightsMeasure(map: Map<String, String>): Height {
         val height = Height(map.getValue("height").toFloat())
-        val accessToken = context.userPrincipal.name!!
-        val session = sessionsManager.getBy(accessToken)
+        val userPrincipal = context.userPrincipal
+        val session = sessionsManager.getBy(userPrincipal)
         height.sessionId = session
         return heightsDao.save(session, height)
     }
@@ -75,8 +75,8 @@ class VitalResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun weightMeasure(map: Map<String, String>): Weight {
         val weight = Weight(map.getValue("weight").toFloat())
-        val accessToken = context.userPrincipal.name!!
-        val session = sessionsManager.getBy(accessToken)
+        val userPrincipal = context.userPrincipal
+        val session = sessionsManager.getBy(userPrincipal)
         weight.sessionId = session
         return weightDao.save(session, weight)
     }
@@ -85,8 +85,8 @@ class VitalResource(
     @Path("/result")
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun getResult(): Result {
-        val accessToken = context.userPrincipal.name!!
-        val session = sessionsManager.getBy(accessToken)
+        val userPrincipal = context.userPrincipal
+        val session = sessionsManager.getBy(userPrincipal)
         val height = heightsDao.getBy(session)
         val weight = weightDao.getBy(session)
         val bp = pbDao.getBy(session)

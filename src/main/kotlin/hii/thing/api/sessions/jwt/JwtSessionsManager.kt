@@ -17,13 +17,14 @@
 
 package hii.thing.api.sessions.jwt
 
-import hii.thing.api.JwtConst
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.registerstore.RegisterStoreDao
 import hii.thing.api.dao.session.SessionsDao
 import hii.thing.api.hashText
+import hii.thing.api.security.token.JwtPrincipal
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
+import java.security.Principal
 import java.util.UUID
 
 class JwtSessionsManager(
@@ -31,26 +32,28 @@ class JwtSessionsManager(
     val registerStoreManager: RegisterStoreDao = getDao()
 ) : SessionsManager {
 
-    override fun anonymousCreate(token: String, deviceId: String): String {
-        require(JwtConst.decode(token).subject == deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
+    override fun anonymousCreate(principal: Principal, deviceId: String): String {
+        val jwt = (principal as JwtPrincipal).jwt
+        require(jwt.subject == deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
         val session = UUID.randomUUID().toString()
-        sessionsDao.save(token.hashText(), session)
+        sessionsDao.save(principal.name.hashText(), session)
         return session
     }
 
-    override fun create(token: String, sessionDetail: CreateSessionDetail): String {
-        val session = anonymousCreate(token, sessionDetail.deviceId)
+    override fun create(principal: Principal, sessionDetail: CreateSessionDetail): String {
+        val session = anonymousCreate(principal, sessionDetail.deviceId)
         registerStoreManager.register(session, sessionDetail)
         return session
     }
 
-    override fun getBy(token: String): String {
-        return sessionsDao.get(token.hashText())
+    override fun getBy(principal: Principal): String {
+        return sessionsDao.get(principal.name.hashText())
     }
 
-    override fun updateCreate(token: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
-        require(JwtConst.decode(token).subject == sessionDetail.deviceId)
-        val session = getBy(token)
+    override fun updateCreate(principal: Principal, sessionDetail: CreateSessionDetail): CreateSessionDetail {
+        val jwt = (principal as JwtPrincipal).jwt
+        require(jwt.subject == sessionDetail.deviceId)
+        val session = getBy(principal)
         return registerStoreManager.update(session, sessionDetail)
     }
 

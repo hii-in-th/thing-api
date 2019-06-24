@@ -17,10 +17,12 @@
 
 package hii.thing.api.sessions
 
+import java.security.Principal
+
 interface SessionsManager {
-    fun anonymousCreate(token: String, deviceId: String): String
-    fun create(token: String, sessionDetail: CreateSessionDetail): String
-    fun getBy(token: String): String
-    fun updateCreate(token: String, sessionDetail: CreateSessionDetail): CreateSessionDetail
+    fun anonymousCreate(principal: Principal, deviceId: String): String
+    fun create(principal: Principal, sessionDetail: CreateSessionDetail): String
+    fun getBy(principal: Principal): String
+    fun updateCreate(principal: Principal, sessionDetail: CreateSessionDetail): CreateSessionDetail
     fun getDetail(session: String): CreateSessionDetail
 }

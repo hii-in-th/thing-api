@@ -19,9 +19,10 @@ package hii.thing.api.sessions.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.JwtConst
 import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.session.InMemorySessionDao
+import hii.thing.api.security.JwtConst
+import hii.thing.api.security.token.JwtPrincipal
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
 import org.amshove.kluent.`should be equal to`
@@ -37,48 +38,45 @@ class JwtSessionsManagerTest {
     val deviceId = "98439-32423-fgd-gfd-gdsg-fds"
     val sessionsManager: SessionsManager = JwtSessionsManager(InMemorySessionDao(), InMemoryRegisterStoreDao())
     val createDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+    val jwtPrincipal = JwtPrincipal(createAccessToken())
 
     @Test
     fun anonymousCreate() {
-        val session = sessionsManager.anonymousCreate(createAccessToken(), deviceId)
+        val session = sessionsManager.anonymousCreate(jwtPrincipal, deviceId)
         session.length `should be greater than` 20
         println("Session $session")
     }
 
     @Test
     fun create() {
-        val session = sessionsManager.create(createAccessToken(), createDetail)
+        val session = sessionsManager.create(jwtPrincipal, createDetail)
         session.length `should be greater than` 20
         println("Session $session")
     }
 
     @Test
     fun getBy() {
-        val token = createAccessToken()
-        val session = sessionsManager.create(token, createDetail)
+        val session = sessionsManager.create(jwtPrincipal, createDetail)
 
-        sessionsManager.getBy(token) `should be equal to` session
+        sessionsManager.getBy(jwtPrincipal) `should be equal to` session
     }
 
     @Test(expected = Exception::class)
     fun getByEmptyFail() {
-        val token = createAccessToken(expire = 2000)
-
-        sessionsManager.getBy(token)
+        sessionsManager.getBy(jwtPrincipal)
     }
 
     @Test
     fun updateCreate() {
-        val token = createAccessToken()
-        sessionsManager.create(token, CreateSessionDetail(deviceId))
-        val update = sessionsManager.updateCreate(token, createDetail)
+        sessionsManager.create(jwtPrincipal, CreateSessionDetail(deviceId))
+        val update = sessionsManager.updateCreate(jwtPrincipal, createDetail)
 
         update.citizenId `should equal` "1234"
     }
 
     @Test(expected = Exception::class)
     fun updateEmptyFail() {
-        sessionsManager.updateCreate("sdfsdf", CreateSessionDetail(deviceId, null, null, null))
+        sessionsManager.updateCreate(jwtPrincipal, CreateSessionDetail(deviceId, null, null, null))
     }
 
     private fun createAccessToken(expire: Long = 1000000, issuer: String = JwtConst.issuer): String {

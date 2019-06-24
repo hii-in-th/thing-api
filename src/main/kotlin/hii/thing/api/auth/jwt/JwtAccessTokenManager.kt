@@ -19,12 +19,12 @@ package hii.thing.api.auth.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.JwtConst
 import hii.thing.api.auth.AccessToken
 import hii.thing.api.auth.AccessTokenManager
 import hii.thing.api.dao.apikey.ApiKeyDao
 import hii.thing.api.dao.getDao
 import hii.thing.api.getLogger
+import hii.thing.api.security.JwtConst
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.util.Date

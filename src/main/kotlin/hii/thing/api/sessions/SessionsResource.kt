@@ -42,16 +42,16 @@ class SessionsResource(
     @POST
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun newSessions(detail: CreateSessionDetail): Session {
-        val accessToken = context.userPrincipal.name!!
+        val userPrincipal = context.userPrincipal
 
         return if (!detail.citizenId.isNullOrBlank())
             Session(
-                sessionsManager.create(accessToken, detail)
+                sessionsManager.create(userPrincipal, detail)
                 // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
             )
         else
             Session(
-                sessionsManager.anonymousCreate(accessToken, detail.deviceId)
+                sessionsManager.anonymousCreate(userPrincipal, detail.deviceId)
                 // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
             )
     }
@@ -59,9 +59,9 @@ class SessionsResource(
     @PUT
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun updateSessions(detail: CreateSessionDetail): Session {
-        val accessToken = context.userPrincipal.name!!
-        val session = sessionsManager.getBy(accessToken)
-        val create = sessionsManager.updateCreate(accessToken, detail)
+        val userPrincipal = context.userPrincipal
+        val session = sessionsManager.getBy(userPrincipal)
+        val create = sessionsManager.updateCreate(userPrincipal, detail)
 
         return Session(session, PersonalResult(mapOf("create" to create)))
     }

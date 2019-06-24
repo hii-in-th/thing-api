@@ -17,7 +17,7 @@
 
 package hii.thing.api.security.token.jwt
 
-import hii.thing.api.JwtConst
+import hii.thing.api.security.JwtConst
 import hii.thing.api.security.token.TokenManager
 
 class JwtTokenManager : TokenManager {

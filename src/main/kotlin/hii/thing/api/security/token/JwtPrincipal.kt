@@ -17,24 +17,10 @@
 
 package hii.thing.api.security.token
 
+import hii.thing.api.security.JwtConst
 import java.security.Principal
-import javax.ws.rs.core.SecurityContext
 
-class TokenSecurityContext(
-    val token: String,
-    private val scheme: String,
-    val tokenManager: TokenManager
-) :
-    SecurityContext {
-
-    override fun isUserInRole(role: String): Boolean {
-        return tokenManager.getUserRole(token).contains(role)
-    }
-
-    override fun getAuthenticationScheme(): String = "Bearer"
-
-    // TODO ให้ส่งกลับเป็น token ที่ decode กลับเป็น object token แล้ว เพื่อที่จุดอื่นจะได้สามารถอ่านได้เลย
-    override fun getUserPrincipal(): Principal = JwtPrincipal(token)
-
-    override fun isSecure() = true
+class JwtPrincipal(val accessToken: String) : Principal {
+    override fun getName(): String = accessToken
+    val jwt = JwtConst.decode(accessToken)
 }

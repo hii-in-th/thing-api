@@ -21,6 +21,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.InvalidClaimException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import hii.thing.api.security.JwtConst
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be equal to`

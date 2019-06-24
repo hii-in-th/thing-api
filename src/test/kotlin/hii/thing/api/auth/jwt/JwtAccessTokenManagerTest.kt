@@ -18,10 +18,10 @@
 package hii.thing.api.auth.jwt
 
 import com.auth0.jwt.JWT
-import hii.thing.api.JwtConst
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
 import hii.thing.api.dao.apikey.ApiKeyDao
+import hii.thing.api.security.JwtConst
 import org.amshove.kluent.`should be equal to`
 import org.junit.Test
 
