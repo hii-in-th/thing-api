@@ -45,7 +45,7 @@ class JwtAccessTokenManager(
         val accessToken = JWT.create()
             .withIssuer(JwtConst.issuer)
             .withIssuedAt(date)
-            .withExpiresAt(Date(date.time + 323234))
+            .withExpiresAt(Date(date.time + 1800000))
             .withAudience(JwtConst.audience)
             .withSubject(device.deviceName)
             .withJWTId(jwtId)
