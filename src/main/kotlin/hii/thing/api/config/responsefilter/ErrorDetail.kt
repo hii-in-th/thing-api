@@ -44,5 +44,10 @@ class ErrorDetail(
             val err = ErrorDetail(ex.response.status, ex.message, ex)
             return Response.status(err.code).entity(err).type(MediaType.APPLICATION_JSON_TYPE).build()
         }
+
+        fun build(ex: WebApplicationException, t: Throwable): Response {
+            val err = ErrorDetail(ex.response.status, ex.message, t)
+            return Response.status(err.code).entity(err).type(MediaType.APPLICATION_JSON_TYPE).build()
+        }
     }
 }
