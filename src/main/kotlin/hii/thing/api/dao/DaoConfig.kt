@@ -26,6 +26,7 @@ import hii.thing.api.dao.keyspair.RedisRSAKeyPairDao
 import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.registerstore.PgSqlRegisterStoreDao
 import hii.thing.api.dao.registerstore.RegisterStoreDao
+import hii.thing.api.dao.registerstore.toSqlTime
 import hii.thing.api.dao.session.InMemorySessionDao
 import hii.thing.api.dao.session.RedisSessionDao
 import hii.thing.api.dao.session.SessionsDao
@@ -41,6 +42,8 @@ import hii.thing.api.dao.vital.weight.WeightDao
 import org.joda.time.DateTime
 import redis.clients.jedis.HostAndPort
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.TimeZone
 
 val standalone = System.getenv("HII_ALONE") != null
 // sql config
@@ -69,6 +72,8 @@ val redisExpireSec by lazy { System.getenv("RE_EXPIRE_SEC").toInt() }
 val redisKeyHost by lazy { System.getenv("RE_KEY_HOST") }
 val redisKeyPort by lazy { System.getenv("RE_KEY_PORT")?.toInt() }
 
+val timeZone = ZoneId.of("Asia/Bangkok")!!
+
 inline fun <reified T : Dao> getDao(): T {
     val dao = when (T::class) {
         ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else PgSqlApiKeyDao { dataSourcePool.getConnection() }
@@ -94,11 +99,14 @@ inline fun <reified T : Dao> getDao(): T {
     return dao as T
 }
 
+fun Now() = LocalDateTime.now(ZoneId.of("Universal")).toSqlTime()
+
 internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.of(
     this.year,
     this.monthOfYear,
     this.dayOfMonth,
     this.hourOfDay,
     this.minuteOfHour,
-    this.secondOfMinute
-)
+    this.secondOfMinute,
+    this.millisOfSecond * 1000000
+).plusSeconds(TimeZone.getTimeZone(timeZone).rawOffset / 1000L)

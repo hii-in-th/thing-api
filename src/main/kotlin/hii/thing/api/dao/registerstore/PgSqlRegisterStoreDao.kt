@@ -17,6 +17,7 @@
 
 package hii.thing.api.dao.registerstore
 
+import hii.thing.api.dao.Now
 import hii.thing.api.sessions.CreateSessionDetail
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
@@ -26,7 +27,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import org.joda.time.DateTime
 import java.sql.Connection
 
 class PgSqlRegisterStoreDao(connection: () -> Connection) :
@@ -48,7 +48,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
-                    it[time] = DateTime.now()
+                    it[time] = Now()
                 }
             } catch (ex: ExposedSQLException) {
                 require(false)

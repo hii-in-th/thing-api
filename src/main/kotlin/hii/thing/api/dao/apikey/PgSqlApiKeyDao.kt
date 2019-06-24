@@ -19,13 +19,13 @@ package hii.thing.api.dao.apikey
 
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
+import hii.thing.api.dao.Now
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import java.sql.Connection
 
 class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
@@ -65,7 +65,7 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
                 it[baseToken] = device.baseToken
                 it[roles] = device.roles.toStringRawText()
                 it[scope] = device.scope.toStringRawText()
-                it[time] = DateTime.now()
+                it[time] = Now()
             }
             SqlDevice.select { SqlDevice.deviceId eq device.deviceID }.limit(1)
                 .map { deviceOut = mapResult(it) }

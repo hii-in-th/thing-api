@@ -17,13 +17,13 @@
 
 package hii.thing.api.dao.vital.bp
 
+import hii.thing.api.dao.Now
 import hii.thing.api.vital.BloodPressures
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import java.sql.Connection
 
 class PgSqlBloodPressuresDao(connection: () -> Connection) :
@@ -41,7 +41,7 @@ class PgSqlBloodPressuresDao(connection: () -> Connection) :
                 it[dia] = bp.dia
                 it[sys] = bp.sys
                 it[sessionId] = session
-                it[time] = DateTime.now()
+                it[time] = Now()
             }
 
             bpOut = getBy(session)

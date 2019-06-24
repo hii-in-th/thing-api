@@ -39,4 +39,12 @@ internal fun DateTime.toStringDate(): String {
 }
 
 internal fun LocalDateTime.toSqlTime(): DateTime =
-    DateTime(this.year, this.monthValue, this.dayOfMonth, 0, 0)
+    DateTime(
+        this.year,
+        this.monthValue,
+        this.dayOfMonth,
+        this.hour,
+        this.minute,
+        this.second,
+        this.nano / 1000000
+    )

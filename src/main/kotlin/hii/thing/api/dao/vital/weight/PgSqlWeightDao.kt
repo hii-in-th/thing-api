@@ -17,13 +17,13 @@
 
 package hii.thing.api.dao.vital.weight
 
+import hii.thing.api.dao.Now
 import hii.thing.api.vital.Weight
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import java.sql.Connection
 
 class PgSqlWeightDao(connection: () -> Connection) : WeightDao {
@@ -40,7 +40,7 @@ class PgSqlWeightDao(connection: () -> Connection) : WeightDao {
             SqlWeight.insert {
                 it[sessionId] = session
                 it[SqlWeight.weight] = weight.weight
-                it[time] = DateTime.now()
+                it[time] = Now()
             }
             weightOut = getBy(session)
         }

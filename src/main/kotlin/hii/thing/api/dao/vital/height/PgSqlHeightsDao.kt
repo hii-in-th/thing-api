@@ -17,13 +17,13 @@
 
 package hii.thing.api.dao.vital.height
 
+import hii.thing.api.dao.Now
 import hii.thing.api.vital.Height
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
 import java.sql.Connection
 
 class PgSqlHeightsDao(connection: () -> Connection) : HeightsDao {
@@ -39,7 +39,7 @@ class PgSqlHeightsDao(connection: () -> Connection) : HeightsDao {
             SqlHeight.insert {
                 it[sessionId] = session
                 it[SqlHeight.height] = height.height
-                it[time] = DateTime.now()
+                it[time] = Now()
             }
 
             heightOut = getBy(session)
