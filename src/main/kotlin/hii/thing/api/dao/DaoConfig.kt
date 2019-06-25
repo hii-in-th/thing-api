@@ -23,6 +23,9 @@ import hii.thing.api.dao.apikey.PgSqlApiKeyDao
 import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.dao.keyspair.RSAKeyPairDao
 import hii.thing.api.dao.keyspair.RedisRSAKeyPairDao
+import hii.thing.api.dao.lastresult.InMemoryLastResultDao
+import hii.thing.api.dao.lastresult.LastResultDao
+import hii.thing.api.dao.lastresult.PgSqlLastResultDao
 import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.registerstore.PgSqlRegisterStoreDao
 import hii.thing.api.dao.registerstore.RegisterStoreDao
@@ -81,6 +84,7 @@ inline fun <reified T : Dao> getDao(): T {
         SessionsDao::class -> if (standalone) InMemorySessionDao() else RedisSessionDao(
             setOf(HostAndPort(redisHost, redisPort)), redisExpireSec
         )
+        LastResultDao::class -> if (standalone) InMemoryLastResultDao() else PgSqlLastResultDao { dataSourcePool.getConnection() }
         BloodPressuresDao::class -> if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
         HeightsDao::class -> if (standalone) InMemoryHeightsDao() else PgSqlHeightsDao { dataSourcePool.getConnection() }
         WeightDao::class -> if (standalone) InMemoryWeightDao() else PgSqlWeightDao { dataSourcePool.getConnection() }

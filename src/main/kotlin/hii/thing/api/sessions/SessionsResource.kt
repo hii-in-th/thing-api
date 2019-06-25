@@ -17,6 +17,9 @@
 
 package hii.thing.api.sessions
 
+import hii.thing.api.dao.getDao
+import hii.thing.api.dao.lastresult.LastResultDao
+import hii.thing.api.ignore
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -33,7 +36,8 @@ import javax.ws.rs.core.SecurityContext
 @Consumes(MediaType.APPLICATION_JSON)
 
 class SessionsResource(
-    private val sessionsManager: SessionsManager = JwtSessionsManager()
+    private val sessionsManager: SessionsManager = JwtSessionsManager(),
+    private val lastResultDao: LastResultDao = getDao()
 ) {
 
     @Context
@@ -43,11 +47,13 @@ class SessionsResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = context.userPrincipal
-
         return if (!detail.citizenId.isNullOrBlank())
             Session(
-                sessionsManager.create(userPrincipal, detail)
-                // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
+                sessionsManager.create(userPrincipal, detail),
+                ignore {
+                    val resultMap = lastResultDao.get(detail.citizenId!!)
+                    PersonalResult(resultMap)
+                }
             )
         else
             Session(sessionsManager.anonymousCreate(userPrincipal, detail.deviceId))

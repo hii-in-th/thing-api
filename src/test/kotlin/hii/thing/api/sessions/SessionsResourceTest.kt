@@ -19,6 +19,7 @@ package hii.thing.api.sessions
 
 import com.google.gson.Gson
 import hii.thing.api.config.GsonJerseyProvider
+import hii.thing.api.dao.lastresult.InMemoryLastResultDao
 import hii.thing.api.sessions.mock.MockRoleTokenSecurity
 import hii.thing.api.sessions.mock.MockTokenManager
 import hii.thing.api.sessions.mock.MockTokenSecurityContext
@@ -62,7 +63,7 @@ class SessionsResourceTest : JerseyTest() {
                 CreateSessionDetail(deviceId, "", "", "")
         }
 
-        val sessionsResource = SessionsResource(mockSessionsManager)
+        val sessionsResource = SessionsResource(mockSessionsManager, InMemoryLastResultDao())
         sessionsResource.context = MockTokenSecurityContext(accessToken, mockTokenManager)
 
         return ResourceConfig()
