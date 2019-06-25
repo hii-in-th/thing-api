@@ -17,6 +17,7 @@
 
 package hii.thing.api
 
+import com.zaxxer.hikari.pool.HikariPool
 import hii.thing.api.dao.DataSource
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
@@ -49,21 +50,24 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
             pgSql.stop()
             pgSql = EmbeddedPostgres()
             url = pgSql.start()
+        } catch (ex: HikariPool.PoolInitializationException) {
+            Thread.sleep(1000)
+            transaction {
+                SchemaUtils.drop(table)
+            }
         }
     }
 
     companion object {
         lateinit var pgSql: EmbeddedPostgres
+        var dataSource: DataSource? = null
         var url: String = ""
     }
 
     val connection = {
         try {
-            DataSource(url, "postgres", "postgres", 1).getConnection()
-        } catch (ex: PSQLException) {
-            pgSql.stop()
-            createNewConnection()
-        } catch (ex: IllegalArgumentException) {
+            dataSource!!.getConnection()
+        } catch (ex: KotlinNullPointerException) {
             createNewConnection()
         }
     }
@@ -71,6 +75,7 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
     private fun createNewConnection(): Connection {
         pgSql = EmbeddedPostgres()
         url = pgSql.start()
-        return DataSource(url, "postgres", "postgres", 1).getConnection()
+        dataSource = DataSource(url, "postgres", "postgres", 1)
+        return dataSource!!.getConnection()
     }
 }
