@@ -18,6 +18,7 @@
 package hii.thing.api.vital
 
 import hii.thing.api.dao.getDao
+import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.dao.registerstore.toJavaTime
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
@@ -43,7 +44,8 @@ class VitalResource(
     val pbDao: BloodPressuresDao = getDao(),
     val heightsDao: HeightsDao = getDao(),
     val weightDao: WeightDao = getDao(),
-    val sessionsManager: SessionsManager = JwtSessionsManager()
+    val sessionsManager: SessionsManager = JwtSessionsManager(),
+    private val lastResultDao: LastResultDao = getDao()
 ) {
 
     @Context
@@ -79,6 +81,7 @@ class VitalResource(
         val userPrincipal = context.userPrincipal
         val session = sessionsManager.getBy(userPrincipal)
         weight.sessionId = session
+
         return weightDao.save(session, weight)
     }
 
@@ -93,6 +96,17 @@ class VitalResource(
         val bp = ignore { pbDao.getBy(session) }
         val userDetail = sessionsManager.getDetail(session)
 
+        userDetail.citizenId?.let { citizenId ->
+            val result = hashMapOf(
+                "height" to "${height?.height}",
+                "bp" to "${bp?.sys}/${bp?.dia}",
+                "weight" to "${weight?.weight}"
+            )
+            result.remove("")
+            lastResultDao.append(
+                citizenId, result
+            )
+        }
         var age: Int? = null
         userDetail.birthDate?.let {
             age = calAge(it.toJavaTime())
