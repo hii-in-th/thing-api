@@ -28,7 +28,6 @@ import kotlinx.coroutines.runBlocking
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
-// TODO ย้ายไปรวมกับ auth
 class JwtConst private constructor() {
     companion object {
         val keyPair: KeyPair = KeyPairManage

@@ -28,7 +28,7 @@ import org.junit.Test
 class PgSqlApiKeyDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(SqlDevice)
+    val pgsql = PgSqlTestRule(SqlApiKeyStore)
     lateinit var apiKeyDao: ApiKeyDao
 
     @Before

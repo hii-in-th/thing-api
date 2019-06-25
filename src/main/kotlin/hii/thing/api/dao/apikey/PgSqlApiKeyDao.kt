@@ -37,8 +37,8 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
     override fun getDeviceBy(baseToken: String): Device {
         var deviceOut: Device? = null
         transaction {
-            SchemaUtils.create(SqlDevice)
-            SqlDevice.select { SqlDevice.baseToken eq baseToken }.limit(1)
+            SchemaUtils.create(SqlApiKeyStore)
+            SqlApiKeyStore.select { SqlApiKeyStore.baseToken eq baseToken }.limit(1)
                 .map { deviceOut = mapResult(it) }
         }
         return deviceOut ?: throw NotFoundToken("ไม่พบ Api key")
@@ -46,20 +46,20 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
 
     private fun mapResult(it: ResultRow): Device {
         return Device(
-            it[SqlDevice.deviceName],
-            it[SqlDevice.baseToken],
-            it[SqlDevice.roles].toList(),
-            it[SqlDevice.scope].toList(),
-            it[SqlDevice.deviceId]
+            it[SqlApiKeyStore.deviceName],
+            it[SqlApiKeyStore.baseToken],
+            it[SqlApiKeyStore.roles].toList(),
+            it[SqlApiKeyStore.scope].toList(),
+            it[SqlApiKeyStore.deviceId]
         )
     }
 
     override fun registerDevice(device: Device): Device {
         var deviceOut: Device? = null
         transaction {
-            SchemaUtils.create(SqlDevice)
+            SchemaUtils.create(SqlApiKeyStore)
             require(runCatching { get(device.deviceID) }.isFailure)
-            SqlDevice.insert {
+            SqlApiKeyStore.insert {
                 it[deviceId] = device.deviceID
                 it[deviceName] = device.deviceName
                 it[baseToken] = device.baseToken
@@ -67,7 +67,7 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
                 it[scope] = device.scope.toStringRawText()
                 it[time] = Now()
             }
-            SqlDevice.select { SqlDevice.deviceId eq device.deviceID }.limit(1)
+            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq device.deviceID }.limit(1)
                 .map { deviceOut = mapResult(it) }
         }
         return deviceOut!!
@@ -76,8 +76,8 @@ class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
     private fun get(deviceId: String): Device {
         var deviceOut: Device? = null
         transaction {
-            SchemaUtils.create(SqlDevice)
-            SqlDevice.select { SqlDevice.deviceId eq deviceId }.map { deviceOut = mapResult(it) }
+            SchemaUtils.create(SqlApiKeyStore)
+            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceId }.map { deviceOut = mapResult(it) }
         }
         return deviceOut!!
     }

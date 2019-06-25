@@ -50,10 +50,7 @@ class SessionsResource(
                 // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
             )
         else
-            Session(
-                sessionsManager.anonymousCreate(userPrincipal, detail.deviceId)
-                // TODO รอสร้างตัวดึงข้อมูลที่วัดไปล่าสุด detail.citizenId
-            )
+            Session(sessionsManager.anonymousCreate(userPrincipal, detail.deviceId))
     }
 
     @PUT
