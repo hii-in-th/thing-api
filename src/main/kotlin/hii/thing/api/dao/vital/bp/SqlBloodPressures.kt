@@ -23,7 +23,7 @@ import hii.thing.api.vital.BloodPressures
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
-object SqlBloodPressures : Table("bloodpressures") {
+internal object SqlBloodPressures : Table("bloodpressures") {
     val sessionId = varchar("sessionid", SQL_SESSION_LENGTH).primaryKey(0).primaryKey(1)
     val time = datetime("time").primaryKey(0)
     val sys = float("sys")

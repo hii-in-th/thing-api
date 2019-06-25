@@ -20,6 +20,7 @@ package hii.thing.api.dao.vital.bp
 import hii.thing.api.PgSqlTestRule
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
+import org.jetbrains.exposed.sql.Table
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +28,7 @@ import org.junit.Test
 class PgSqlBloodPressuresDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(SqlBloodPressures)
+    val pgsql = PgSqlTestRule(Table("bloodpressures"))
 
     lateinit var pbDao: PgSqlBloodPressuresDao
 

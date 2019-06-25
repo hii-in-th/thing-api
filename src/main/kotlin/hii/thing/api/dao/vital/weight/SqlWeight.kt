@@ -23,7 +23,7 @@ import hii.thing.api.vital.Weight
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
-object SqlWeight : Table() {
+internal object SqlWeight : Table("weight") {
     val sessionId = varchar("sessionid", SQL_SESSION_LENGTH).primaryKey(0).primaryKey(1)
     val time = datetime("time").primaryKey(0)
     var weight = float("weight")

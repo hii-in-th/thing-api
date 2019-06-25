@@ -21,6 +21,7 @@ import hii.thing.api.PgSqlTestRule
 import hii.thing.api.auth.Device
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.jetbrains.exposed.sql.Table
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +29,7 @@ import org.junit.Test
 class PgSqlApiKeyDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(SqlApiKeyStore)
+    val pgsql = PgSqlTestRule(Table("keystore"))
     lateinit var apiKeyDao: ApiKeyDao
 
     @Before

@@ -21,6 +21,7 @@ import hii.thing.api.PgSqlTestRule
 import hii.thing.api.getLogger
 import hii.thing.api.vital.Height
 import org.amshove.kluent.`should be equal to`
+import org.jetbrains.exposed.sql.Table
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +29,7 @@ import org.junit.Test
 class PgSqlHeightsDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(SqlHeight)
+    val pgsql = PgSqlTestRule(Table("height"))
     lateinit var heightsDao: HeightsDao
 
     @Before

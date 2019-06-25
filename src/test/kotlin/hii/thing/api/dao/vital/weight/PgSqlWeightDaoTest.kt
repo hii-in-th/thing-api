@@ -20,6 +20,7 @@ package hii.thing.api.dao.vital.weight
 import hii.thing.api.PgSqlTestRule
 import hii.thing.api.vital.Weight
 import org.amshove.kluent.`should be equal to`
+import org.jetbrains.exposed.sql.Table
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +28,7 @@ import org.junit.Test
 class PgSqlWeightDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(SqlWeight)
+    val pgsql = PgSqlTestRule(Table("weight"))
     lateinit var weightDao: WeightDao
 
     @Before

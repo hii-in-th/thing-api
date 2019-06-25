@@ -19,7 +19,7 @@ package hii.thing.api.dao.apikey
 
 import org.jetbrains.exposed.sql.Table
 
-object SqlApiKeyStore : Table("keystore") {
+internal object SqlApiKeyStore : Table("keystore") {
     val deviceId = varchar("deviceid", 36).primaryKey(0).primaryKey(1)
     val time = datetime("time").primaryKey(0)
     val deviceName = varchar("name", 255) // sub

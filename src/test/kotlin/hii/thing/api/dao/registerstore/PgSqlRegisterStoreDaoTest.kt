@@ -21,6 +21,7 @@ import hii.thing.api.PgSqlTestRule
 import hii.thing.api.sessions.CreateSessionDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.jetbrains.exposed.sql.Table
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,7 +29,7 @@ import org.junit.Test
 class PgSqlRegisterStoreDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(SqlRegisterDetail)
+    val pgsql = PgSqlTestRule(Table("register"))
     lateinit var registerStoreDao: RegisterStoreDao
 
     @Before
