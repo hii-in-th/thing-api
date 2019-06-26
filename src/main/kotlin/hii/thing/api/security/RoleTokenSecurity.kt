@@ -23,7 +23,7 @@ import hii.thing.api.security.token.TokenSecurityContext
 import hii.thing.api.security.token.jwt.JwtTokenManager
 import javax.annotation.Priority
 import javax.annotation.security.RolesAllowed
-import javax.ws.rs.NotAuthorizedException
+import javax.ws.rs.NotFoundException
 import javax.ws.rs.Priorities
 import javax.ws.rs.container.ContainerRequestContext
 import javax.ws.rs.container.ContainerRequestFilter
@@ -45,7 +45,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
             ?: resourceInfo.resourceClass.getAnnotation(RolesAllowed::class.java)
 
         val clientToken = requestContext.token ?: if (rolesAllowed != null)
-            throw NotAuthorizedException("ไม่มีข้อมูลการยืนยันตัวตน", DummyChallenge())
+            throw NotFoundException("")
         else
             return
 
