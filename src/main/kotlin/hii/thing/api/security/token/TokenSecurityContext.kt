@@ -33,7 +33,6 @@ class TokenSecurityContext(
 
     override fun getAuthenticationScheme(): String = "Bearer"
 
-    // TODO ให้ส่งกลับเป็น token ที่ decode กลับเป็น object token แล้ว เพื่อที่จุดอื่นจะได้สามารถอ่านได้เลย
     override fun getUserPrincipal(): Principal = JwtPrincipal(token)
 
     override fun isSecure() = true

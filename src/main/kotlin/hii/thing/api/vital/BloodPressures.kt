@@ -27,9 +27,19 @@ data class BloodPressures(
 ) {
 
     // TODO ประเมินความดัน
-    val level: String
-        get() {
-            // registerStoreDao.get(session)
-            return "RISK"
-        }
+    // https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings
+
+    val level: BloodLevel
+        get() = calLevel()
+
+    internal fun calLevel(): BloodLevel {
+        return if (sys < 120 && dia < 80) BloodLevel.NORMAL
+        else if (sys <= 129 && dia < 80) BloodLevel.RISK
+        else if (sys >= 180 || dia >= 120) BloodLevel.HYPERTENSION_CRISIS
+        else BloodLevel.HYPERTENSION
+    }
+
+    enum class BloodLevel {
+        NORMAL, RISK, HYPERTENSION, HYPERTENSION_CRISIS
+    }
 }
