@@ -24,6 +24,7 @@ import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
 import hii.thing.api.dao.vital.weight.WeightDao
 import hii.thing.api.ignore
+import hii.thing.api.security.token.JwtPrincipal
 import hii.thing.api.sessions.SessionsManager
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.annotation.security.RolesAllowed
@@ -56,8 +57,8 @@ class VitalResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun bpMeasure(map: Map<String, String>): BloodPressures {
         val bp = BloodPressures(map.getValue("sys").toFloat(), map.getValue("dia").toFloat())
-        val userPrincipal = context.userPrincipal
-        val session = sessionsManager.getBy(userPrincipal)
+        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val session = sessionsManager.getBy(userPrincipal.accessToken)
         bp.sessionId = session
         return pbDao.save(session, bp)
     }
@@ -67,8 +68,8 @@ class VitalResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun heightsMeasure(map: Map<String, String>): Height {
         val height = Height(map.getValue("height").toFloat())
-        val userPrincipal = context.userPrincipal
-        val session = sessionsManager.getBy(userPrincipal)
+        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val session = sessionsManager.getBy(userPrincipal.accessToken)
         height.sessionId = session
         return heightsDao.save(session, height)
     }
@@ -78,8 +79,8 @@ class VitalResource(
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun weightMeasure(map: Map<String, String>): Weight {
         val weight = Weight(map.getValue("weight").toFloat())
-        val userPrincipal = context.userPrincipal
-        val session = sessionsManager.getBy(userPrincipal)
+        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val session = sessionsManager.getBy(userPrincipal.accessToken)
         weight.sessionId = session
 
         return weightDao.save(session, weight)
@@ -89,8 +90,8 @@ class VitalResource(
     @Path("/result")
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun getResult(): Result {
-        val userPrincipal = context.userPrincipal
-        val session = sessionsManager.getBy(userPrincipal)
+        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val session = sessionsManager.getBy(userPrincipal.accessToken)
         val height = ignore { heightsDao.getBy(session) }
         val weight = ignore { weightDao.getBy(session) }
         val bp = ignore { pbDao.getBy(session) }

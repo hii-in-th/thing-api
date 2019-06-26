@@ -20,6 +20,7 @@ package hii.thing.api.sessions
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.ignore
+import hii.thing.api.security.token.JwtPrincipal
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -46,25 +47,25 @@ class SessionsResource(
     @POST
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun newSessions(detail: CreateSessionDetail): Session {
-        val userPrincipal = context.userPrincipal
+        val userPrincipal = (context.userPrincipal as JwtPrincipal)
         return if (!detail.citizenId.isNullOrBlank())
             Session(
-                sessionsManager.create(userPrincipal, detail),
+                sessionsManager.create(userPrincipal.accessToken, detail),
                 ignore {
                     val resultMap = lastResultDao.get(detail.citizenId!!)
                     PersonalResult(resultMap)
                 }
             )
         else
-            Session(sessionsManager.anonymousCreate(userPrincipal, detail.deviceId))
+            Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, detail.deviceId))
     }
 
     @PUT
     @RolesAllowed("MACHINE", "KIOS", "kios")
     fun updateSessions(detail: CreateSessionDetail): Session {
-        val userPrincipal = context.userPrincipal
-        val session = sessionsManager.getBy(userPrincipal)
-        val create = sessionsManager.updateCreate(userPrincipal, detail)
+        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val session = sessionsManager.getBy(userPrincipal.accessToken)
+        val create = sessionsManager.updateCreate(userPrincipal.accessToken, detail)
 
         return Session(session, PersonalResult(mapOf("create" to create)))
     }

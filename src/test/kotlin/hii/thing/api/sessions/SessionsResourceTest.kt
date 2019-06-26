@@ -28,7 +28,6 @@ import org.glassfish.jersey.server.ResourceConfig
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature
 import org.glassfish.jersey.test.JerseyTest
 import org.junit.Test
-import java.security.Principal
 import java.util.UUID
 import javax.ws.rs.client.Entity
 import javax.ws.rs.core.Application
@@ -50,13 +49,13 @@ class SessionsResourceTest : JerseyTest() {
 
     override fun configure(): Application {
         val mockSessionsManager = object : SessionsManager {
-            override fun anonymousCreate(principal: Principal, deviceId: String): String = session
+            override fun anonymousCreate(accessToken: String, deviceId: String): String = session
 
-            override fun create(principal: Principal, sessionDetail: CreateSessionDetail): String = session
+            override fun create(accessToken: String, sessionDetail: CreateSessionDetail): String = session
 
-            override fun getBy(principal: Principal): String = session
+            override fun getBy(accessToken: String): String = session
 
-            override fun updateCreate(principal: Principal, sessionDetail: CreateSessionDetail): CreateSessionDetail =
+            override fun updateCreate(accessToken: String, sessionDetail: CreateSessionDetail): CreateSessionDetail =
                 CreateSessionDetail(deviceId, "", "", "")
 
             override fun getDetail(session: String): CreateSessionDetail =

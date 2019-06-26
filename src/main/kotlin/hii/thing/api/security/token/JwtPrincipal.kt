@@ -21,6 +21,6 @@ import hii.thing.api.security.JwtConst
 import java.security.Principal
 
 class JwtPrincipal(val accessToken: String) : Principal {
-    override fun getName(): String = accessToken
+    override fun getName(): String = jwt.subject
     val jwt = JwtConst.decode(accessToken)
 }
