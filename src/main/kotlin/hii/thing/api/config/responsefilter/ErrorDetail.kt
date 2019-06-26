@@ -18,8 +18,6 @@
 package hii.thing.api.config.responsefilter
 
 import hii.thing.api.getLogger
-import hii.thing.api.logLevel
-import org.apache.logging.log4j.Level
 import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
@@ -33,10 +31,11 @@ class ErrorDetail(
     private var t: Throwable? = null
 
     init {
-        if (logLevel != Level.INFO) {
+        val logger1 = getLogger()
+        if (logger1.isInfoEnabled) {
             this.t = t
         }
-        getLogger().debug("${t.message}", t)
+        logger1.debug("${t.message}", t)
     }
 
     companion object {

@@ -17,11 +17,9 @@
 
 package hii.thing.api
 
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
+import mu.KLogger
+import mu.KotlinLogging
 
-inline fun <reified T> T.getLogger(): Logger {
-    return LogManager.getLogger(T::class.java)
+inline fun <reified T> T.getLogger(): KLogger {
+    return KotlinLogging.logger { T::class.simpleName }
 }
-
-val logLevel get() = Any().getLogger().level

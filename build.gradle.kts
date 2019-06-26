@@ -21,8 +21,8 @@ dependencies {
     compile("args4j:args4j:2.33")
 
     val log4jVersion = "2.11.1"
-    compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
     compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
+    compile("io.github.microutils:kotlin-logging:1.6.26")
 
     compile("redis.clients:jedis:3.0.1")
     compile("org.jetbrains.exposed:exposed:0.13.7")
@@ -73,7 +73,7 @@ tasks.register<Jar>("sourcesJar") {
 
 tasks.named<Jar>("jar") {
     configurations.compileClasspath.get().forEach { if (it.isDirectory) from(it) else from(zipTree(it)) }
-    
+
     this.archiveName = "${project.name}.jar"
     this.destinationDir = file("$rootDir/build/bin")
 
