@@ -52,7 +52,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
         logger.debug("requestToken:$clientToken")
         if (rolesAllowed != null) {
             // require(requestContext.isCsrf) { "CSRF" }
-            require(tokenManager.verify(clientToken)) { "Verify token ผิดพลาด" }
+            requireJwt(tokenManager.verify(clientToken)) { "Verify token ผิดพลาด" }
 
             val clientRole = tokenManager.getUserRole(clientToken)
             require(clientRole.containsSome(rolesAllowed.value.toList())) { "ไม่มีสิทธิในการใช้งาน" }

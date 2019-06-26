@@ -17,6 +17,7 @@
 
 package hii.thing.api.security
 
+import javax.ws.rs.ClientErrorException
 import javax.ws.rs.ForbiddenException
 
 internal fun require(value: Boolean, lazyMessage: () -> Any) {
@@ -24,5 +25,13 @@ internal fun require(value: Boolean, lazyMessage: () -> Any) {
         kotlin.require(value, lazyMessage)
     } catch (ex: IllegalArgumentException) {
         throw ForbiddenException(ex.message, ex)
+    }
+}
+
+internal fun requireJwt(value: Boolean, lazyMessage: () -> Any) {
+    try {
+        kotlin.require(value, lazyMessage)
+    } catch (ex: IllegalArgumentException) {
+        throw ClientErrorException(ex.message, 401, ex)
     }
 }
