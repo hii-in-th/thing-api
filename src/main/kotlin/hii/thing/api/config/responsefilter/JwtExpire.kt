@@ -18,7 +18,7 @@
 package hii.thing.api.config.responsefilter
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import javax.ws.rs.ForbiddenException
+import javax.ws.rs.ClientErrorException
 import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider
@@ -26,6 +26,6 @@ import javax.ws.rs.ext.Provider
 @Provider
 class JwtExpire : ExceptionMapper<TokenExpiredException> {
     override fun toResponse(exception: TokenExpiredException): Response {
-        return ErrorDetail.build(ForbiddenException(exception.message), exception)
+        return ErrorDetail.build(ClientErrorException(exception.message, 401), exception)
     }
 }
