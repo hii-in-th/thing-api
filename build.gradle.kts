@@ -21,6 +21,7 @@ dependencies {
     compile("args4j:args4j:2.33")
 
     val log4jVersion = "2.11.1"
+    compile("org.apache.logging.log4j:log4j-core:$log4jVersion")
     compile("org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion")
     compile("io.github.microutils:kotlin-logging:1.6.26")
 
