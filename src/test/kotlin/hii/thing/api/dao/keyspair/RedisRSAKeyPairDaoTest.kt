@@ -37,7 +37,7 @@ class RedisRSAKeyPairDaoTest {
         val keypairPrivate = keyPair.private as RSAPrivateKey
 
         dao.privateKey = keypairPrivate
-        dao.privateKey!!.algorithm `should equal` keypairPrivate.algorithm
+        dao.privateKey!!.algorithm `should equal` keypairPrivate.algorithm // RSA
         dao.privateKey!!.encoded `should equal` keypairPrivate.encoded
         dao.privateKey!!.privateExponent `should equal` keypairPrivate.privateExponent
         dao.privateKey!!.modulus `should equal` keypairPrivate.modulus
