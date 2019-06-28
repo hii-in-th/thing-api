@@ -54,7 +54,7 @@ class VitalResource(
 
     @POST
     @Path("/blood-pressures")
-    @RolesAllowed("MACHINE", "KIOS", "kios")
+    @RolesAllowed("kiosk")
     fun bpMeasure(map: Map<String, String>): BloodPressures {
         val bp = BloodPressures(map.getValue("sys").toFloat(), map.getValue("dia").toFloat())
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
@@ -65,7 +65,7 @@ class VitalResource(
 
     @POST
     @Path("/heights")
-    @RolesAllowed("MACHINE", "KIOS", "kios")
+    @RolesAllowed("kiosk")
     fun heightsMeasure(map: Map<String, String>): Height {
         val height = Height(map.getValue("height").toFloat())
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
@@ -76,7 +76,7 @@ class VitalResource(
 
     @POST
     @Path("/weights")
-    @RolesAllowed("MACHINE", "KIOS", "kios")
+    @RolesAllowed("kiosk")
     fun weightMeasure(map: Map<String, String>): Weight {
         val weight = Weight(map.getValue("weight").toFloat())
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
@@ -88,7 +88,7 @@ class VitalResource(
 
     @GET
     @Path("/result")
-    @RolesAllowed("MACHINE", "KIOS", "kios")
+    @RolesAllowed("kiosk")
     fun getResult(): Result {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)

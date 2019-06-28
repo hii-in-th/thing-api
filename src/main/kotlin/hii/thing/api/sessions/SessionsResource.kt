@@ -45,7 +45,7 @@ class SessionsResource(
     lateinit var context: SecurityContext
 
     @POST
-    @RolesAllowed("MACHINE", "KIOS", "kios")
+    @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
         return if (!detail.citizenId.isNullOrBlank())
@@ -61,7 +61,7 @@ class SessionsResource(
     }
 
     @PUT
-    @RolesAllowed("MACHINE", "KIOS", "kios")
+    @RolesAllowed("kiosk")
     fun updateSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
