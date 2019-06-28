@@ -18,7 +18,7 @@
 package hii.thing.api.config.responsefilter
 
 import hii.thing.api.auth.NotFoundToken
-import javax.ws.rs.ForbiddenException
+import javax.ws.rs.ClientErrorException
 import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider
@@ -26,6 +26,6 @@ import javax.ws.rs.ext.Provider
 @Provider
 class NotFoundTokenFilter : ExceptionMapper<NotFoundToken> {
     override fun toResponse(exception: NotFoundToken): Response {
-        return ErrorDetail.build(ForbiddenException(exception.message))
+        return ErrorDetail.build(ClientErrorException(exception.message, 401))
     }
 }
