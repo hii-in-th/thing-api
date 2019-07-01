@@ -21,8 +21,11 @@ import com.auth0.jwt.JWT
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
 import hii.thing.api.dao.apikey.ApiKeyDao
+import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.security.JwtConst
+import hii.thing.api.security.keypair.KeyPairManage
 import org.amshove.kluent.`should be equal to`
+import org.junit.Before
 import org.junit.Test
 
 class JwtAccessTokenManagerTest {
@@ -47,6 +50,11 @@ class JwtAccessTokenManagerTest {
         override fun registerDevice(device: Device): Device = device
     }
     val jwtAccessTokenManager = JwtAccessTokenManager(tokenDao)
+
+    @Before
+    fun setUp() {
+        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+    }
 
     @Test
     fun createAndJWTVerifier() {

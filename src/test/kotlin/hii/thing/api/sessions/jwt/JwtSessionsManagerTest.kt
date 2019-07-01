@@ -19,14 +19,17 @@ package hii.thing.api.sessions.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.session.InMemorySessionDao
 import hii.thing.api.security.JwtConst
+import hii.thing.api.security.keypair.KeyPairManage
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be greater than`
 import org.amshove.kluent.`should equal`
+import org.junit.Before
 import org.junit.Test
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -38,6 +41,11 @@ class JwtSessionsManagerTest {
     val sessionsManager: SessionsManager = JwtSessionsManager(InMemorySessionDao(), InMemoryRegisterStoreDao())
     val createDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
     val accessToken = createAccessToken()
+
+    @Before
+    fun setUp() {
+        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+    }
 
     @Test
     fun anonymousCreate() {

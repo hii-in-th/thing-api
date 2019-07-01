@@ -17,8 +17,6 @@
 
 package hii.thing.api.security.keypair
 
-import hii.thing.api.dao.getDao
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.dao.keyspair.RSAKeyPairDao
 import hii.thing.api.getLogger
 import java.security.KeyPairGenerator
@@ -26,13 +24,12 @@ import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
 object KeyPairManage : KeyPair {
-    private val keyPairDao: RSAKeyPairDao by lazy {
-        try {
-            getDao<RSAKeyPairDao>()
-        } catch (ex: java.lang.IllegalStateException) {
-            getLogger().error("getDao<RSAKeyPairDao> error auto to in memory. :${ex.message}", ex)
-            InMemoryRSAKeyPairDao()
-        }
+    private lateinit var keyPairDao: RSAKeyPairDao
+
+    fun setUp(dao: RSAKeyPairDao): KeyPair {
+        if (kotlin.runCatching { keyPairDao }.isFailure)
+            keyPairDao = dao
+        return this
     }
 
     override val privateKey: RSAPrivateKey

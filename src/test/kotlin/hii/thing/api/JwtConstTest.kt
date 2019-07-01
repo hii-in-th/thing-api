@@ -21,7 +21,9 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.InvalidClaimException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.security.JwtConst
+import hii.thing.api.security.keypair.KeyPairManage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be equal to`
@@ -33,6 +35,11 @@ import java.util.Date
 import java.util.UUID
 
 class JwtConstTest {
+
+    @Before
+    fun setUp() {
+        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+    }
 
     @Test
     fun verifyOk() {
@@ -81,10 +88,5 @@ class JwtConstTest {
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
             .sign(algorithm)
-    }
-
-    @Before
-    fun setUp() {
-        // setEnv(mapOf("HII_ALONE" to "true"))
     }
 }
