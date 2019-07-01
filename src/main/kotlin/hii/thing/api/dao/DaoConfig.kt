@@ -22,7 +22,7 @@ import hii.thing.api.dao.apikey.InMemoryApiKeyDao
 import hii.thing.api.dao.apikey.PgSqlApiKeyDao
 import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.dao.keyspair.RSAKeyPairDao
-import hii.thing.api.dao.keyspair.RedisRSAKeyPairDao
+import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
 import hii.thing.api.dao.lastresult.InMemoryLastResultDao
 import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.dao.lastresult.PgSqlLastResultDao
@@ -71,10 +71,6 @@ val redisHost by lazy { System.getenv("RE_HOST") }
 val redisPort by lazy { System.getenv("RE_PORT").toInt() }
 val redisExpireSec by lazy { System.getenv("RE_EXPIRE_SEC").toInt() }
 
-// Redis rsa store server ถ้าไม่กำหนดจะใช้ค่าเดียวกับ ด้านบน
-val redisKeyHost by lazy { System.getenv("RE_KEY_HOST") }
-val redisKeyPort by lazy { System.getenv("RE_KEY_PORT")?.toInt() }
-
 val timeZone = ZoneId.of("Asia/Bangkok")!!
 
 val rsaPrivateKey by lazy { System.getenv("HII_PRIVATE") }
@@ -91,16 +87,10 @@ inline fun <reified T : Dao> getDao(): T {
         BloodPressuresDao::class -> if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
         HeightsDao::class -> if (standalone) InMemoryHeightsDao() else PgSqlHeightsDao { dataSourcePool.getConnection() }
         WeightDao::class -> if (standalone) InMemoryWeightDao() else PgSqlWeightDao { dataSourcePool.getConnection() }
-        RSAKeyPairDao::class -> if (standalone) InMemoryRSAKeyPairDao() else {
-            RedisRSAKeyPairDao(
-                setOf(
-                    HostAndPort(
-                        redisKeyHost ?: redisHost,
-                        redisKeyPort ?: redisPort
-                    )
-                )
-            )
-        }
+        RSAKeyPairDao::class -> if (standalone) InMemoryRSAKeyPairDao() else StringRSAKeyPairDao(
+            rsaPrivateKey,
+            rsaPublicKey
+        )
         else -> throw TypeCastException("Cannot type dao.")
     }
     return dao as T
