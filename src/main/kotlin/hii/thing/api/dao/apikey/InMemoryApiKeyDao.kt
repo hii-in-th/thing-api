@@ -32,10 +32,10 @@ class InMemoryApiKeyDao : ApiKeyDao {
 
     companion object {
         private val storage = linkedMapOf<String, Device>().apply {
-            put("acde", Device("hii/7", "acde", listOf("kios"), listOf("/vital", "/height", "/bmi")))
-            put("ab001", Device("hii/001", "ab001", listOf("kios"), listOf("/vital")))
-            put("ab002", Device("hii/002", "ab002", listOf("kios"), listOf("/height")))
-            put("ab003", Device("hii/003", "ab003", listOf("kios"), listOf("/bmi")))
+            put("abcde", Device("hii/07", "abcde", listOf("kiosk"), listOf("/vital", "/height", "/bmi")))
+            put("ab001", Device("hii/001", "ab001", listOf("kiosk"), listOf("/vital")))
+            put("ab002", Device("hii/002", "ab002", listOf("kiosk"), listOf("/height")))
+            put("ab003", Device("hii/003", "ab003", listOf("kiosk"), listOf("/bmi")))
         }
     }
 }
