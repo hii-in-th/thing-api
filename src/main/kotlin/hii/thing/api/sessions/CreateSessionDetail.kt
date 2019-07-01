@@ -21,5 +21,6 @@ data class CreateSessionDetail(
     val deviceId: String,
     val citizenId: String? = null,
     val citizenIdInput: String? = null,
-    val birthDate: String? = null
+    val birthDate: String? = null,
+    val name: String? = null
 )
