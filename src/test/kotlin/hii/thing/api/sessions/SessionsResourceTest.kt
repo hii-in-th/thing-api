@@ -74,7 +74,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsOk() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65", "ธนชัย ชัย")
 
         val res = target("/sessions").request()
             .header("Authorization", "Bearer $accessToken")

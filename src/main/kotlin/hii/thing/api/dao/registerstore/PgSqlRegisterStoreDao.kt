@@ -48,6 +48,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
+                    it[name] = sessionDetail.name
                     it[time] = Now()
                 }
             } catch (ex: ExposedSQLException) {
@@ -65,7 +66,8 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
             it[SqlRegisterDetail.deviceId],
             it[SqlRegisterDetail.citizenId],
             it[SqlRegisterDetail.citizenIdInput],
-            it[SqlRegisterDetail.birthDate]?.toStringDate()
+            it[SqlRegisterDetail.birthDate]?.toStringDate(),
+            it[SqlRegisterDetail.name]
         )
     }
 
@@ -77,6 +79,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                     it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput
+                    it[name] = sessionDetail.name
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
                 }
             } catch (ex: ExposedSQLException) {

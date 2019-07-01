@@ -22,6 +22,7 @@ import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.ignore
 import hii.thing.api.security.token.JwtPrincipal
 import hii.thing.api.sessions.jwt.JwtSessionsManager
+import hii.thing.api.vital.Result
 import hii.thing.api.vital.VitalResource
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -50,12 +51,21 @@ class SessionsResource(
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
         // TODO แยกตาม citizenInputType
-        return if (!detail.citizenId.isNullOrBlank())
-            Session(
-                sessionsManager.create(userPrincipal.accessToken, detail),
-                ignore { lastResultDao.get(detail.citizenId) }
-            )
-        else
+        return if (!detail.citizenId.isNullOrBlank()) {
+            val lastSub = ignore { lastResultDao.get(detail.citizenId) }
+            when (detail.citizenIdInput) {
+                "CARD" -> {
+                    require(detail.name != null) { "การใช้บัตร จำเป็นต้องใส่ชื่อมาด้วย require field \"name\"" }
+                    Session(sessionsManager.create(userPrincipal.accessToken, detail), lastSub)
+                }
+                else -> {
+                    Session(
+                        sessionsManager.create(userPrincipal.accessToken, detail),
+                        Result(null, lastSub?.height, lastSub?.weight, null)
+                    )
+                }
+            }
+        } else
             Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, detail.deviceId))
     }
 
