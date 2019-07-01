@@ -17,4 +17,6 @@
 
 package hii.thing.api.sessions
 
-data class Session(val sessionId: String, var subject: PersonalResult? = null)
+import hii.thing.api.vital.Result
+
+data class Session(val sessionId: String, var subject: Result? = null)

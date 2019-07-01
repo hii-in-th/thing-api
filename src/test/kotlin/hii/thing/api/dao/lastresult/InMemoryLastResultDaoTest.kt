@@ -17,7 +17,10 @@
 
 package hii.thing.api.dao.lastresult
 
+import hii.thing.api.vital.BloodPressures
+import hii.thing.api.vital.Result
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should equal`
 import org.junit.After
 import org.junit.Test
 
@@ -26,63 +29,93 @@ class InMemoryLastResultDaoTest {
     val memory = InMemoryLastResultDao()
     val dao: LastResultDao = memory
 
-    val laseResult = mapOf("Height" to "1570", "Me" to "i")
+    val laseResult = Result(18, 165F, 54F, BloodPressures(110F, 65F))
     val citizenId = "3212334483726"
 
     @Test
     fun set() {
         val result = dao.set(citizenId, laseResult)
 
-        result["Height"]!! `should be equal to` "1570"
-        result["Me"]!! `should be equal to` "i"
+        result.height!! `should be equal to` 165F
+        result.age!! `should be equal to` 18
+        result.weight!! `should be equal to` 54F
+        result.bloodPressure!!.sys `should be equal to` 110F
+        result.bloodPressure!!.dia `should be equal to` 65F
+    }
+
+    @Test
+    fun setAgeHeightWeightNotSetBp() {
+        val result = dao.set(citizenId, Result(18, 165F, 54F, null))
+
+        result.height!! `should be equal to` 165F
+        result.age!! `should be equal to` 18
+        result.weight!! `should be equal to` 54F
+        result.bloodPressure `should equal` null
+    }
+
+    @Test
+    fun setBpNotSetAgeHeightWeight() {
+        val result = dao.set(citizenId, Result(null, null, null, BloodPressures(110F, 65F)))
+
+        result.height `should equal` null
+        result.age `should equal` null
+        result.weight `should equal` null
+        result.bloodPressure!!.sys `should be equal to` 110F
+        result.bloodPressure!!.dia `should be equal to` 65F
+    }
+
+    @Test
+    fun setWeight() {
+        val result = dao.set(citizenId, Result(null, null, 56F, null))
+
+        result.height `should equal` null
+        result.age `should equal` null
+        result.weight!! `should be equal to` 56F
+        result.bloodPressure `should equal` null
+    }
+
+    @Test
+    fun setAge() {
+        val result = dao.set(citizenId, Result(56, null, null, null))
+
+        result.height `should equal` null
+        result.age!! `should be equal to` 56
+        result.weight `should equal` null
+        result.bloodPressure `should equal` null
+    }
+
+    @Test
+    fun setHeight() {
+        val result = dao.set(citizenId, Result(null, 156F, null, null))
+
+        result.height!! `should be equal to` 156F
+        result.age `should equal` null
+        result.weight `should equal` null
+        result.bloodPressure `should equal` null
     }
 
     @Test
     fun doubleSet() {
-        dao.set(citizenId, laseResult)
-        val result = dao.set(citizenId, mapOf("Height" to "99.9"))
+        dao.set(citizenId, Result(15, 190F, 60F, BloodPressures(113F, 67F)))
+        val result = dao.set(citizenId, laseResult)
 
-        result["Height"]!! `should be equal to` "99.9"
-    }
-
-    @Test
-    fun append() {
-        dao.set(citizenId, laseResult)
-        val result = dao.append(citizenId, mapOf("age" to "38"))
-
-        result["Height"]!! `should be equal to` "1570"
-        result["Me"]!! `should be equal to` "i"
-        result["age"]!! `should be equal to` "38"
-    }
-
-    @Test
-    fun appendEmpty() {
-        dao.append(citizenId, laseResult)
-        val result = dao.append(citizenId, mapOf("age" to "38"))
-
-        result["Height"]!! `should be equal to` "1570"
-        result["Me"]!! `should be equal to` "i"
-        result["age"]!! `should be equal to` "38"
-    }
-
-    @Test
-    fun appendOverlap() {
-        dao.append(citizenId, laseResult)
-        val result = dao.append(citizenId, mapOf("age" to "38", "Height" to "99.9"))
-
-        result["Height"]!! `should be equal to` "99.9"
-        result["Me"]!! `should be equal to` "i"
-        result["age"]!! `should be equal to` "38"
+        result.height!! `should be equal to` 165F
+        result.age!! `should be equal to` 18
+        result.weight!! `should be equal to` 54F
+        result.bloodPressure!!.sys `should be equal to` 110F
+        result.bloodPressure!!.dia `should be equal to` 65F
     }
 
     @Test
     fun get() {
         dao.set(citizenId, laseResult)
-
         val result = dao.get(citizenId)
 
-        result["Height"]!! `should be equal to` "1570"
-        result["Me"]!! `should be equal to` "i"
+        result.height!! `should be equal to` 165F
+        result.age!! `should be equal to` 18
+        result.weight!! `should be equal to` 54F
+        result.bloodPressure!!.sys `should be equal to` 110F
+        result.bloodPressure!!.dia `should be equal to` 65F
     }
 
     @Test(expected = Exception::class)

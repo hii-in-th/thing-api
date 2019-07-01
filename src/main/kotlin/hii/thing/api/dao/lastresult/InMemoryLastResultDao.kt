@@ -17,24 +17,15 @@
 
 package hii.thing.api.dao.lastresult
 
-private typealias Result = Map<String, String>
-private typealias ResultStore = HashMap<String, String>
+import hii.thing.api.vital.Result
 
 class InMemoryLastResultDao : LastResultDao {
     override fun set(citizenId: String, result: Result): Result {
-        memory[citizenId] = HashMap(result)
+        memory[citizenId] = result
         return result
     }
 
-    override fun append(citizenId: String, result: Result): Result {
-        return if (memory[citizenId] == null) set(citizenId, result)
-        else {
-            memory[citizenId]!!.putAll(result)
-            memory[citizenId]!!
-        }
-    }
-
-    override fun get(citizenId: String): Map<String, String> {
+    override fun get(citizenId: String): Result {
         return memory[citizenId]!!
     }
 
@@ -48,6 +39,6 @@ class InMemoryLastResultDao : LastResultDao {
     }
 
     companion object {
-        private val memory: HashMap<String, ResultStore> by lazy { hashMapOf<String, ResultStore>() }
+        private val memory: HashMap<String, Result> by lazy { hashMapOf<String, Result>() }
     }
 }

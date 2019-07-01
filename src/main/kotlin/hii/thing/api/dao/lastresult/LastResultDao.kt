@@ -18,6 +18,7 @@
 package hii.thing.api.dao.lastresult
 
 import hii.thing.api.dao.Dao
+import hii.thing.api.vital.Result
 
 /**
  * เก็บข้อมูลเกี่ยวกับการวัดครั้งล่า่สุด เพื่อที่จะไม่ต้อง query ที่ database ใหม่
@@ -27,14 +28,8 @@ interface LastResultDao : Dao {
      * Clear all and set.
      * @return All result
      */
-    fun set(citizenId: String, result: Map<String, String>): Map<String, String>
+    fun set(citizenId: String, result: Result): Result
 
-    /**
-     * auto set
-     * @return All result
-     */
-    fun append(citizenId: String, result: Map<String, String>): Map<String, String>
-
-    fun get(citizenId: String): Map<String, String>
+    fun get(citizenId: String): Result
     fun remove(citizenId: String)
 }

@@ -22,6 +22,7 @@ import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.ignore
 import hii.thing.api.security.token.JwtPrincipal
 import hii.thing.api.sessions.jwt.JwtSessionsManager
+import hii.thing.api.vital.VitalResource
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -48,13 +49,11 @@ class SessionsResource(
     @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        // TODO แยกตาม citizenInputType
         return if (!detail.citizenId.isNullOrBlank())
             Session(
                 sessionsManager.create(userPrincipal.accessToken, detail),
-                ignore {
-                    val resultMap = lastResultDao.get(detail.citizenId!!)
-                    PersonalResult(resultMap)
-                }
+                ignore { lastResultDao.get(detail.citizenId) }
             )
         else
             Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, detail.deviceId))
@@ -65,8 +64,8 @@ class SessionsResource(
     fun updateSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
-        val create = sessionsManager.updateCreate(userPrincipal.accessToken, detail)
+        sessionsManager.updateCreate(userPrincipal.accessToken, detail)
 
-        return Session(session, PersonalResult(mapOf("create" to create)))
+        return Session(session, VitalResource().getResult())
     }
 }

@@ -97,22 +97,11 @@ class VitalResource(
         val bp = ignore { pbDao.getBy(session) }
         val userDetail = sessionsManager.getDetail(session)
 
-        userDetail.citizenId?.let { citizenId ->
-            val result = hashMapOf(
-                "height" to "${height?.height}",
-                "bp" to "${bp?.sys}/${bp?.dia}",
-                "weight" to "${weight?.weight}"
-            )
-            result.remove("")
-            lastResultDao.append(
-                citizenId, result
-            )
-        }
-        var age: Int? = null
-        userDetail.birthDate?.let {
-            age = calAge(it.toJavaTime())
-        }
+        val age: Int? = userDetail.birthDate?.let { calAge(it.toJavaTime()) }
 
-        return Result(age, height?.height, weight?.weight, bp)
+        val result = Result(age, height?.height, weight?.weight, bp)
+        userDetail.citizenId?.let { lastResultDao.set(it, result) }
+
+        return result
     }
 }

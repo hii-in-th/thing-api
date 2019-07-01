@@ -17,11 +17,12 @@
 
 package hii.thing.api.dao.lastresult
 
+import hii.thing.api.vital.BloodPressures
+import hii.thing.api.vital.Result
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -36,7 +37,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         Database.connect(connection)
     }
 
-    override fun set(citizenId: String, result: Map<String, String>): Map<String, String> {
+    override fun set(citizenId: String, result: Result): Result {
         val strValue: String = createStrValue(result)
         try {
             transaction {
@@ -56,49 +57,38 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         return get(citizenId)
     }
 
-    private fun createStrValue(result: Map<String, String>): String {
+    private fun createStrValue(result: Result): String {
         var strValue = ""
-        result.forEach { (key, value) -> strValue += "$key$delimiter$value$delimiter$delimiter" }
+        strValue += "a$delimiter${result.age}$delimiter$delimiter"
+        strValue += "h$delimiter${result.height}$delimiter$delimiter"
+        strValue += "w$delimiter${result.weight}$delimiter$delimiter"
+        strValue += "bs$delimiter${result.bloodPressure?.sys}$delimiter$delimiter"
+        strValue += "bd$delimiter${result.bloodPressure?.dia}$delimiter$delimiter"
         return strValue
     }
 
-    override fun append(citizenId: String, result: Map<String, String>): Map<String, String> {
-        transaction {
-            SchemaUtils.create(SqlLastResult)
-            val appendResult = hashMapOf<String, String>()
-            val whereQuery = SqlLastResult.citizenId eq citizenId
-            SqlLastResult.select { whereQuery }.limit(1)
-                .map {
-                    it[SqlLastResult.value].split("$delimiter$delimiter").forEach { listResult ->
-                        val keyMap = listResult.split(delimiter)
-                        appendResult[keyMap.first()] = keyMap.last()
-                    }
-                }
-
-            appendResult.putAll(result)
-            appendResult.remove("")
-
-            SqlLastResult.update({ whereQuery }) {
-                it[value] = createStrValue(appendResult)
-            }
-        }
-        return try {
-            get(citizenId)
-        } catch (ex: KotlinNullPointerException) {
-            set(citizenId, result)
-        }
-    }
-
-    override fun get(citizenId: String): Map<String, String> {
-        var output: Map<String, String>? = null
+    override fun get(citizenId: String): Result {
+        var resultStr: Map<String, String>? = null
         transaction {
             SchemaUtils.create(SqlLastResult)
             SqlLastResult.select { SqlLastResult.citizenId eq citizenId }.limit(1)
                 .map {
-                    output = mapToResult(it)
+                    resultStr = mapToResult(it)
                 }
         }
-        return output.takeIf { !it.isNullOrEmpty() }!!
+
+        require(!resultStr.isNullOrEmpty()) { "Last result empty." }
+        val sys = resultStr?.get("bs")?.toFloatOrNull()
+        val dia = resultStr?.get("bd")?.toFloatOrNull()
+        val bp = if (sys != null && dia != null) {
+            BloodPressures(sys, dia)
+        } else null
+        return Result(
+            resultStr?.get("a")?.toIntOrNull(),
+            resultStr?.get("h")?.toFloatOrNull(),
+            resultStr?.get("w")?.toFloatOrNull(),
+            bp
+        )
     }
 
     private fun mapToResult(it: ResultRow): HashMap<String, String> {

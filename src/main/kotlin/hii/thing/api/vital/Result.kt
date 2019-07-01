@@ -33,7 +33,7 @@ data class Result(
     fun bmiCal() =
         if (height != null && weight != null) weight / ((height / 100) * (height / 100)) else null
 
-    val suggestions: List<Suggestions>? = calSuggestions(this)
+    var suggestions: List<Suggestions>? = calSuggestions(this)
 }
 
 data class Suggestions(
