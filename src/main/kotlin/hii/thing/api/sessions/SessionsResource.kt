@@ -62,7 +62,6 @@ class SessionsResource(
             val lastSub = ignore { lastResultDao.get(replatDeviceId.citizenId) }
             when (replatDeviceId.citizenIdInput) {
                 "CARD" -> {
-                    require(replatDeviceId.name != null) { "การใช้บัตร จำเป็นต้องใส่ชื่อมาด้วย require field \"name\"" }
                     Session(sessionsManager.create(userPrincipal.accessToken, replatDeviceId), lastSub)
                 }
                 else -> {
