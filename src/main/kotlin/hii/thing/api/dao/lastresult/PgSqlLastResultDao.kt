@@ -22,8 +22,10 @@ import hii.thing.api.vital.BloodPressures
 import hii.thing.api.vital.Result
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -32,14 +34,13 @@ import org.jetbrains.exposed.sql.update
 import java.sql.Connection
 
 private const val delimiter = "|"
-internal const val urlLength = 16
 
 class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
     init {
         Database.connect(connection)
     }
 
-    override fun set(citizenId: String, result: Result): Result {
+    override fun set(citizenId: String, result: Result, refLink: String): Result {
         val strValue: String = createStrValue(result)
         try {
             transaction {
@@ -47,7 +48,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
                 SqlLastResult.insert {
                     it[SqlLastResult.citizenId] = citizenId
                     it[value] = strValue
-                    it[refLink] = genUrl.nextSecret()
+                    it[SqlLastResult.refLink] = refLink
                     it[updateTime] = Now()
                 }
             }
@@ -55,7 +56,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
             transaction {
                 SqlLastResult.update({ SqlLastResult.citizenId eq citizenId }) {
                     it[value] = strValue
-                    it[refLink] = genUrl.nextSecret()
+                    it[SqlLastResult.refLink] = refLink
                     it[updateTime] = Now()
                 }
             }
@@ -74,12 +75,22 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
     }
 
     override fun get(citizenId: String): Result {
+        return getResultWhere(SqlLastResult.citizenId eq citizenId)
+    }
+
+    override fun getBy(refLink: String): Result {
+        return getResultWhere(SqlLastResult.refLink eq refLink)
+    }
+
+    private fun getResultWhere(where: Op<Boolean>): Result {
         var resultStr: Map<String, String>? = null
+        var refLink: String? = null
         transaction {
             SchemaUtils.create(SqlLastResult)
-            SqlLastResult.select { SqlLastResult.citizenId eq citizenId }.limit(1)
+            SqlLastResult.select { where }.limit(1)
                 .map {
                     resultStr = mapToResult(it)
+                    refLink = it[SqlLastResult.refLink]
                 }
         }
 
@@ -94,7 +105,9 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
             resultStr?.get("h")?.toFloatOrNull(),
             resultStr?.get("w")?.toFloatOrNull(),
             bp
-        )
+        ).apply {
+            this.refLink = refLink
+        }
     }
 
     private fun mapToResult(it: ResultRow): HashMap<String, String> {
@@ -110,9 +123,5 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         transaction {
             SqlLastResult.deleteWhere { SqlLastResult.citizenId eq citizenId }
         }
-    }
-
-    companion object {
-        private val genUrl: GenUrl by lazy { GenUrl(urlLength) }
     }
 }

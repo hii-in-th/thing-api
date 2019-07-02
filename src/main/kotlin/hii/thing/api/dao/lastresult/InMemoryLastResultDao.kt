@@ -20,13 +20,18 @@ package hii.thing.api.dao.lastresult
 import hii.thing.api.vital.Result
 
 class InMemoryLastResultDao : LastResultDao {
-    override fun set(citizenId: String, result: Result): Result {
+    override fun set(citizenId: String, result: Result, refLink: String): Result {
+        result.refLink = refLink
         memory[citizenId] = result
-        return result
+        return memory[citizenId]!!
     }
 
     override fun get(citizenId: String): Result {
         return memory[citizenId]!!
+    }
+
+    override fun getBy(refLink: String): Result {
+        return memory.toList().find { it.second.refLink == refLink }!!.second
     }
 
     override fun remove(citizenId: String) {

@@ -76,6 +76,8 @@ val timeZone = ZoneId.of("Asia/Bangkok")!!
 val rsaPrivateKey by lazy { System.getenv("HII_PRIVATE") }
 val rsaPublicKey by lazy { System.getenv("HII_PUBLIC") }
 
+const val refResultLinkLength = 16
+
 inline fun <reified T : Dao> getDao(): T {
     val dao = when (T::class) {
         ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else JwtApiKeyDao()

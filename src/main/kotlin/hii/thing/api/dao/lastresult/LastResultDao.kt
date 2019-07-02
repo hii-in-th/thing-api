@@ -18,6 +18,7 @@
 package hii.thing.api.dao.lastresult
 
 import hii.thing.api.dao.Dao
+import hii.thing.api.dao.refResultLinkLength
 import hii.thing.api.vital.Result
 
 /**
@@ -28,8 +29,9 @@ interface LastResultDao : Dao {
      * Clear all and set.
      * @return All result
      */
-    fun set(citizenId: String, result: Result): Result
+    fun set(citizenId: String, result: Result, refLink: String = GenUrl(refResultLinkLength).nextSecret()): Result
 
     fun get(citizenId: String): Result
+    fun getBy(refLink: String): Result
     fun remove(citizenId: String)
 }

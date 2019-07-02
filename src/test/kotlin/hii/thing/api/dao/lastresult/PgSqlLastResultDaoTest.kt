@@ -123,6 +123,24 @@ class PgSqlLastResultDaoTest {
         result.bloodPressure!!.dia `should be equal to` 65F
     }
 
+    @Test
+    fun getByRefLink() {
+        val set = dao.set(citizenId, laseResult)
+        val result = dao.getBy(set.refLink!!)
+
+        result.height!! `should be equal to` 165F
+        result.age!! `should be equal to` 18
+        result.weight!! `should be equal to` 54F
+        result.bloodPressure!!.sys `should be equal to` 110F
+        result.bloodPressure!!.dia `should be equal to` 65F
+    }
+
+    @Test(expected = Exception::class)
+    fun getByEmptyRefLink() {
+        dao.set(citizenId, laseResult)
+        dao.getBy("dldkdkdkd")
+    }
+
     @Test(expected = Exception::class)
     fun getEmpty() {
         dao.get(citizenId)
@@ -134,6 +152,11 @@ class PgSqlLastResultDaoTest {
         dao.remove(citizenId)
 
         runCatching { dao.get(citizenId) }.isFailure `should be equal to` true
+    }
+
+    @Test(expected = Exception::class)
+    fun removeEmpty() {
+        dao.remove(citizenId)
     }
 
     @Before
