@@ -17,6 +17,7 @@
 
 package hii.thing.api.dao.lastresult
 
+import hii.thing.api.dao.Now
 import hii.thing.api.vital.BloodPressures
 import hii.thing.api.vital.Result
 import org.jetbrains.exposed.exceptions.ExposedSQLException
@@ -31,6 +32,7 @@ import org.jetbrains.exposed.sql.update
 import java.sql.Connection
 
 private const val delimiter = "|"
+internal const val urlLength = 16
 
 class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
     init {
@@ -45,12 +47,16 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
                 SqlLastResult.insert {
                     it[SqlLastResult.citizenId] = citizenId
                     it[value] = strValue
+                    it[refLink] = genUrl.nextSecret()
+                    it[updateTime] = Now()
                 }
             }
         } catch (update: ExposedSQLException) {
             transaction {
                 SqlLastResult.update({ SqlLastResult.citizenId eq citizenId }) {
                     it[value] = strValue
+                    it[refLink] = genUrl.nextSecret()
+                    it[updateTime] = Now()
                 }
             }
         }
@@ -104,5 +110,9 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         transaction {
             SqlLastResult.deleteWhere { SqlLastResult.citizenId eq citizenId }
         }
+    }
+
+    companion object {
+        private val genUrl: GenUrl by lazy { GenUrl(urlLength) }
     }
 }

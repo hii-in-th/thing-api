@@ -21,5 +21,7 @@ import org.jetbrains.exposed.sql.Table
 
 object SqlLastResult : Table("tmp_lastresult") {
     val citizenId = varchar("citizen", 30).primaryKey(0)
+    val refLink = varchar("reflink", urlLength).primaryKey(1)
     val value = varchar("value", 255)
+    val updateTime = datetime("updatedate")
 }
