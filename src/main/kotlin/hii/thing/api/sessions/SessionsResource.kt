@@ -50,17 +50,24 @@ class SessionsResource(
     @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as JwtPrincipal)
-        // TODO แยกตาม citizenInputType
-        return if (!detail.citizenId.isNullOrBlank()) {
-            val lastSub = ignore { lastResultDao.get(detail.citizenId) }
-            when (detail.citizenIdInput) {
+        val replatDeviceId =
+            CreateSessionDetail(
+                userPrincipal.jwt.subject,
+                detail.citizenId,
+                detail.citizenIdInput,
+                detail.birthDate,
+                detail.name
+            )
+        return if (!replatDeviceId.citizenId.isNullOrBlank()) {
+            val lastSub = ignore { lastResultDao.get(replatDeviceId.citizenId) }
+            when (replatDeviceId.citizenIdInput) {
                 "CARD" -> {
-                    require(detail.name != null) { "การใช้บัตร จำเป็นต้องใส่ชื่อมาด้วย require field \"name\"" }
-                    Session(sessionsManager.create(userPrincipal.accessToken, detail), lastSub)
+                    require(replatDeviceId.name != null) { "การใช้บัตร จำเป็นต้องใส่ชื่อมาด้วย require field \"name\"" }
+                    Session(sessionsManager.create(userPrincipal.accessToken, replatDeviceId), lastSub)
                 }
                 else -> {
                     Session(
-                        sessionsManager.create(userPrincipal.accessToken, detail),
+                        sessionsManager.create(userPrincipal.accessToken, replatDeviceId),
                         Result(null, lastSub?.height, lastSub?.weight, null)
                     )
                 }
