@@ -19,7 +19,7 @@ package hii.thing.api.dao
 
 import hii.thing.api.dao.apikey.ApiKeyDao
 import hii.thing.api.dao.apikey.InMemoryApiKeyDao
-import hii.thing.api.dao.apikey.PgSqlApiKeyDao
+import hii.thing.api.dao.apikey.JwtApiKeyDao
 import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.dao.keyspair.RSAKeyPairDao
 import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
@@ -78,7 +78,7 @@ val rsaPublicKey by lazy { System.getenv("HII_PUBLIC") }
 
 inline fun <reified T : Dao> getDao(): T {
     val dao = when (T::class) {
-        ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else PgSqlApiKeyDao { dataSourcePool.getConnection() }
+        ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else JwtApiKeyDao()
         RegisterStoreDao::class -> if (standalone) InMemoryRegisterStoreDao() else PgSqlRegisterStoreDao { dataSourcePool.getConnection() }
         SessionsDao::class -> if (standalone) InMemorySessionDao() else RedisSessionDao(
             setOf(HostAndPort(redisHost, redisPort)), redisExpireSec
