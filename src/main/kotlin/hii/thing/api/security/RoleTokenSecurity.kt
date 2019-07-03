@@ -74,8 +74,13 @@ class RoleTokenSecurity : ContainerRequestFilter {
     val ContainerRequestContext.token: String?
         get() {
             val authHeaders = headers[AUTHORIZATION_HEADER]
-            if (authHeaders.isNullOrEmpty())
-                return null
+            if (authHeaders.isNullOrEmpty()) {
+                val token = this.uriInfo.queryParameters["token"]?.firstOrNull() // ดึง token จาก query
+                return if (token.isNullOrEmpty())
+                    null
+                else
+                    token
+            }
             val bearer = authHeaders.find { it.startsWith(BEARER_SCHEME) }
             return bearer?.replaceFirst(BEARER_SCHEME, "")?.trim()?.takeIf { it.isNotBlank() }
         }

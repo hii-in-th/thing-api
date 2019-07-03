@@ -97,4 +97,16 @@ class SessionsResourceTest : JerseyTest() {
 
         res.status `should equal` 403
     }
+
+    @Test
+    fun tokenByQueryParameter() {
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+        val res = target("/sessions")
+            .queryParam("token", accessToken)
+            .request()
+            .header("X-Requested-By", devicename)
+            .post(Entity.entity(Gson().toJson(sessionDetail), MediaType.APPLICATION_JSON_TYPE))
+
+        res.status `should equal` 200
+    }
 }
