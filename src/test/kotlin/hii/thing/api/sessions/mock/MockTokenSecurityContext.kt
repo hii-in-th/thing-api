@@ -23,7 +23,7 @@ import javax.ws.rs.core.SecurityContext
 
 class MockTokenSecurityContext(token: String, tokenManager: MockTokenManager) : SecurityContext {
 
-    val tokenSecurityContext = TokenSecurityContext(token, "https", tokenManager)
+    val tokenSecurityContext = TokenSecurityContext(token, tokenManager)
 
     override fun isUserInRole(role: String): Boolean {
         return tokenSecurityContext.isUserInRole(role)

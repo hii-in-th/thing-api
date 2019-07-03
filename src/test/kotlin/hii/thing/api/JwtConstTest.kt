@@ -47,6 +47,30 @@ class JwtConstTest {
         JwtConst.verify(accessToken)
     }
 
+    @Test
+    fun verfyScopeOk() {
+        val accessToken = createAccessToken()
+        JwtConst.verifyPath(accessToken, "vital")
+    }
+
+    @Test
+    fun verfySubScopeOk() {
+        val accessToken = createAccessToken()
+        JwtConst.verifyPath(accessToken, "vital/result")
+    }
+
+    @Test(expected = Exception::class)
+    fun verfySubScopeNotOk() {
+        val accessToken = createAccessToken()
+        JwtConst.verifyPath(accessToken, "run/result")
+    }
+
+    @Test(expected = Exception::class)
+    fun verfyScopeNotOk() {
+        val accessToken = createAccessToken()
+        JwtConst.verifyPath(accessToken, "session")
+    }
+
     @Test(expected = TokenExpiredException::class)
     fun verifyExpire() {
         runBlocking {
@@ -87,6 +111,7 @@ class JwtConstTest {
             .withNotBefore(date)
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
+            .withArrayClaim("scopt", arrayOf("/vital", "/bmi", "/height"))
             .sign(algorithm)
     }
 }

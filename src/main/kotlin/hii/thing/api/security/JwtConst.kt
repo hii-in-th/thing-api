@@ -19,6 +19,7 @@ package hii.thing.api.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.RSAKeyProvider
 import hii.thing.api.dao.getDao
@@ -58,6 +59,14 @@ class JwtConst private constructor() {
                 .withIssuer(issuer)
                 .build() // Reusable verifier instance
             verifier.verify(accessToken)
+            return true
+        }
+
+        fun verifyPath(accessToken: String, path: String): Boolean {
+            verify(accessToken)
+            val scope = decode(accessToken).getClaim("scopt").asArray(String::class.java)
+            val contains = scope.find { "/$path".startsWith(it) } != null
+            if (!contains) throw JWTVerificationException("Part $path not allow")
             return true
         }
     }

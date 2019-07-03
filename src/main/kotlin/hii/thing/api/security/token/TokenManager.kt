@@ -18,7 +18,13 @@
 package hii.thing.api.security.token
 
 interface TokenManager {
-    fun verify(token: String): Boolean
+    /**
+     * @param token is token string
+     * @param path is url path ex. /session path = session
+     * @return Check ok
+     */
+    fun verify(token: String, path: String? = null): Boolean
+
     fun getUserRole(token: String): List<String>
     fun getName(token: String): String
 }

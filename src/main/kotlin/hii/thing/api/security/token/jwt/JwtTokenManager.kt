@@ -21,7 +21,12 @@ import hii.thing.api.security.JwtConst
 import hii.thing.api.security.token.TokenManager
 
 class JwtTokenManager : TokenManager {
-    override fun verify(token: String): Boolean = JwtConst.verify(token)
+    override fun verify(token: String, path: String?): Boolean {
+        return if (path != null)
+            JwtConst.verifyPath(token, path)
+        else
+            JwtConst.verify(token)
+    }
 
     override fun getUserRole(token: String): List<String> =
         JwtConst.decode(token).getClaim("role")!!.asList(String::class.java)!!

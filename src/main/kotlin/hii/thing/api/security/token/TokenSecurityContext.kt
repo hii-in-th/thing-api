@@ -22,18 +22,25 @@ import javax.ws.rs.core.SecurityContext
 
 class TokenSecurityContext(
     val token: String,
-    private val scheme: String,
     val tokenManager: TokenManager
 ) :
     SecurityContext {
 
     override fun isUserInRole(role: String): Boolean {
-        return tokenManager.getUserRole(token).contains(role)
+        return if (token.isEmpty())
+            role == "visitor"
+        else
+            tokenManager.getUserRole(token).contains(role)
     }
 
     override fun getAuthenticationScheme(): String = "Bearer"
 
-    override fun getUserPrincipal(): Principal = JwtPrincipal(token)
+    override fun getUserPrincipal(): Principal {
+        return if (token.isEmpty())
+            Principal { "visitor" }
+        else
+            JwtPrincipal(token)
+    }
 
     override fun isSecure() = true
 }
