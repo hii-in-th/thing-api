@@ -18,7 +18,9 @@
 package hii.thing.api.vital
 
 import hii.thing.api.dao.getDao
+import hii.thing.api.dao.lastresult.GenUrl
 import hii.thing.api.dao.lastresult.LastResultDao
+import hii.thing.api.dao.refResultLinkLength
 import hii.thing.api.dao.registerstore.toJavaTime
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
@@ -27,6 +29,10 @@ import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.SessionsManager
 import hii.thing.api.sessions.jwt.JwtSessionsManager
+import hii.thing.api.vital.link.JwtLink
+import hii.thing.api.vital.link.Link
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
@@ -46,7 +52,8 @@ class VitalResource(
     val heightsDao: HeightsDao = getDao(),
     val weightDao: WeightDao = getDao(),
     val sessionsManager: SessionsManager = JwtSessionsManager(),
-    private val lastResultDao: LastResultDao = getDao()
+    private val lastResultDao: LastResultDao = getDao(),
+    val link: Link = JwtLink()
 ) {
 
     @Context
@@ -100,7 +107,15 @@ class VitalResource(
         val age: Int? = userDetail.birthDate?.let { calAge(it.toJavaTime()) }
 
         val result = Result(age, height?.height, weight?.weight, bp)
-        userDetail.citizenId?.let { lastResultDao.set(it, result) }
+        userDetail.citizenId?.let {
+            val refLink = GenUrl(refResultLinkLength).nextSecret()
+            var linkToken: String? = null
+            runBlocking {
+                launch { lastResultDao.set(it, result, refLink) }
+                launch { linkToken = link.create(refLink) }
+            }
+            result.refLink = linkToken
+        }
 
         return result
     }
