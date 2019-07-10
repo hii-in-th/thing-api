@@ -111,7 +111,7 @@ class JwtConstTest {
             .withNotBefore(date)
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
-            .withArrayClaim("scopt", arrayOf("/vital", "/bmi", "/height"))
+            .withArrayClaim("scope", arrayOf("/vital", "/bmi", "/height"))
             .sign(algorithm)
     }
 }

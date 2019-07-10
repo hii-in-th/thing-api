@@ -17,6 +17,7 @@
 
 package hii.thing.api.security.token
 
+import hii.thing.api.security.token.jwt.JwtThingPrincipal
 import java.security.Principal
 import javax.ws.rs.core.SecurityContext
 
@@ -39,7 +40,7 @@ class TokenSecurityContext(
         return if (token.isEmpty())
             Principal { "visitor" }
         else
-            JwtPrincipal(token)
+            JwtThingPrincipal(token)
     }
 
     override fun isSecure() = true

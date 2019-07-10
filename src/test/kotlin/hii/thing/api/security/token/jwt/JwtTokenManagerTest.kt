@@ -75,7 +75,7 @@ class JwtTokenManagerTest {
             .withNotBefore(date)
             .withSubject(deviceName)
             .withArrayClaim("role", roles.toTypedArray())
-            .withArrayClaim("scopt", scope.toTypedArray())
+            .withArrayClaim("scope", scope.toTypedArray())
             .sign(algorithm)
     }
 }

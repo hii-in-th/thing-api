@@ -20,7 +20,7 @@ package hii.thing.api.sessions
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.ignore
-import hii.thing.api.security.token.JwtPrincipal
+import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import hii.thing.api.vital.Result
 import hii.thing.api.vital.VitalResource
@@ -49,10 +49,10 @@ class SessionsResource(
     @POST
     @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
-        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val replatDeviceId =
             CreateSessionDetail(
-                userPrincipal.jwt.subject,
+                userPrincipal.deviceName,
                 detail.citizenId,
                 detail.citizenIdInput,
                 detail.birthDate,
@@ -78,7 +78,7 @@ class SessionsResource(
     @PUT
     @RolesAllowed("kiosk")
     fun updateSessions(detail: CreateSessionDetail): Session {
-        val userPrincipal = (context.userPrincipal as JwtPrincipal)
+        val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         sessionsManager.updateCreate(userPrincipal.accessToken, detail)
 

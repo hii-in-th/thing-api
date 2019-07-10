@@ -17,10 +17,11 @@
 
 package hii.thing.api.security.token
 
-import hii.thing.api.security.JwtConst
 import java.security.Principal
 
-class JwtPrincipal(val accessToken: String) : Principal {
-    override fun getName(): String = jwt.subject
-    val jwt = JwtConst.decode(accessToken)
+interface ThingPrincipal : Principal {
+    fun getRole(): Array<String>
+    val accessToken: String
+    val deviceName: String
+    override fun getName(): String
 }

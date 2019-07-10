@@ -31,7 +31,7 @@ class JwtApiKeyDao : ApiKeyDao {
         val jwt = JwtConst.decodeAndVerify(baseToken)
 
         val role = jwt.claims["role"]!!.asArray(String::class.java).toList()
-        val scope = jwt.claims["scopt"]!!.asArray(String::class.java).toList()
+        val scope = jwt.claims["scope"]!!.asArray(String::class.java).toList()
         return Device(jwt.subject, baseToken, role, scope)
     }
 
@@ -52,7 +52,7 @@ class JwtApiKeyDao : ApiKeyDao {
             .withSubject(device.deviceName)
             .withJWTId(jwtId)
             .withArrayClaim("role", device.roles.toTypedArray())
-            .withArrayClaim("scopt", device.scope.toTypedArray())
+            .withArrayClaim("scope", device.scope.toTypedArray())
             .withNotBefore(date)
             .sign(algorithm)
 

@@ -64,7 +64,7 @@ class JwtConst private constructor() {
 
         fun verifyPath(accessToken: String, path: String): Boolean {
             verify(accessToken)
-            val scope = decode(accessToken).getClaim("scopt").asArray(String::class.java)
+            val scope = decode(accessToken).getClaim("scope").asArray(String::class.java)
             val contains = scope.find { "/$path".startsWith(it) } != null
             if (!contains) throw JWTVerificationException("Part $path not allow")
             return true
