@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "1.3.31"
     id("org.jmailen.kotlinter") version "1.26.0"
     id("com.moonlitdoor.git-version") version "0.1.1"
+    id("org.jetbrains.dokka") version "0.9.18"
 }
 
 group = "hii"
@@ -17,6 +18,9 @@ repositories {
 
 dependencies {
     //Application dependency block
+
+    dokkaRuntime("org.jetbrains.dokka:dokka-fatjar:0.9.18")
+
     compile(kotlin("stdlib-jdk8"))
     compile("args4j:args4j:2.33")
 
@@ -36,7 +40,6 @@ dependencies {
     compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
     compile("commons-codec:commons-codec:1.12")
     compile("com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1")
-
     testImplementation("com.github.fppt:jedis-mock:0.1.13")
     testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
 }
@@ -72,6 +75,11 @@ tasks.register<Jar>("sourcesJar") {
     from(sourceSets.main.get().allJava)
 }
 
+tasks.named<Test>("test") {
+    minHeapSize = "1024m"
+    maxHeapSize = "2048m"
+}
+
 tasks.named<Jar>("jar") {
     configurations.compileClasspath.get().forEach { if (it.isDirectory) from(it) else from(zipTree(it)) }
 
@@ -89,4 +97,8 @@ tasks.named<Jar>("jar") {
         "META-INF/LICENSE*",
         "about.html"
     )
+}
+tasks.dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
 }
