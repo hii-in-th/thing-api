@@ -31,12 +31,21 @@ import javax.ws.rs.container.ResourceInfo
 import javax.ws.rs.core.Context
 import javax.ws.rs.ext.Provider
 
+/**
+ * ทุกครั้งที่มีการเรียกเข้ามาที่ api จะต้องผ่านตัวกรองที่นี่
+ */
 @Priority(Priorities.AUTHENTICATION)
 @Provider
 class RoleTokenSecurity : ContainerRequestFilter {
 
     @Context
     lateinit var resourceInfo: ResourceInfo
+
+    companion object {
+        const val AUTHORIZATION_HEADER = "Authorization"
+        const val BEARER_SCHEME = "Bearer "
+        private val logger = RoleTokenSecurity.getLogger()
+    }
 
     var tokenManager: TokenManager = JwtTokenManager()
 
@@ -100,12 +109,6 @@ class RoleTokenSecurity : ContainerRequestFilter {
             val name = tokenManager.getName(token)
             return !hiiXreq.find { it == name }.isNullOrEmpty()
         }
-
-    companion object {
-        const val AUTHORIZATION_HEADER = "Authorization"
-        const val BEARER_SCHEME = "Bearer "
-        private val logger = RoleTokenSecurity.getLogger()
-    }
 
     private fun List<String>.containsSome(list: List<String>): Boolean {
         forEach {

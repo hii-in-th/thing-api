@@ -30,6 +30,9 @@ import kotlinx.coroutines.runBlocking
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
+/**
+ * Configuration และ util ของ JWT
+ */
 class JwtConst private constructor() {
     companion object {
         val keyPair: KeyPair by lazy { KeyPairManage.setUp(getDao()) }

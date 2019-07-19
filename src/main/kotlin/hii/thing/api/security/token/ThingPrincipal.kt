@@ -19,6 +19,9 @@ package hii.thing.api.security.token
 
 import java.security.Principal
 
+/**
+ * api จะใช้ ThingPrincipal ทั้งหมด
+ */
 interface ThingPrincipal : Principal {
     fun getRole(): Array<String>
     val accessToken: String

@@ -22,6 +22,9 @@ import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
 
+/**
+ * Main application
+ */
 class ThingApiServer(val args: Array<String>) {
 
     @Option(name = "-port", usage = "port destination to start server")

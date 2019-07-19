@@ -48,7 +48,11 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.TimeZone
 
+/**
+ * หากกำหนดค่า HII_ALONE ใน System env จะทำงานแบบ in memory ทั้งหมด
+ */
 val standalone = System.getenv("HII_ALONE") != null
+
 // sql config
 const val SQL_SESSION_LENGTH = 36
 val dataSourcePool by lazy { DataSource() }
@@ -78,6 +82,10 @@ val rsaPublicKey by lazy { System.getenv("HII_PUBLIC") }
 
 const val refResultLinkLength = 16
 
+/**
+ * เกี่ยวกับการสร้าง Dao ใช้แยกระหว่าง standalone กับ production
+ * @see standalone
+ */
 inline fun <reified T : Dao> getDao(): T {
     val dao = when (T::class) {
         ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else JwtApiKeyDao()
@@ -100,6 +108,11 @@ inline fun <reified T : Dao> getDao(): T {
 
 fun Now() = LocalDateTime.now(ZoneId.of("Universal")).toSqlTime()
 
+/**
+ * แปลงเวลา joda time เป็น java time เนื่องจาก
+ * lib ที่ใช้เชื่อมกับ database ใช้เป็น joda time
+ * @see org.jetbrains.exposed.sql.Table.datetime
+ */
 internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.of(
     this.year,
     this.monthOfYear,

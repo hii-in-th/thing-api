@@ -19,9 +19,11 @@ package hii.thing.api.security.token
 
 interface TokenManager {
     /**
+     * ใช้ในการตรวจสอบ token ที่ส่งเข้ามาว่าผ่านการตรวจสอบหรือไม่
+     *
      * @param token is token string
-     * @param path is url path ex. /session path = session
-     * @return Check ok
+     * @param path พาทปัจจุบันที่ client เรียกเข้ามา ex. /session path = session
+     * @return Verify ok?
      */
     fun verify(token: String, path: String? = null): Boolean
 
