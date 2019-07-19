@@ -20,6 +20,11 @@
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d %-5p [%t] %-5c{1} - %m%n"/>
         </Console>
+
+        <Socket name="LOGSTASH" host="logstash" port="12394" immediateFlush="false" connectTimeoutMillis="5000">
+            <SerializedLayout/>
+        </Socket>
+
     </Appenders>
 
     <Loggers>
