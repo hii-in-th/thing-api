@@ -99,6 +99,6 @@ tasks.named<Jar>("jar") {
     )
 }
 tasks.dokka {
-    outputFormat = "html"
+    outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
 }
