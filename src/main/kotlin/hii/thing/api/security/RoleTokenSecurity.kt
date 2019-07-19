@@ -83,7 +83,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
      * หรือ ถ้าไม่มีจะดึงมาจาก query?token=
      * @return Token
      */
-    val ContainerRequestContext.token: String?
+    private val ContainerRequestContext.token: String?
         get() {
             val authHeaders = headers[AUTHORIZATION_HEADER]
             if (authHeaders.isNullOrEmpty()) {
@@ -100,7 +100,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
     /**
      * ตรวจสอบ Csrf
      */
-    val ContainerRequestContext.isCsrf: Boolean
+    private val ContainerRequestContext.isCsrf: Boolean
         get() {
             val hiiXreq = headers["X-Requested-By"]
             val token = this.token
