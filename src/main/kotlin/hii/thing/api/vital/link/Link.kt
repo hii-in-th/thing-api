@@ -27,5 +27,5 @@ interface Link {
      * ถอดรหัส link
      * @return linkToken
      */
-    fun getResult(link: String): String
+    fun getRefId(link: String): String?
 }

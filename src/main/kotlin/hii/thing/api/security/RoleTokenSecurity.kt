@@ -71,6 +71,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
 
     /**
      * ดึง token ออกมาจาก header
+     * หรือ ถ้าไม่มีจะดึงมาจาก query?token=
      * @return Token
      */
     val ContainerRequestContext.token: String?

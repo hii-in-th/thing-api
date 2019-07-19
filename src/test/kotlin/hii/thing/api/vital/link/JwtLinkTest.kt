@@ -42,6 +42,6 @@ class JwtLinkTest {
     @Test
     fun getResult() {
         val link = jwtLink.create("abcdefg")
-        jwtLink.getResult(link) `should be equal to` "abcdefg"
+        jwtLink.getRefId(link)!! `should be equal to` "abcdefg"
     }
 }

@@ -49,7 +49,7 @@ class JwtLink : Link {
             .sign(algorithm)
     }
 
-    override fun getResult(link: String): String {
-        return JwtConst.decodeAndVerify(link).getClaim("ref").asString()!!
+    override fun getRefId(link: String): String? {
+        return JwtConst.decode(link).getClaim("ref").asString()
     }
 }

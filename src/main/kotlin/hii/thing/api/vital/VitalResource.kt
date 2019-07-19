@@ -98,15 +98,25 @@ class VitalResource(
     @RolesAllowed("kiosk", "report")
     fun getResult(): Result {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
+        val linkResult = link.getRefId(userPrincipal.accessToken)
+
+        return if (!linkResult.isNullOrEmpty()) { //  ตรวจสอบว่าเป็น Link แบบดูย้อนหลังหรือไม่
+            lastResultDao.getBy(linkResult) //  ดึงผลเก่าออกมา
+        } else {
+            createNewResult(userPrincipal)
+        }
+    }
+
+    private fun createNewResult(userPrincipal: ThingPrincipal): Result {
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         val height = ignore { heightsDao.getBy(session) }
         val weight = ignore { weightDao.getBy(session) }
         val bp = ignore { pbDao.getBy(session) }
         val userDetail = sessionsManager.getDetail(session)
-
         val age: Int? = userDetail.birthDate?.let { calAge(it.toJavaTime()) }
 
         val result = Result(age, height?.height, weight?.weight, bp)
+
         userDetail.citizenId?.let {
             val refLink = GenUrl(refResultLinkLength).nextSecret()
             var linkToken: String? = null
@@ -116,7 +126,6 @@ class VitalResource(
             }
             result.linkToken = linkToken
         }
-
         return result
     }
 }
