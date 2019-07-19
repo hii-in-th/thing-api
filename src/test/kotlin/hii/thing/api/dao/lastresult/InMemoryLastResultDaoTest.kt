@@ -121,7 +121,7 @@ class InMemoryLastResultDaoTest {
     @Test
     fun getByRefLink() {
         val set = dao.set(citizenId, laseResult)
-        val result = dao.getBy(set.refLink!!)
+        val result = dao.getBy(set.linkToken!!)
 
         result.height!! `should be equal to` 165F
         result.age!! `should be equal to` 18

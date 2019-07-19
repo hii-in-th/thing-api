@@ -27,7 +27,7 @@ data class Result(
 
     val bloodPressure: BloodPressures?
 ) {
-    var refLink: String? = null
+    var linkToken: String? = null
     val bmi: Float? = bmiCal()
 
     fun bmiCal() =

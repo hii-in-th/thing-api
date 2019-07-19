@@ -19,13 +19,13 @@ package hii.thing.api.vital.link
 
 interface Link {
     /**
-     * สร้าง link จาก refLink
+     * สร้าง link จาก linkToken
      */
-    fun create(refLink: String): String
+    fun create(refId: String): String
 
     /**
      * ถอดรหัส link
-     * @return refLink
+     * @return linkToken
      */
     fun getResult(link: String): String
 }

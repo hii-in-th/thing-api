@@ -21,7 +21,7 @@ import hii.thing.api.vital.Result
 
 class InMemoryLastResultDao : LastResultDao {
     override fun set(citizenId: String, result: Result, refLink: String): Result {
-        result.refLink = refLink
+        result.linkToken = refLink
         memory[citizenId] = result
         return memory[citizenId]!!
     }
@@ -31,7 +31,7 @@ class InMemoryLastResultDao : LastResultDao {
     }
 
     override fun getBy(refLink: String): Result {
-        return memory.toList().find { it.second.refLink == refLink }!!.second
+        return memory.toList().find { it.second.linkToken == refLink }!!.second
     }
 
     override fun remove(citizenId: String) {

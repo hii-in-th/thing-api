@@ -114,7 +114,7 @@ class VitalResource(
                 launch { lastResultDao.set(it, result, refLink) }
                 launch { linkToken = link.create(refLink) }
             }
-            result.refLink = linkToken
+            result.linkToken = linkToken
         }
 
         return result

@@ -26,7 +26,7 @@ import java.util.Date
 import java.util.UUID
 
 class JwtLink : Link {
-    override fun create(refLink: String): String {
+    override fun create(refId: String): String {
 
         val jwtId = UUID.randomUUID().toString()
 
@@ -44,7 +44,7 @@ class JwtLink : Link {
             .withJWTId(jwtId)
             .withArrayClaim("role", arrayOf("report"))
             .withArrayClaim("scope", arrayOf("/result"))
-            .withClaim("ref", refLink)
+            .withClaim("ref", refId)
             .withNotBefore(date)
             .sign(algorithm)
     }

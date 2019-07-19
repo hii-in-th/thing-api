@@ -106,7 +106,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
             resultStr?.get("w")?.toFloatOrNull(),
             bp
         ).apply {
-            this.refLink = refLink
+            this.linkToken = refLink
         }
     }
 
