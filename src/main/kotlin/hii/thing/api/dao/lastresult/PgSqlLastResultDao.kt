@@ -40,7 +40,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         Database.connect(connection)
     }
 
-    override fun set(citizenId: String, result: Result, refLink: String): Result {
+    override fun set(citizenId: String, result: Result, replayId: String): Result {
         val strValue: String = createStrValue(result)
         try {
             transaction {
@@ -48,7 +48,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
                 SqlLastResult.insert {
                     it[SqlLastResult.citizenId] = citizenId
                     it[value] = strValue
-                    it[SqlLastResult.refLink] = refLink
+                    it[SqlLastResult.refLink] = replayId
                     it[updateTime] = Now()
                 }
             }
@@ -56,7 +56,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
             transaction {
                 SqlLastResult.update({ SqlLastResult.citizenId eq citizenId }) {
                     it[value] = strValue
-                    it[SqlLastResult.refLink] = refLink
+                    it[SqlLastResult.refLink] = replayId
                     it[updateTime] = Now()
                 }
             }
@@ -78,8 +78,8 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         return getResultWhere(SqlLastResult.citizenId eq citizenId)
     }
 
-    override fun getBy(refLink: String): Result {
-        return getResultWhere(SqlLastResult.refLink eq refLink)
+    override fun getBy(replayId: String): Result {
+        return getResultWhere(SqlLastResult.refLink eq replayId)
     }
 
     private fun getResultWhere(where: Op<Boolean>): Result {
@@ -106,7 +106,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
             resultStr?.get("w")?.toFloatOrNull(),
             bp
         ).apply {
-            this.linkToken = refLink
+            this.replayLink = refLink
         }
     }
 

@@ -19,7 +19,7 @@ package hii.thing.api.vital.link
 
 interface Link {
     /**
-     * สร้าง link จาก linkToken
+     * สร้าง link จาก replayLink
      */
     fun create(refId: String): String
 

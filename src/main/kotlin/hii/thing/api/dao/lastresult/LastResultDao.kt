@@ -29,9 +29,9 @@ interface LastResultDao : Dao {
      * Clear all and set.
      * @return All result
      */
-    fun set(citizenId: String, result: Result, refLink: String = GenUrl(refResultLinkLength).nextSecret()): Result
+    fun set(citizenId: String, result: Result, replayId: String = GenUrl(refResultLinkLength).nextSecret()): Result
 
     fun get(citizenId: String): Result
-    fun getBy(refLink: String): Result
+    fun getBy(replayId: String): Result
     fun remove(citizenId: String)
 }

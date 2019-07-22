@@ -25,6 +25,7 @@ import hii.thing.api.dao.registerstore.toJavaTime
 import hii.thing.api.dao.vital.bp.BloodPressuresDao
 import hii.thing.api.dao.vital.height.HeightsDao
 import hii.thing.api.dao.vital.weight.WeightDao
+import hii.thing.api.getLogger
 import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.SessionsManager
@@ -98,10 +99,11 @@ class VitalResource(
     @RolesAllowed("kiosk", "report")
     fun getResult(): Result {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
-        val linkResult = link.getRefId(userPrincipal.accessToken)
+        val replayId = link.getRefId(userPrincipal.accessToken)
 
-        return if (!linkResult.isNullOrEmpty()) { //  ตรวจสอบว่าเป็น Link แบบดูย้อนหลังหรือไม่
-            lastResultDao.getBy(linkResult) //  ดึงผลเก่าออกมา
+        return if (!replayId.isNullOrEmpty()) { //  ตรวจสอบว่าเป็น Link แบบดูย้อนหลังหรือไม่
+            log.debug { "Replay result $replayId" }
+            lastResultDao.getBy(replayId) //  ดึงผลเก่าออกมา
         } else {
             createNewResult(userPrincipal)
         }
@@ -118,14 +120,18 @@ class VitalResource(
         val result = Result(age, height?.height, weight?.weight, bp)
 
         userDetail.citizenId?.let {
-            val refLink = GenUrl(refResultLinkLength).nextSecret()
-            var linkToken: String? = null
+            val replayId = GenUrl(refResultLinkLength).nextSecret()
+            var replayLink: String? = null
             runBlocking {
-                launch { lastResultDao.set(it, result, refLink) }
-                launch { linkToken = link.create(refLink) }
+                launch { lastResultDao.set(it, result, replayId) }
+                launch { replayLink = "/result?token=${link.create(replayId)}" }
             }
-            result.linkToken = linkToken
+            result.replayLink = replayLink
         }
         return result
+    }
+
+    companion object {
+        val log by lazy { getLogger() }
     }
 }
