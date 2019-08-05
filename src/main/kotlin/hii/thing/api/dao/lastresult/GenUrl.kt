@@ -21,6 +21,10 @@ import java.security.SecureRandom
 import java.util.Locale
 import java.util.Random
 
+/**
+ * ช่วยในการสร้าง reference link สำหรับเรียกคืนค่าผลการวัด
+ * เพื่อนำไปใช้สำหรับสร้าง link เรียกคืนข้อมูลให้ user
+ */
 internal class GenUrl constructor(
     length: Int,
     val random: Random = SecureRandom(),

@@ -22,7 +22,7 @@ import hii.thing.api.dao.refResultLinkLength
 import hii.thing.api.vital.Result
 
 /**
- * เก็บข้อมูลเกี่ยวกับการวัดครั้งล่า่สุด เพื่อที่จะไม่ต้อง query ที่ database ใหม่
+ * ใช้เก็บข้อมูลเกี่ยวกับการวัดครั้งล่า่สุด
  */
 interface LastResultDao : Dao {
     /**

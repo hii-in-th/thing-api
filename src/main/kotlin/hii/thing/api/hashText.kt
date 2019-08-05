@@ -21,6 +21,9 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
+/**
+ * คำนวนหาค่า hash จาก String
+ */
 fun String.hashText(): String {
     try {
         val md = MessageDigest.getInstance("SHA-1")

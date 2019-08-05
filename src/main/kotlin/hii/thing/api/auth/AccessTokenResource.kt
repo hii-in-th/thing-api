@@ -32,7 +32,9 @@ import javax.ws.rs.core.MediaType
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
+/**
+ * ใช้เพื่อสร้าง accessToken สำหรับบริการอื่นต่อ
+ */
 class AccessTokenResource(
     private val managerAccess: AccessTokenManager = JwtAccessTokenManager()
 ) {

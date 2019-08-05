@@ -23,6 +23,9 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.ServerConnector
 import org.eclipse.jetty.util.thread.QueuedThreadPool
 
+/**
+ * ตั้งค่าการทำงานของ jetty http server
+ */
 fun server(port: Int): Server {
 
     return Server(threadPool).apply {

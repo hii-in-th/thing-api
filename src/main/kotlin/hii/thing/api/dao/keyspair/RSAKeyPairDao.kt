@@ -21,6 +21,9 @@ import hii.thing.api.dao.Dao
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 
+/**
+ * สำหรับดึงคีย์สำหรับใช้ใน JWT
+ */
 interface RSAKeyPairDao : Dao {
     var privateKey: RSAPrivateKey?
     var publicKey: RSAPublicKey?

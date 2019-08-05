@@ -25,6 +25,9 @@ import java.security.interfaces.RSAPublicKey
 import java.util.Date
 import java.util.UUID
 
+/**
+ * ตัวจัดการ Link token ในรูปแบบ JWT
+ */
 class JwtLink : Link {
     override fun create(refId: String): String {
 

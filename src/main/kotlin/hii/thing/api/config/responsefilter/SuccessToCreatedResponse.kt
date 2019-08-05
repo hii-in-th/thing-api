@@ -25,6 +25,9 @@ import javax.ws.rs.container.ContainerResponseContext
 import javax.ws.rs.container.ContainerResponseFilter
 import javax.ws.rs.ext.Provider
 
+/**
+ * หาก client POST เข้ามาแล้วสำเร็จ ให้ส่งกลับเป็น 201
+ */
 @Suppress("UNUSED_VARIABLE")
 @Priority(Priorities.HEADER_DECORATOR)
 @Provider

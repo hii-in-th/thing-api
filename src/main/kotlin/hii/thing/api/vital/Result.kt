@@ -20,6 +20,9 @@ package hii.thing.api.vital
 import java.time.LocalDateTime
 import java.util.LinkedList
 
+/**
+ * Object ผลของการวัด
+ */
 data class Result(
     val age: Int?,
     val height: Float?,

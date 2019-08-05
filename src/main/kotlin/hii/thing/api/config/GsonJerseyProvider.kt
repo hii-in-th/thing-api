@@ -51,6 +51,9 @@ import javax.ws.rs.ext.MessageBodyReader
 import javax.ws.rs.ext.MessageBodyWriter
 import javax.ws.rs.ext.Provider
 
+/**
+ * ตั้งค่าตัวแปลง Object ที่ใช้ระหว่างการส่งข้อมูลไป Client ให้กลายเป็น JSON
+ */
 @Provider
 @Produces(MediaType.APPLICATION_JSON, "application/vnd.geo+json")
 @Consumes(MediaType.APPLICATION_JSON, "application/vnd.geo+json")

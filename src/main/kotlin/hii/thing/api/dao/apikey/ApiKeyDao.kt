@@ -20,6 +20,10 @@ package hii.thing.api.dao.apikey
 import hii.thing.api.auth.Device
 import hii.thing.api.dao.Dao
 
+/**
+ * สำหรับสร้าง และ ดึงข้อมูลของ Device จาก Token
+ */
+// TODO Rename ApiKeyDao to DeviceTokenDao
 interface ApiKeyDao : Dao {
     fun getDeviceBy(baseToken: String): Device
     fun registerDevice(device: Device): Device

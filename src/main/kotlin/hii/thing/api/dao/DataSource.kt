@@ -22,6 +22,9 @@ import com.zaxxer.hikari.HikariDataSource
 import java.sql.Connection
 import java.sql.SQLException
 
+/**
+ * ตัวจัดการ DataSource ที่ใช้เชื่อมต่อกับ Database
+ */
 class DataSource(
     url: String = dbUrl,
     username: String = dbUsername,

@@ -22,6 +22,9 @@ import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
+/**
+ * เวลาเกิด Error จะส่ง Object นี้ response ไปยัง client
+ */
 class ErrorDetail(
     val code: Int,
     val message: String?,
