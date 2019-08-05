@@ -63,9 +63,10 @@ class RoleTokenSecurity : ContainerRequestFilter {
         logger.debug("requestToken:$clientToken")
         if (rolesAllowed != null) {
             // require(requestContext.isCsrf) { "CSRF" }
-            requireJwt(tokenManager.verify(clientToken/*, requestContext.uriInfo.path*/)) { "Verify token ผิดพลาด" }
+            requireJwt(tokenManager.verify(clientToken, requestContext.uriInfo.path)) { "Verify token ผิดพลาด" }
 
             val clientRole = tokenManager.getUserRole(clientToken)
+            logger.debug { "${requestContext.method} role ${rolesAllowed.value.toList()}" }
             require(clientRole.containsSome(rolesAllowed.value.toList())) { "ไม่มีสิทธิในการใช้งาน" }
         }
         // Token ที่ดึงจาก securityContext จะได้เป็น access token
