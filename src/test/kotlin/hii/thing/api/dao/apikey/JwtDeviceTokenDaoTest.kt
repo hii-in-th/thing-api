@@ -26,9 +26,9 @@ import org.amshove.kluent.`should not equal`
 import org.junit.Before
 import org.junit.Test
 
-class JwtApiKeyDaoTest {
+class JwtDeviceTokenDaoTest {
 
-    val apiKeyDao: ApiKeyDao = JwtApiKeyDao()
+    val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()
 
     val device = Device(
         "hii/007",
@@ -44,13 +44,13 @@ class JwtApiKeyDaoTest {
 
     @Test
     fun registerDevice() {
-        apiKeyDao.registerDevice(device)
+        deviceTokenDao.registerDevice(device)
     }
 
     @Test
     fun registerAndGet() {
-        val register = apiKeyDao.registerDevice(device)
-        val getDevice = apiKeyDao.getDeviceBy(register.baseToken)
+        val register = deviceTokenDao.registerDevice(device)
+        val getDevice = deviceTokenDao.getDeviceBy(register.baseToken)
 
         getDevice.deviceID `should not equal` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName

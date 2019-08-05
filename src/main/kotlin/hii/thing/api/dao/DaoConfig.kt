@@ -17,9 +17,9 @@
 
 package hii.thing.api.dao
 
-import hii.thing.api.dao.apikey.ApiKeyDao
-import hii.thing.api.dao.apikey.InMemoryApiKeyDao
-import hii.thing.api.dao.apikey.JwtApiKeyDao
+import hii.thing.api.dao.apikey.DeviceTokenDao
+import hii.thing.api.dao.apikey.InMemoryDeviceTokenDao
+import hii.thing.api.dao.apikey.JwtDeviceTokenDao
 import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
 import hii.thing.api.dao.keyspair.RSAKeyPairDao
 import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
@@ -88,7 +88,7 @@ const val refResultLinkLength = 16
  */
 inline fun <reified T : Dao> getDao(): T {
     val dao = when (T::class) {
-        ApiKeyDao::class -> if (standalone) InMemoryApiKeyDao() else JwtApiKeyDao()
+        DeviceTokenDao::class -> if (standalone) InMemoryDeviceTokenDao() else JwtDeviceTokenDao()
         RegisterStoreDao::class -> if (standalone) InMemoryRegisterStoreDao() else PgSqlRegisterStoreDao { dataSourcePool.getConnection() }
         SessionsDao::class -> if (standalone) InMemorySessionDao() else RedisSessionDao(
             setOf(HostAndPort(redisHost, redisPort)), redisExpireSec

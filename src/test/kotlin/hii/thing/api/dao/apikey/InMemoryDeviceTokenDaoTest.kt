@@ -22,9 +22,9 @@ import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.junit.Test
 
-class InMemoryApiKeyDaoTest {
+class InMemoryDeviceTokenDaoTest {
 
-    val apiKeyDao: ApiKeyDao = InMemoryApiKeyDao()
+    val deviceTokenDao: DeviceTokenDao = InMemoryDeviceTokenDao()
 
     val device = Device(
         "hii/007",
@@ -35,13 +35,13 @@ class InMemoryApiKeyDaoTest {
 
     @Test
     fun registerDevice() {
-        apiKeyDao.registerDevice(device)
+        deviceTokenDao.registerDevice(device)
     }
 
     @Test
     fun registerAndGet() {
-        apiKeyDao.registerDevice(device)
-        val getDevice = apiKeyDao.getDeviceBy(device.baseToken)
+        deviceTokenDao.registerDevice(device)
+        val getDevice = deviceTokenDao.getDeviceBy(device.baseToken)
 
         getDevice.deviceID `should be equal to` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName

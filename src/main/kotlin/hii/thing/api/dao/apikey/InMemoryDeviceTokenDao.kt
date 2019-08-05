@@ -20,7 +20,7 @@ package hii.thing.api.dao.apikey
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
 
-class InMemoryApiKeyDao : ApiKeyDao {
+class InMemoryDeviceTokenDao : DeviceTokenDao {
     override fun getDeviceBy(baseToken: String): Device {
         return storage[baseToken] ?: throw NotFoundToken("ไม่พบ Api key")
     }

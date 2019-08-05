@@ -28,7 +28,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 
-class PgSqlApiKeyDao(connection: () -> Connection) : ApiKeyDao {
+class PgSqlDeviceTokenDao(connection: () -> Connection) : DeviceTokenDao {
 
     init {
         Database.connect(connection)

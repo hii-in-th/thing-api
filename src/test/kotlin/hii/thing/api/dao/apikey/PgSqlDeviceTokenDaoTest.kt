@@ -26,15 +26,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class PgSqlApiKeyDaoTest {
+class PgSqlDeviceTokenDaoTest {
     @JvmField
     @Rule
     val pgsql = PgSqlTestRule(Table("keystore"))
-    lateinit var apiKeyDao: ApiKeyDao
+    lateinit var deviceTokenDao: DeviceTokenDao
 
     @Before
     fun setUp() {
-        apiKeyDao = PgSqlApiKeyDao(pgsql.connection)
+        deviceTokenDao = PgSqlDeviceTokenDao(pgsql.connection)
     }
 
     val device = Device(
@@ -46,13 +46,13 @@ class PgSqlApiKeyDaoTest {
 
     @Test
     fun registerDevice() {
-        apiKeyDao.registerDevice(device)
+        deviceTokenDao.registerDevice(device)
     }
 
     @Test
     fun registerAndGet() {
-        apiKeyDao.registerDevice(device)
-        val getDevice = apiKeyDao.getDeviceBy(device.baseToken)
+        deviceTokenDao.registerDevice(device)
+        val getDevice = deviceTokenDao.getDeviceBy(device.baseToken)
 
         getDevice.deviceID `should be equal to` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName

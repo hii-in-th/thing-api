@@ -23,8 +23,7 @@ import hii.thing.api.dao.Dao
 /**
  * สำหรับสร้าง และ ดึงข้อมูลของ Device จาก Token
  */
-// TODO Rename ApiKeyDao to DeviceTokenDao
-interface ApiKeyDao : Dao {
+interface DeviceTokenDao : Dao {
     fun getDeviceBy(baseToken: String): Device
     fun registerDevice(device: Device): Device
 }

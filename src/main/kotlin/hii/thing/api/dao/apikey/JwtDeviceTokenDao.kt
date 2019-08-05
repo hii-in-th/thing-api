@@ -26,7 +26,7 @@ import java.security.interfaces.RSAPublicKey
 import java.util.Date
 import java.util.UUID
 
-class JwtApiKeyDao : ApiKeyDao {
+class JwtDeviceTokenDao : DeviceTokenDao {
     override fun getDeviceBy(baseToken: String): Device {
         val jwt = JwtConst.decodeAndVerify(baseToken)
 

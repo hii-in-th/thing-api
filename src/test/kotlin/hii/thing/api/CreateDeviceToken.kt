@@ -18,8 +18,8 @@
 package hii.thing.api
 
 import hii.thing.api.auth.Device
-import hii.thing.api.dao.apikey.ApiKeyDao
-import hii.thing.api.dao.apikey.JwtApiKeyDao
+import hii.thing.api.dao.apikey.DeviceTokenDao
+import hii.thing.api.dao.apikey.JwtDeviceTokenDao
 import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
 import hii.thing.api.security.keypair.KeyPairManage
 import org.junit.Before
@@ -58,14 +58,14 @@ class CreateDeviceToken {
             "/result"
         )
     )
-    val apiKeyDao: ApiKeyDao = JwtApiKeyDao()
+    val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()
 
     /**
      * สำหรับสร้าง Device token
      */
     @Test
     fun registerDevice() {
-        println(apiKeyDao.registerDevice(device).baseToken)
+        println(deviceTokenDao.registerDevice(device).baseToken)
     }
 
     @Before
