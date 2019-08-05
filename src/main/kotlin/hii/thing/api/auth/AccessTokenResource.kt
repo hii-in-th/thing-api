@@ -20,6 +20,7 @@ package hii.thing.api.auth
 import hii.thing.api.auth.jwt.JwtAccessTokenManager
 import hii.thing.api.getLogger
 import hii.thing.api.ignore
+import javax.annotation.security.RolesAllowed
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -46,6 +47,7 @@ class AccessTokenResource(
     lateinit var headers: HttpHeaders
 
     @POST
+    @RolesAllowed("kiosk")
     @Path("/tokens")
     fun createAccessToken(): AccessToken {
         logger.info("Create access token by ip:${ignore { req.remoteAddr }}")
