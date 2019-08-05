@@ -51,11 +51,7 @@ class CreateDeviceToken {
         baseToken = "", // ไม่ต้องใส่
         roles = listOf("kiosk"),
         scope = listOf(
-            "/sessions",
-            "/blood-pressures",
-            "/heights",
-            "/weights",
-            "/result"
+            "/auth"
         )
     )
     val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()

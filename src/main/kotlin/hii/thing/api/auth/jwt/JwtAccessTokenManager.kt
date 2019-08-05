@@ -50,7 +50,16 @@ class JwtAccessTokenManager(
             .withSubject(device.deviceName)
             .withJWTId(jwtId)
             .withArrayClaim("role", device.roles.toTypedArray())
-            .withArrayClaim("scope", device.scope.toTypedArray())
+            .withArrayClaim(
+                "scope",
+                arrayOf(
+                    "/sessions",
+                    "/blood-pressures",
+                    "/heights",
+                    "/weights",
+                    "/result"
+                )
+            )
             .withNotBefore(date)
             .sign(algorithm)
 
