@@ -62,8 +62,6 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
     val connection = {
         count++
         getLogger().debug { "Count $count" }
-        if (count % 10 == 0)
-            Thread.sleep(1000)
         try {
             dataSource!!.getConnection()
         } catch (ex: KotlinNullPointerException) {

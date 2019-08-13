@@ -23,6 +23,7 @@ import hii.thing.api.dao.apikey.JwtDeviceTokenDao
 import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
 import hii.thing.api.security.keypair.KeyPairManage
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -45,6 +46,7 @@ import org.junit.Test
  * นำข้อความใน public_key.pem มาใส่ในตัวแปร
  * @see publicKey
  */
+@Ignore("สำหรับสร้าง Device token")
 class CreateDeviceToken {
     val device = Device(
         deviceName = "dev/001",
