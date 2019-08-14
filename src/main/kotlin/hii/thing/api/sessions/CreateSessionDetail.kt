@@ -17,10 +17,31 @@
 
 package hii.thing.api.sessions
 
+import java.time.LocalDateTime
+
 data class CreateSessionDetail(
     val deviceId: String,
     val citizenId: String? = null,
     val citizenIdInput: String? = null,
     val birthDate: String? = null,
     val name: String? = null
-)
+) {
+    val age: Int?
+        get() = birthDateToAge(birthDate)
+
+    internal fun birthDateToAge(birthDate: String?, currentDate: LocalDateTime = LocalDateTime.now()): Int? {
+        if (birthDate == null) return null
+        val rex = Regex("""^(\d{4})-(\d{2})-(\d{2})$""")
+        val result = rex.matchEntire(birthDate)?.groupValues ?: return null
+
+        val year = result[1].toLong()
+        val month = result[2].toLong()
+        val day = result[3].toLong()
+
+        return currentDate
+            .minusYears(year)
+            .minusMonths(month)
+            .minusDays(day)
+            .year
+    }
+}
