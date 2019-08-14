@@ -102,7 +102,7 @@ class VitalResource(
         val replayId = link.getRefId(userPrincipal.accessToken)
 
         return if (!replayId.isNullOrEmpty()) { //  ตรวจสอบว่าเป็น Link แบบดูย้อนหลังหรือไม่
-            log.debug { "Replay result $replayId" }
+            logger.debug { "Replay result $replayId" }
             lastResultDao.getBy(replayId) //  ดึงผลเก่าออกมา
         } else {
             createNewResult(userPrincipal)
@@ -132,6 +132,6 @@ class VitalResource(
     }
 
     companion object {
-        val log by lazy { getLogger() }
+        val logger by lazy { getLogger() }
     }
 }

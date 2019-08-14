@@ -63,7 +63,7 @@ class JwtAccessTokenManager(
             .withNotBefore(date)
             .sign(algorithm)
 
-        logger.info("Register access token by ${device.deviceName} jwtId:$jwtId")
+        logger.info { "Register access token by ${device.deviceName} jwtId:$jwtId" }
 
         return AccessToken(accessToken)
     }

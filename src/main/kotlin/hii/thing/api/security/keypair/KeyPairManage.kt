@@ -55,7 +55,7 @@ object KeyPairManage : KeyPair {
         }
 
     private fun genNewKeyPair() {
-        getLogger().info("Generate new key pari")
+        getLogger().info { "Generate new key pari" }
         val keyPair = KeyPairGenerator.getInstance("RSA").apply { initialize(4096) }.genKeyPair()!!
         keyPairDao.privateKey = keyPair.private as RSAPrivateKey
         keyPairDao.publicKey = keyPair.public as RSAPublicKey

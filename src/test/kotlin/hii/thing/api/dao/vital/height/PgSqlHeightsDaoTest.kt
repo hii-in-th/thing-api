@@ -52,9 +52,9 @@ class PgSqlHeightsDaoTest {
     @Test(expected = Exception::class)
     fun saveDuplicate() {
         val logger = getLogger()
-        logger.info("Save 1")
+        logger.info { "Save 1" }
         heightsDao.save(sessionId, height)
-        logger.info("Save 2")
+        logger.info { "Save 2" }
         val result = heightsDao.save(sessionId, height2)
         result.height `should be equal to` height2.height
     }

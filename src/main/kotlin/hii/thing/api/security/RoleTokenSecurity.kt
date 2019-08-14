@@ -71,7 +71,7 @@ class RoleTokenSecurity : ContainerRequestFilter {
             return
         }
 
-        logger.debug("requestToken:$clientToken")
+        logger.debug { "requestToken:$clientToken" }
         if (rolesAllowed != null) {
             // require(requestContext.isCsrf) { "CSRF" }
             requireJwt(tokenManager.verify(clientToken, requestContext.uriInfo.path)) { "Verify token ผิดพลาด" }
