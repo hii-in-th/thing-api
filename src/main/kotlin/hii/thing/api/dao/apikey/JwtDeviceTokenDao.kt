@@ -47,7 +47,7 @@ class JwtDeviceTokenDao : DeviceTokenDao {
         val baseToken = JWT.create()
             .withIssuer(JwtConst.issuer)
             .withIssuedAt(date)
-            .withExpiresAt(Date(date.time + 788400000)) // 10 Year
+            .withExpiresAt(Date(date.time + 315360000000)) // 10 Year
             .withAudience(JwtConst.audience)
             .withSubject(device.deviceName)
             .withJWTId(jwtId)
