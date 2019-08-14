@@ -50,7 +50,7 @@ class SessionsResource(
     @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
-        val replatDeviceId =
+        val newDetail = // Repeat real deviceId
             CreateSessionDetail(
                 userPrincipal.deviceName,
                 detail.citizenId,
@@ -58,16 +58,16 @@ class SessionsResource(
                 detail.birthDate,
                 detail.name
             )
-        return if (!replatDeviceId.citizenId.isNullOrBlank()) {
-            val lastSub = ignore { lastResultDao.get(replatDeviceId.citizenId) }
-            when (replatDeviceId.citizenIdInput) {
+        return if (!newDetail.citizenId.isNullOrBlank()) {
+            val lastResult = ignore { lastResultDao.get(newDetail.citizenId) }
+            val sessionId = sessionsManager.create(userPrincipal.accessToken, newDetail)
+            when (newDetail.citizenIdInput) {
                 "CARD" -> {
-                    Session(sessionsManager.create(userPrincipal.accessToken, replatDeviceId), lastSub)
+                    Session(sessionId, lastResult)
                 }
                 else -> {
                     Session(
-                        sessionsManager.create(userPrincipal.accessToken, replatDeviceId),
-                        Result(null, lastSub?.height, lastSub?.weight, null)
+                        sessionId, Result(null, lastResult?.height, lastResult?.weight, null)
                     )
                 }
             }
