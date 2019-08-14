@@ -21,15 +21,24 @@
             <PatternLayout pattern="%d %-5p [%t] %-5c{1} - %m%n"/>
         </Console>
 
-        <Socket name="LOGSTASH" host="logstash" port="12394" immediateFlush="false" connectTimeoutMillis="5000">
-            <SerializedLayout/>
-        </Socket>
+        <RollingFile name="RollingFile" fileName="app.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="3 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="2"/>
+        </RollingFile>
 
     </Appenders>
 
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="RollingFile" level="info"/>
         </Root>
     </Loggers>
 
