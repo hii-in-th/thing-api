@@ -68,7 +68,10 @@ class VitalResource(
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         bp.sessionId = session
-        return pbDao.save(session, bp)
+
+        val save = pbDao.save(session, bp)
+        logger.info { "MeasureBP\tsys:${save.sys}\tdia:${save.dia}\tage:${sessionsManager.getDetail(session).age}" }
+        return save
     }
 
     @POST
@@ -79,7 +82,10 @@ class VitalResource(
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         height.sessionId = session
-        return heightsDao.save(session, height)
+
+        val save = heightsDao.save(session, height)
+        logger.info { "MeasureHeight\theight:${save.height}\tage:${sessionsManager.getDetail(session).age}" }
+        return save
     }
 
     @POST
@@ -91,7 +97,9 @@ class VitalResource(
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         weight.sessionId = session
 
-        return weightDao.save(session, weight)
+        val save = weightDao.save(session, weight)
+        logger.info { "MeasureWeight\tweight:${save.weight}\tage:${sessionsManager.getDetail(session).age}" }
+        return save
     }
 
     @GET
