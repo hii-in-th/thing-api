@@ -27,6 +27,7 @@ import hii.thing.api.security.keypair.KeyPairManage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should equal`
 import org.junit.Before
 import org.junit.Test
 import java.security.interfaces.RSAPrivateKey
@@ -39,6 +40,12 @@ class JwtConstTest {
     @Before
     fun setUp() {
         KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+    }
+
+    @Test
+    fun tokenNoExpire() {
+        val token = createAccessTokenNoExpire()
+        JwtConst.verify(token) `should equal` true
     }
 
     @Test
@@ -107,6 +114,23 @@ class JwtConstTest {
             .withIssuer(issuer)
             .withIssuedAt(date)
             .withExpiresAt(Date(date.time + expire))
+            .withJWTId(UUID.randomUUID().toString())
+            .withNotBefore(date)
+            .withClaim("int", 10)
+            .withClaim("string", "thanachai")
+            .withArrayClaim("scope", arrayOf("/vital", "/bmi", "/height"))
+            .sign(algorithm)
+    }
+
+    private fun createAccessTokenNoExpire(issuer: String = JwtConst.issuer): String {
+        val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
+        val privateKey: RSAPrivateKey = JwtConst.keyPair.privateKey
+        val algorithm = Algorithm.RSA512(publicKey, privateKey)
+        val date = Date()
+
+        return JWT.create()
+            .withIssuer(issuer)
+            .withIssuedAt(date)
             .withJWTId(UUID.randomUUID().toString())
             .withNotBefore(date)
             .withClaim("int", 10)
