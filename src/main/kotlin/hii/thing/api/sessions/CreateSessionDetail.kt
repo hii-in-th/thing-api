@@ -24,7 +24,8 @@ data class CreateSessionDetail(
     val citizenId: String? = null,
     val citizenIdInput: String? = null,
     val birthDate: String? = null,
-    val name: String? = null
+    val name: String? = null,
+    val sex: String? = null
 ) {
     val age: Int?
         get() = birthDateToAge(birthDate)
