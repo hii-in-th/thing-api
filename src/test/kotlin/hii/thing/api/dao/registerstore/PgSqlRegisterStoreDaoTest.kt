@@ -42,14 +42,16 @@ class PgSqlRegisterStoreDaoTest {
         "1234122345634",
         "CARD",
         "1970-10-13",
-        "thanachai"
+        "thanachai",
+        "male"
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",
-        "9988",
+        "3342",
         "TYPE",
         "1970-10-16",
-        "nstda"
+        "nstda",
+        "female"
     )
 
     @Test
@@ -61,6 +63,7 @@ class PgSqlRegisterStoreDaoTest {
         reg.citizenIdInput!! `should be equal to` createSessionDetail.citizenIdInput!!
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
         reg.name!! `should be equal to` createSessionDetail.name!!
+        reg.sex!! `should be equal to` createSessionDetail.sex!!
     }
 
     @Test(expected = Exception::class)
@@ -79,6 +82,7 @@ class PgSqlRegisterStoreDaoTest {
         update.citizenIdInput!! `should be equal to` anonymous.citizenIdInput!!
         update.birthDate!! `should be equal to` anonymous.birthDate!!
         update.name!! `should be equal to` anonymous.name!!
+        update.sex!! `should be equal to` anonymous.sex!!
     }
 
     @Test(expected = Exception::class)
