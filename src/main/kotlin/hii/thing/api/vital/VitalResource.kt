@@ -122,12 +122,13 @@ class VitalResource(
         val height = ignore { heightsDao.getBy(session) }
         val weight = ignore { weightDao.getBy(session) }
         val bp = ignore { pbDao.getBy(session) }
-        val userDetail = sessionsManager.getDetail(session)
-        val age: Int? = userDetail.birthDate?.let { calAge(it.toJavaTime()) }
+
+        val userDetail = kotlin.runCatching { sessionsManager.getDetail(session) }.getOrNull()
+        val age: Int? = userDetail?.birthDate?.let { calAge(it.toJavaTime()) }
 
         val result = Result(age, height?.height, weight?.weight, bp)
 
-        userDetail.citizenId?.let {
+        userDetail?.citizenId?.let {
             val replayId = GenUrl(refResultLinkLength).nextSecret()
             var replayLink: String? = null
             runBlocking {
