@@ -20,6 +20,7 @@ package hii.thing.api.auth
 import hii.thing.api.auth.jwt.JwtAccessTokenManager
 import hii.thing.api.getLogger
 import hii.thing.api.ignore
+import hii.thing.api.security.token.ThingPrincipal
 import javax.annotation.security.RolesAllowed
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.Consumes
@@ -29,6 +30,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.SecurityContext
 
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
@@ -46,6 +48,9 @@ class AccessTokenResource(
     @Context
     lateinit var headers: HttpHeaders
 
+    @Context
+    lateinit var context: SecurityContext
+
     @POST
     @RolesAllowed("kiosk")
     @Path("/tokens")
@@ -61,7 +66,12 @@ class AccessTokenResource(
         require(!baseKey.isNullOrBlank()) { "ไม่พบ Base token ใน Authorization" }
         logger.debug { "Base token $baseKey" }
 
-        return managerAccess.create(baseKey)
+        val create = managerAccess.create(baseKey)
+        logger.info {
+            val userPrincipal = (context.userPrincipal as ThingPrincipal)
+            "Auth\tName:${userPrincipal.deviceName}"
+        }
+        return create
     }
 
     companion object {

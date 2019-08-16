@@ -19,6 +19,7 @@ package hii.thing.api.sessions
 
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.lastresult.LastResultDao
+import hii.thing.api.getLogger
 import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.jwt.JwtSessionsManager
@@ -58,7 +59,7 @@ class SessionsResource(
                 detail.birthDate,
                 detail.name
             )
-        return if (!newDetail.citizenId.isNullOrBlank()) {
+        val session = if (!newDetail.citizenId.isNullOrBlank()) {
             val lastResult = ignore { lastResultDao.get(newDetail.citizenId) }
             val sessionId = sessionsManager.create(userPrincipal.accessToken, newDetail)
             when (newDetail.citizenIdInput) {
@@ -73,6 +74,8 @@ class SessionsResource(
             }
         } else
             Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, detail.deviceId))
+        logger.info { "UserUse\tId:${session.sessionId}\tName:${userPrincipal.deviceName}" }
+        return session
     }
 
     @PUT
@@ -83,5 +86,9 @@ class SessionsResource(
         sessionsManager.updateCreate(userPrincipal.accessToken, detail)
 
         return Session(session, VitalResource().getResult())
+    }
+
+    companion object {
+        private val logger by lazy { getLogger() }
     }
 }
