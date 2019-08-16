@@ -59,10 +59,10 @@ class SessionsResource(
                 detail.birthDate,
                 detail.name
             )
-        val session = if (!newDetail.citizenId.isNullOrBlank()) {
+        val session = if (!newDetail.citizenId.isNullOrBlank()) { // ตรวจสอบว่าใด้ใส่เลขบัตรประชาชนมาหรือไม่
             val lastResult = ignore { lastResultDao.get(newDetail.citizenId) }
             val sessionId = sessionsManager.create(userPrincipal.accessToken, newDetail)
-            when (newDetail.citizenIdInput) {
+            when (newDetail.citizenIdInput) { // ตรวจสอบรูปแบบการ Input ข้อมูลบัตรประชาชน
                 "CARD" -> {
                     Session(sessionId, lastResult)
                 }
@@ -73,7 +73,7 @@ class SessionsResource(
                 }
             }
         } else
-            Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, detail.deviceId))
+            Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, newDetail.deviceId))
         logger.info { "UserUse\tId:${session.sessionId}\tName:${userPrincipal.deviceName}" }
         return session
     }
