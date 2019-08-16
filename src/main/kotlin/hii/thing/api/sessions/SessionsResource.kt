@@ -20,6 +20,7 @@ package hii.thing.api.sessions
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.lastresult.LastResultDao
 import hii.thing.api.getLogger
+import hii.thing.api.hashText
 import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.jwt.JwtSessionsManager
@@ -57,7 +58,8 @@ class SessionsResource(
                 detail.citizenId,
                 detail.citizenIdInput,
                 detail.birthDate,
-                detail.name
+                detail.name,
+                detail.sex
             )
         val session = if (!newDetail.citizenId.isNullOrBlank()) { // ตรวจสอบว่าใด้ใส่เลขบัตรประชาชนมาหรือไม่
             val lastResult = ignore { lastResultDao.get(newDetail.citizenId) }
@@ -74,7 +76,24 @@ class SessionsResource(
             }
         } else
             Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, newDetail.deviceId))
-        logger.info { "UserUse\tId:${session.sessionId}\tName:${userPrincipal.deviceName}" }
+        logger.info {
+            "UserUse\t" +
+                "Id:${session.sessionId}\t" +
+                "Name:${userPrincipal.deviceName}\t" +
+                "InputType:${newDetail.citizenIdInput}\t" +
+                "Sex:${
+                if (!newDetail.sex.isNullOrBlank())
+                    newDetail.sex
+                else
+                    "Unknown"
+                }\t" +
+                "Citizen:${
+                if (!detail.citizenId.isNullOrBlank())
+                    detail.citizenId.hashText()
+                else
+                    "anonymous"
+                }"
+        }
         return session
     }
 
