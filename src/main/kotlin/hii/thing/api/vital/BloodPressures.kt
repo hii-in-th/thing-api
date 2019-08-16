@@ -19,27 +19,29 @@ package hii.thing.api.vital
 
 import java.time.LocalDateTime
 
-data class BloodPressures(
+class BloodPressures(
     val sys: Float,
     val dia: Float,
     var sessionId: String? = null,
     val time: LocalDateTime = LocalDateTime.now()
 ) {
+    val level = calLevel()
 
-    // TODO ประเมินความดัน
-    // https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings
+    internal fun calLevel(): Set<BloodLevel> {
+        val systolic = sys
+        val diastolic = dia
+        val out = mutableSetOf<BloodLevel>()
 
-    val level: BloodLevel
-        get() = calLevel()
-
-    internal fun calLevel(): BloodLevel {
-        return if (sys < 120 && dia < 80) BloodLevel.NORMAL
-        else if (sys <= 129 && dia < 80) BloodLevel.RISK
-        else if (sys >= 180 || dia >= 120) BloodLevel.HYPERTENSION_CRISIS
-        else BloodLevel.HYPERTENSION
+        if (systolic < 90 || diastolic < 60) out.add(BloodLevel.isLow)
+        if (systolic in 90.0..119.0 && diastolic in 60.0..79.0) out.add(BloodLevel.isNormal)
+        if (systolic >= 140.0 || diastolic >= 90.0) out.add(BloodLevel.isHigh)
+        if ((systolic in 120.0..139.0 || diastolic in 80.0..89.0) && !out.contains(BloodLevel.isHigh)) out.add(
+            BloodLevel.isPreHigh
+        )
+        return out
     }
 
     enum class BloodLevel {
-        NORMAL, RISK, HYPERTENSION, HYPERTENSION_CRISIS
+        isLow, isNormal, isPreHigh, isHigh
     }
 }

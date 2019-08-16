@@ -17,43 +17,92 @@
 
 package hii.thing.api.vital
 
-import hii.thing.api.vital.BloodPressures.BloodLevel.HYPERTENSION
-import hii.thing.api.vital.BloodPressures.BloodLevel.HYPERTENSION_CRISIS
-import hii.thing.api.vital.BloodPressures.BloodLevel.NORMAL
-import hii.thing.api.vital.BloodPressures.BloodLevel.RISK
-import org.amshove.kluent.`should equal`
+import hii.thing.api.vital.BloodPressures.BloodLevel.isHigh
+import hii.thing.api.vital.BloodPressures.BloodLevel.isLow
+import hii.thing.api.vital.BloodPressures.BloodLevel.isNormal
+import hii.thing.api.vital.BloodPressures.BloodLevel.isPreHigh
+import org.amshove.kluent.`should contain`
+import org.amshove.kluent.`should not contain`
 import org.junit.Test
 
 class BloodPressuresLevelTest {
     @Test
     fun normal() {
-        BloodPressures(119F, 79F).level `should equal` NORMAL
-        BloodPressures(110F, 65F).level `should equal` NORMAL
+        val bp = BloodPressures(90F, 60F).calLevel()
+
+        bp `should contain` isNormal
+        bp `should not contain` isLow
+        bp `should not contain` isHigh
+        bp `should not contain` isPreHigh
     }
 
     @Test
-    fun risk() {
-        BloodPressures(120F, 79F).level `should equal` RISK
-        BloodPressures(129F, 65F).level `should equal` RISK
+    fun normal2() {
+        val bp = BloodPressures(119F, 79F).calLevel()
+
+        bp `should contain` isNormal
+        bp `should not contain` isLow
+        bp `should not contain` isHigh
+        bp `should not contain` isPreHigh
     }
 
     @Test
-    fun hypertension() {
-        BloodPressures(120F, 80F).level `should equal` HYPERTENSION
-        BloodPressures(130F, 65F).level `should equal` HYPERTENSION
-        BloodPressures(140F, 76F).level `should equal` HYPERTENSION
-        BloodPressures(160F, 79F).level `should equal` HYPERTENSION
+    fun low() {
+        val bp = BloodPressures(60F, 50F).calLevel()
 
-        BloodPressures(119F, 85F).level `should equal` HYPERTENSION
-        BloodPressures(115F, 90F).level `should equal` HYPERTENSION
-        BloodPressures(110F, 100F).level `should equal` HYPERTENSION
+        bp `should not contain` isNormal
+        bp `should contain` isLow
+        bp `should not contain` isHigh
+        bp `should not contain` isPreHigh
     }
 
     @Test
-    fun hypertensionCrisis() {
-        BloodPressures(180F, 80F).level `should equal` HYPERTENSION_CRISIS
-        BloodPressures(190F, 65F).level `should equal` HYPERTENSION_CRISIS
-        BloodPressures(110F, 120F).level `should equal` HYPERTENSION_CRISIS
-        BloodPressures(115F, 130F).level `should equal` HYPERTENSION_CRISIS
+    fun preHigh() {
+        val bp = BloodPressures(120F, 80F).calLevel()
+
+        bp `should not contain` isNormal
+        bp `should not contain` isLow
+        bp `should not contain` isHigh
+        bp `should contain` isPreHigh
+    }
+
+    @Test
+    fun preHigh2() {
+        val bp = BloodPressures(125F, 85F).calLevel()
+
+        bp `should not contain` isNormal
+        bp `should not contain` isLow
+        bp `should not contain` isHigh
+        bp `should contain` isPreHigh
+    }
+
+    @Test
+    fun preHigh3() {
+        val bp = BloodPressures(139F, 89F).calLevel()
+
+        bp `should not contain` isNormal
+        bp `should not contain` isLow
+        bp `should not contain` isHigh
+        bp `should contain` isPreHigh
+    }
+
+    @Test
+    fun heigh() {
+        val bp = BloodPressures(140F, 99F).calLevel()
+
+        bp `should not contain` isNormal
+        bp `should not contain` isLow
+        bp `should contain` isHigh
+        bp `should not contain` isPreHigh
+    }
+
+    @Test
+    fun heigh2() {
+        val bp = BloodPressures(180F, 110F).calLevel()
+
+        bp `should not contain` isNormal
+        bp `should not contain` isLow
+        bp `should contain` isHigh
+        bp `should not contain` isPreHigh
     }
 }
