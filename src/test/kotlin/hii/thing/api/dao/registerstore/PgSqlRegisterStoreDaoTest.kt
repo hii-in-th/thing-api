@@ -20,6 +20,7 @@ package hii.thing.api.dao.registerstore
 import hii.thing.api.PgSqlTestRule
 import hii.thing.api.sessions.CreateSessionDetail
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should equal`
 import org.jetbrains.exposed.sql.Table
 import org.junit.Before
 import org.junit.Rule
@@ -43,7 +44,7 @@ class PgSqlRegisterStoreDaoTest {
         "CARD",
         "1970-10-13",
         "thanachai",
-        "male"
+        CreateSessionDetail.Sex.MALE
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",
@@ -51,7 +52,7 @@ class PgSqlRegisterStoreDaoTest {
         "TYPE",
         "1970-10-16",
         "nstda",
-        "female"
+        CreateSessionDetail.Sex.FEMALE
     )
 
     @Test
@@ -63,7 +64,7 @@ class PgSqlRegisterStoreDaoTest {
         reg.citizenIdInput!! `should be equal to` createSessionDetail.citizenIdInput!!
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
         reg.name!! `should be equal to` createSessionDetail.name!!
-        reg.sex!! `should be equal to` createSessionDetail.sex!!
+        reg.sex!! `should equal` createSessionDetail.sex!!
     }
 
     @Test(expected = Exception::class)
@@ -82,7 +83,7 @@ class PgSqlRegisterStoreDaoTest {
         update.citizenIdInput!! `should be equal to` anonymous.citizenIdInput!!
         update.birthDate!! `should be equal to` anonymous.birthDate!!
         update.name!! `should be equal to` anonymous.name!!
-        update.sex!! `should be equal to` anonymous.sex!!
+        update.sex!! `should equal` anonymous.sex!!
     }
 
     @Test(expected = Exception::class)
