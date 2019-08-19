@@ -81,12 +81,7 @@ class SessionsResource(
                 "Id:${session.sessionId}\t" +
                 "Name:${userPrincipal.deviceName}\t" +
                 "InputType:${newDetail.citizenIdInput}\t" +
-                "Sex:${
-                if (!newDetail.sex.isNullOrBlank())
-                    newDetail.sex
-                else
-                    "Unknown"
-                }\t" +
+                "Sex:${newDetail.sex.toString().toLowerCase() ?: "Unknown"}\t" +
                 "Citizen:${
                 if (!detail.citizenId.isNullOrBlank())
                     detail.citizenId.hashText()

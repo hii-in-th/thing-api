@@ -31,14 +31,10 @@ class ErrorDetail(
     t: Throwable
 ) {
     val tType = t::class.java.simpleName
-    private var t: Throwable? = null
 
     init {
-        val logger1 = getLogger()
-        if (logger1.isInfoEnabled) {
-            this.t = t
-        }
-        logger1.debug("${t.message}", t)
+        val logger = getLogger()
+        logger.debug("${t.message}", t)
     }
 
     companion object {

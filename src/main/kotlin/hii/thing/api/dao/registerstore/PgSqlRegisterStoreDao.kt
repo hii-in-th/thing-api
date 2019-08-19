@@ -50,7 +50,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
                     it[name] = sessionDetail.name
                     it[time] = Now()
-                    it[sex] = sessionDetail.sex
+                    it[sex] = sessionDetail.sex?.toString()
                 }
             } catch (ex: ExposedSQLException) {
                 require(false)
@@ -69,7 +69,11 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
             it[SqlRegisterDetail.citizenIdInput],
             it[SqlRegisterDetail.birthDate]?.toStringDate(),
             it[SqlRegisterDetail.name],
-            it[SqlRegisterDetail.sex]
+            try {
+                CreateSessionDetail.Sex.valueOf(it[SqlRegisterDetail.sex]!!.toUpperCase())
+            } catch (ignore: Exception) {
+                null
+            }
         )
     }
 
@@ -83,7 +87,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                     it[citizenIdInput] = sessionDetail.citizenIdInput
                     it[name] = sessionDetail.name
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
-                    it[sex] = sessionDetail.sex
+                    it[sex] = sessionDetail.sex.toString()
                 }
             } catch (ex: ExposedSQLException) {
                 require(false)

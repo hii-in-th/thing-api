@@ -36,19 +36,13 @@ data class Result(
     fun bmiCal() =
         if (height != null && weight != null) weight / ((height / 100) * (height / 100)) else null
 
-    var suggestions: List<Suggestions>? = calSuggestions(this)
+    var suggestions: List<Suggestions>? = thinkSuggestions()
 }
 
-data class Suggestions(
-    val imgUrl: String?,
-    val text: String?,
-    val causes: List<String>?
-)
-
-fun calSuggestions(result: Result): List<Suggestions>? {
+private fun Result.thinkSuggestions(): List<Suggestions>? {
     val list = LinkedList<Suggestions>().apply {
-        add(Suggestions(null, "อายุ ${result.age}", null))
-        add(Suggestions(null, "BMI ${result.bmiCal()}", null))
+        add(Suggestions(null, "อายุ ${age}", null))
+        add(Suggestions(null, "BMI ${bmiCal()}", null))
     }
     // TODO ("Cal suggestions")
 

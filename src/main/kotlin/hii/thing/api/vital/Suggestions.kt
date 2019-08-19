@@ -15,16 +15,10 @@
  * limitations under the License.
  */
 
-package hii.thing.api.config.responsefilter
+package hii.thing.api.vital
 
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.Response
-import javax.ws.rs.ext.ExceptionMapper
-import javax.ws.rs.ext.Provider
-
-@Provider
-class RequireFilter : ExceptionMapper<IllegalArgumentException> {
-    override fun toResponse(exception: IllegalArgumentException): Response {
-        return ErrorDetail.build(WebApplicationException(exception.message, exception, 400))
-    }
-}
+class Suggestions(
+    val imgUrl: String?,
+    val text: String?,
+    val causes: List<String>?
+)

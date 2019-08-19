@@ -25,7 +25,7 @@ data class CreateSessionDetail(
     val citizenIdInput: String? = null,
     val birthDate: String? = null,
     val name: String? = null,
-    val sex: String? = null
+    val sex: Sex? = null
 ) {
     val age: Int?
         get() = birthDateToAge(birthDate)
@@ -44,5 +44,9 @@ data class CreateSessionDetail(
             .minusMonths(month)
             .minusDays(day)
             .year
+    }
+
+    enum class Sex() {
+        MALE, FEMALE, UNKNOWN
     }
 }
