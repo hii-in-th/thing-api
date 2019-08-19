@@ -137,7 +137,7 @@ class VitalResource(
             var replayLink: String? = null
             runBlocking {
                 launch { lastResultDao.set(it, result, replayId) }
-                launch { replayLink = "/result?token=${link.create(replayId)}" }
+                launch { replayLink = "https://thing-api.hii.in.th/v1/result?token=${link.create(replayId)}" }
             }
             result.replayLink = replayLink
         }
