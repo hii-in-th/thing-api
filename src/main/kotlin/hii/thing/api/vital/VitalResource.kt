@@ -107,6 +107,10 @@ class VitalResource(
     @RolesAllowed("kiosk", "report")
     fun getResult(): Result {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
+        return result(userPrincipal)
+    }
+
+    fun result(userPrincipal: ThingPrincipal): Result {
         val replayId = link.getRefId(userPrincipal.accessToken)
 
         return if (!replayId.isNullOrEmpty()) { //  ตรวจสอบว่าเป็น Link แบบดูย้อนหลังหรือไม่

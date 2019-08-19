@@ -102,9 +102,18 @@ class SessionsResource(
     fun updateSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
-        sessionsManager.updateCreate(userPrincipal.accessToken, detail)
+        sessionsManager.updateCreate(
+            userPrincipal.accessToken, CreateSessionDetail(
+                userPrincipal.deviceName,
+                detail.citizenId,
+                detail.citizenIdInput,
+                detail.birthDate,
+                detail.name,
+                detail.sex
+            )
+        )
 
-        return Session(session, VitalResource().getResult())
+        return Session(session, VitalResource().result(userPrincipal))
     }
 
     companion object {
