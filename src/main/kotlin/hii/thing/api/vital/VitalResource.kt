@@ -70,7 +70,13 @@ class VitalResource(
         bp.sessionId = session
 
         val save = pbDao.save(session, bp)
-        logger.info { "MeasureBP\tsys:${save.sys}\tdia:${save.dia}\tage:${sessionsManager.getDetail(session).age}" }
+        logger.info {
+            "MeasureBP\t" +
+                "sys:${save.sys}\t" +
+                "dia:${save.dia}\t" +
+                "BPLevel:${save.level.first()}\t" +
+                "age:${sessionsManager.getDetail(session).age}"
+        }
         return save
     }
 
@@ -84,7 +90,13 @@ class VitalResource(
         height.sessionId = session
 
         val save = heightsDao.save(session, height)
-        logger.info { "MeasureHeight\theight:${save.height}\tage:${sessionsManager.getDetail(session).age}" }
+        val weight = ignore { weightDao.getBy(session) }
+        logger.info {
+            "MeasureHeight\t" +
+                "height:${save.height}\t" +
+                "weight:${weight?.weight}\t" +
+                "age:${sessionsManager.getDetail(session).age}"
+        }
         return save
     }
 
@@ -98,7 +110,13 @@ class VitalResource(
         weight.sessionId = session
 
         val save = weightDao.save(session, weight)
-        logger.info { "MeasureWeight\tweight:${save.weight}\tage:${sessionsManager.getDetail(session).age}" }
+        val height = ignore { heightsDao.getBy(session) }
+        logger.info {
+            "MeasureWeight\t" +
+                "height:${height?.height}\t" +
+                "weight:${weight.weight}\t" +
+                "age:${sessionsManager.getDetail(session).age}"
+        }
         return save
     }
 
