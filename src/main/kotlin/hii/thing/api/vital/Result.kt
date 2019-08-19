@@ -41,7 +41,7 @@ data class Result(
 
 private fun Result.thinkSuggestions(): List<Suggestions>? {
     val list = LinkedList<Suggestions>().apply {
-        add(Suggestions(null, "อายุ ${age}", null))
+        add(Suggestions(null, "อายุ $age", null))
         add(Suggestions(null, "BMI ${bmiCal()}", null))
     }
     // TODO ("Cal suggestions")
