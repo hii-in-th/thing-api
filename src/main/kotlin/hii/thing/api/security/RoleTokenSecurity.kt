@@ -52,12 +52,14 @@ class RoleTokenSecurity : ContainerRequestFilter {
     override fun filter(requestContext: ContainerRequestContext) {
 
         logger.info {
-            var message = "Time:${System.currentTimeMillis()}"
+            var message = "HttpLog\t" +
+                "Time:${System.currentTimeMillis()}\t" +
+                "Proto:${requestContext.request.method}::" +
+                "${requestContext.uriInfo.absolutePath}"
             requestContext.headers.forEach { key, value ->
                 if (key != "Authorization")
                     message += "\t$key:$value"
             }
-            message += "\t${requestContext.uriInfo.path}"
             message
         }
 
@@ -84,8 +86,9 @@ class RoleTokenSecurity : ContainerRequestFilter {
         requestContext.securityContext =
             TokenSecurityContext(clientToken, tokenManager)
         logger.info(
-            "Name: ${if (rolesAllowed != null) tokenManager.getName(clientToken) else clientToken} " +
-                "Access:${requestContext.method} " +
+            "AuthLog\t" +
+                "Name: ${if (rolesAllowed != null) tokenManager.getName(clientToken) else clientToken}\t" +
+                "Access:${requestContext.method}\t" +
                 "Path:${requestContext.uriInfo.path}"
         )
     }
