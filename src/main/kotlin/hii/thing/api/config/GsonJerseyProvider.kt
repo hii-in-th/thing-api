@@ -80,7 +80,7 @@ class GsonJerseyProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
         try {
             InputStreamReader(entityStream, UTF_8).use {
                 try {
-                    return gson.fromJson<Any>(it, genericType)
+                    return hiiGson.fromJson<Any>(it, genericType)
                 } catch (ex: java.lang.NumberFormatException) {
                     logger.info { "Json error ${ex.message}" }
                     val errormess = BadRequestException("JSON error ${ex.message}")
@@ -121,13 +121,13 @@ class GsonJerseyProvider : MessageBodyWriter<Any>, MessageBodyReader<Any> {
         entityStream: OutputStream
     ) {
         OutputStreamWriter(entityStream, UTF_8).use { writer ->
-            gson.toJson(`object`, genericType, writer)
+            hiiGson.toJson(`object`, genericType, writer)
         }
     }
 
     companion object {
         private val UTF_8 = "UTF-8"
-        private val gson: Gson by lazy {
+        val hiiGson: Gson by lazy {
             GsonBuilder()
                 .adapterFor<LocalDate>(LocalDateConverter())
                 .adapterFor<LocalDateTime>(LocalDateTimeConverter())

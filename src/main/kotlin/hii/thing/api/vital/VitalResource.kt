@@ -17,6 +17,7 @@
 
 package hii.thing.api.vital
 
+import hii.thing.api.config.cache.Cache
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.lastresult.GenUrl
 import hii.thing.api.dao.lastresult.LastResultDao
@@ -123,6 +124,7 @@ class VitalResource(
     @GET
     @Path("/result")
     @RolesAllowed("kiosk", "report")
+    @Cache(maxAge = 5)
     fun getResult(): Result {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         return result(userPrincipal)
