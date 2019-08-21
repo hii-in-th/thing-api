@@ -39,11 +39,25 @@ class ThingApiServer(val args: Array<String>) {
 
     fun start() {
         val server = server(port)
+        server.setRequestLog { request, response ->
+            logger.info {
+                var message = "HttpLog\t" +
+                    "Time:${System.currentTimeMillis()}\t" +
+                    "Proto:${request.method}::" +
+                    "${request.originalURI}"
+                request.headerNames.toList().forEach { key ->
+                    if (key != "Authorization")
+                        message += "\t$key:${request.getHeader(key)}"
+                }
+                message
+            }
+        }
         server.start()
         server.join()
     }
 
     companion object {
+        private val logger = getLogger()
         @JvmStatic
         fun main(args: Array<String>) {
             ThingApiServer(args).start()

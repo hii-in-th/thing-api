@@ -50,19 +50,6 @@ class RoleTokenSecurity : ContainerRequestFilter {
     var tokenManager: TokenManager = JwtTokenManager()
 
     override fun filter(requestContext: ContainerRequestContext) {
-
-        logger.info {
-            var message = "HttpLog\t" +
-                "Time:${System.currentTimeMillis()}\t" +
-                "Proto:${requestContext.request.method}::" +
-                "${requestContext.uriInfo.absolutePath}"
-            requestContext.headers.forEach { key, value ->
-                if (key != "Authorization")
-                    message += "\t$key:$value"
-            }
-            message
-        }
-
         val rolesAllowed: RolesAllowed? = resourceInfo.resourceMethod.getAnnotation(RolesAllowed::class.java)
             ?: resourceInfo.resourceClass.getAnnotation(RolesAllowed::class.java)
 
