@@ -43,8 +43,9 @@ class ThingApiServer(val args: Array<String>) {
             logger.info {
                 var message = "HttpLog\t" +
                     "Time:${System.currentTimeMillis()}\t" +
+                    "Status:${response.status}\t" +
                     "Proto:${request.method}::" +
-                    "${request.originalURI}"
+                    request.originalURI
                 request.headerNames.toList().forEach { key ->
                     if (key != "Authorization")
                         message += "\t$key:${request.getHeader(key)}"
