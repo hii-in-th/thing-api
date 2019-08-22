@@ -51,6 +51,18 @@ class InMemoryLastResultDaoTest {
         result.age!! `should be equal to` 18
         result.weight!! `should be equal to` 54F
         result.bloodPressure `should equal` null
+        result.sex `should equal` null
+    }
+
+    @Test
+    fun setSex() {
+        val result = dao.set(citizenId, Result(null, null, null, null, "male"))
+
+        result.height `should equal` null
+        result.age `should equal` null
+        result.weight `should equal` null
+        result.bloodPressure `should equal` null
+        result.sex!! `should be equal to` "male"
     }
 
     @Test

@@ -46,7 +46,7 @@ class JwtLink : Link {
             .withAudience(JwtConst.audience)
             .withJWTId(jwtId)
             .withArrayClaim("role", arrayOf("report"))
-            .withArrayClaim("scope", arrayOf("/result"))
+            .withArrayClaim("scope", arrayOf("/lresult"))
             .withClaim("ref", refId)
             .withSubject("Anonymous")
             .withNotBefore(date)

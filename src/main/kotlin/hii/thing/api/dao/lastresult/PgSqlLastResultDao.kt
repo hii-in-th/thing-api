@@ -71,6 +71,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         strValue += "w$delimiter${result.weight}$delimiter$delimiter"
         strValue += "bs$delimiter${result.bloodPressure?.sys}$delimiter$delimiter"
         strValue += "bd$delimiter${result.bloodPressure?.dia}$delimiter$delimiter"
+        strValue += "sex$delimiter${result.sex}$delimiter$delimiter"
         return strValue
     }
 
@@ -95,16 +96,20 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         }
 
         require(!resultStr.isNullOrEmpty()) { "Last result empty." }
+
+        val sex = resultStr?.get("sex").takeIf { it != "null" }
+        val weight = resultStr?.get("w")?.toFloatOrNull()
+        val height = resultStr?.get("h")?.toFloatOrNull()
+        val age = resultStr?.get("a")?.toIntOrNull()
         val sys = resultStr?.get("bs")?.toFloatOrNull()
         val dia = resultStr?.get("bd")?.toFloatOrNull()
+
         val bp = if (sys != null && dia != null) {
             BloodPressures(sys, dia)
         } else null
+
         return Result(
-            resultStr?.get("a")?.toIntOrNull(),
-            resultStr?.get("h")?.toFloatOrNull(),
-            resultStr?.get("w")?.toFloatOrNull(),
-            bp
+            age, height, weight, bp, sex
         ).apply {
             this.replayLink = refLink
         }

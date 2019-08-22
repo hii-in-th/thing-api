@@ -124,8 +124,16 @@ class VitalResource(
     @GET
     @Path("/result")
     @RolesAllowed("kiosk", "report")
-    @Cache(maxAge = 5)
     fun getResult(): Result {
+        val userPrincipal = (context.userPrincipal as ThingPrincipal)
+        return result(userPrincipal)
+    }
+
+    @GET
+    @Path("/lresult")
+    @RolesAllowed("kiosk", "report")
+    @Cache(maxAge = 1000)
+    fun lGetResult(): Result {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         return result(userPrincipal)
     }
@@ -150,14 +158,14 @@ class VitalResource(
         val userDetail = kotlin.runCatching { sessionsManager.getDetail(session) }.getOrNull()
         val age: Int? = userDetail?.birthDate?.let { calAge(it.toJavaTime()) }
 
-        val result = Result(age, height?.height, weight?.weight, bp)
+        val result = Result(age, height?.height, weight?.weight, bp, userDetail?.sex?.toString())
 
         userDetail?.citizenId?.let {
             val replayId = GenUrl(refResultLinkLength).nextSecret()
             var replayLink: String? = null
             runBlocking {
                 launch { lastResultDao.set(it, result, replayId) }
-                launch { replayLink = "https://thing-api.hii.in.th/v1/result?token=${link.create(replayId)}" }
+                launch { replayLink = "https://thing-api.hii.in.th/v1/lresult?token=${link.create(replayId)}" }
             }
             result.replayLink = replayLink
         }
