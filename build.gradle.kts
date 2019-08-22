@@ -1,3 +1,4 @@
+import org.flywaydb.gradle.task.FlywayCleanTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,6 +7,7 @@ plugins {
     id("org.jmailen.kotlinter") version "1.26.0"
     id("com.moonlitdoor.git-version") version "0.1.1"
     id("org.jetbrains.dokka") version "0.9.18"
+    id("org.flywaydb.flyway") version "6.0.0"
 }
 
 group = "hii"
@@ -42,6 +44,7 @@ dependencies {
     compile("com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.1")
     testImplementation("com.github.fppt:jedis-mock:0.1.13")
     testImplementation("ru.yandex.qatools.embed:postgresql-embedded:2.10")
+    testImplementation("org.flywaydb:flyway-core:6.0.0")
 }
 
 dependencies {
@@ -101,4 +104,10 @@ tasks.named<Jar>("jar") {
 tasks.dokka {
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
+}
+
+tasks.creating(FlywayCleanTask::class) {
+    url = "jdbc:postgresql://127.0.0.1:27365/postgres"
+    user = "postgres"
+    password = "postgres"
 }

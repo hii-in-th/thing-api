@@ -71,7 +71,7 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
 
     private fun createNewConnection(): Connection {
         pgSql = EmbeddedPostgres()
-        url = pgSql.start()
+        url = pgSql.start("127.0.0.1", 27365, "postgres")
         dataSource = DataSource(url, "postgres", "postgres", 1)
         return dataSource!!.getConnection()
     }
