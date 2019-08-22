@@ -43,6 +43,7 @@ data class Result(
 private fun Result.thinkSuggestions(): List<Suggestions>? {
     val list = LinkedList<Suggestions>()
     bmiCal()?.let { list.add(checkBMI(it)) }
+    bloodPressure?.let { list.add(checkBloodPressures(bloodPressure)) }
 
     return list.toList().takeIf { it.isNotEmpty() }
 }
@@ -56,6 +57,26 @@ fun calAge(date: LocalDateTime): Int {
             .minusDays(date.dayOfMonth.toLong())
 
     return partDateTime.year
+}
+
+private fun checkBloodPressures(bloodPressures: BloodPressures): Suggestions {
+    val message = when (bloodPressures.level) {
+        BloodPressures.BloodLevel.isLow ->
+            "มีภาวะ ความดันต่ำ ลองวัดใหม่อีกครั้ง หากยังต่ำอยู่ " +
+                "แนะนำ ให้ขอคำชี้แนะจากหมอ" +
+                "ได้ที่สถานีอนามัย หรือสถาพยาบาล"
+        BloodPressures.BloodLevel.isNormal ->
+            "ความดันอยู่ในระดับ ปกติ"
+        BloodPressures.BloodLevel.isPreHigh ->
+            "ระดับความดัน อยู่ในระดับ กำลังจะสูง ลองนั้งพักซักพักแล้ววัดใหม่ " +
+                "หากยังมีแนวโน้มสูงอยู่ แนะนำ ให้ขอคำชี้แนะจากหมอ " +
+                "ได้ที่สถานีอนามัย หรือสถาพยาบาล"
+        BloodPressures.BloodLevel.isHigh ->
+            "มีภาวะความดันสูง ลองนั้งพักซักพักแล้ววัดใหม่ " +
+                "หากยังมีภาวะความดันสูงอยู่ แนะนำ ให้ปรึกษาหมอ " +
+                "ได้ที่สถานีอนามัย หรือสถาพยาบาล"
+    }
+    return Suggestions(null, message, listOf("ความดัน"))
 }
 
 private fun checkBMI(bmi: Float): Suggestions {

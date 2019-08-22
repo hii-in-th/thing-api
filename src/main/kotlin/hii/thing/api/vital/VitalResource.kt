@@ -75,7 +75,7 @@ class VitalResource(
             "MeasureBP\t" +
                 "sys:${save.sys}\t" +
                 "dia:${save.dia}\t" +
-                "BPLevel:${save.level.first()}\t" +
+                "BPLevel:${save.level}\t" +
                 "age:${sessionsManager.getDetail(session).age}"
         }
         return save

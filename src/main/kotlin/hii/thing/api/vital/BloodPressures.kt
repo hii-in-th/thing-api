@@ -27,7 +27,7 @@ class BloodPressures(
 ) {
     val level = calLevel()
 
-    internal fun calLevel(): Set<BloodLevel> {
+    internal fun calLevel(): BloodLevel {
         val systolic = sys
         val diastolic = dia
         val out = mutableSetOf<BloodLevel>()
@@ -38,7 +38,7 @@ class BloodPressures(
         if ((systolic in 120.0..139.0 || diastolic in 80.0..89.0) && !out.contains(BloodLevel.isHigh)) out.add(
             BloodLevel.isPreHigh
         )
-        return out
+        return out.first()
     }
 
     enum class BloodLevel {
