@@ -21,8 +21,8 @@ import hii.thing.api.vital.BloodPressures.BloodLevel.isHigh
 import hii.thing.api.vital.BloodPressures.BloodLevel.isLow
 import hii.thing.api.vital.BloodPressures.BloodLevel.isNormal
 import hii.thing.api.vital.BloodPressures.BloodLevel.isPreHigh
-import org.amshove.kluent.`should contain`
-import org.amshove.kluent.`should not contain`
+import org.amshove.kluent.`should equal`
+import org.amshove.kluent.`should not equal`
 import org.junit.Test
 
 class BloodPressuresLevelTest {
@@ -30,79 +30,79 @@ class BloodPressuresLevelTest {
     fun normal() {
         val bp = BloodPressures(90F, 60F).calLevel()
 
-        bp `should contain` isNormal
-        bp `should not contain` isLow
-        bp `should not contain` isHigh
-        bp `should not contain` isPreHigh
+        bp `should equal` isNormal
+        bp `should not equal` isLow
+        bp `should not equal` isHigh
+        bp `should not equal` isPreHigh
     }
 
     @Test
     fun normal2() {
         val bp = BloodPressures(119F, 79F).calLevel()
 
-        bp `should contain` isNormal
-        bp `should not contain` isLow
-        bp `should not contain` isHigh
-        bp `should not contain` isPreHigh
+        bp `should equal` isNormal
+        bp `should not equal` isLow
+        bp `should not equal` isHigh
+        bp `should not equal` isPreHigh
     }
 
     @Test
     fun low() {
         val bp = BloodPressures(60F, 50F).calLevel()
 
-        bp `should not contain` isNormal
-        bp `should contain` isLow
-        bp `should not contain` isHigh
-        bp `should not contain` isPreHigh
+        bp `should not equal` isNormal
+        bp `should equal` isLow
+        bp `should not equal` isHigh
+        bp `should not equal` isPreHigh
     }
 
     @Test
     fun preHigh() {
         val bp = BloodPressures(120F, 80F).calLevel()
 
-        bp `should not contain` isNormal
-        bp `should not contain` isLow
-        bp `should not contain` isHigh
-        bp `should contain` isPreHigh
+        bp `should not equal` isNormal
+        bp `should not equal` isLow
+        bp `should not equal` isHigh
+        bp `should equal` isPreHigh
     }
 
     @Test
     fun preHigh2() {
         val bp = BloodPressures(125F, 85F).calLevel()
 
-        bp `should not contain` isNormal
-        bp `should not contain` isLow
-        bp `should not contain` isHigh
-        bp `should contain` isPreHigh
+        bp `should not equal` isNormal
+        bp `should not equal` isLow
+        bp `should not equal` isHigh
+        bp `should equal` isPreHigh
     }
 
     @Test
     fun preHigh3() {
         val bp = BloodPressures(139F, 89F).calLevel()
 
-        bp `should not contain` isNormal
-        bp `should not contain` isLow
-        bp `should not contain` isHigh
-        bp `should contain` isPreHigh
+        bp `should not equal` isNormal
+        bp `should not equal` isLow
+        bp `should not equal` isHigh
+        bp `should equal` isPreHigh
     }
 
     @Test
     fun heigh() {
         val bp = BloodPressures(140F, 99F).calLevel()
 
-        bp `should not contain` isNormal
-        bp `should not contain` isLow
-        bp `should contain` isHigh
-        bp `should not contain` isPreHigh
+        bp `should not equal` isNormal
+        bp `should not equal` isLow
+        bp `should equal` isHigh
+        bp `should not equal` isPreHigh
     }
 
     @Test
     fun heigh2() {
         val bp = BloodPressures(180F, 110F).calLevel()
 
-        bp `should not contain` isNormal
-        bp `should not contain` isLow
-        bp `should contain` isHigh
-        bp `should not contain` isPreHigh
+        bp `should not equal` isNormal
+        bp `should not equal` isLow
+        bp `should equal` isHigh
+        bp `should not equal` isPreHigh
     }
 }
