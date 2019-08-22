@@ -21,7 +21,7 @@ import com.auth0.jwt.JWT
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
 import hii.thing.api.dao.apikey.DeviceTokenDao
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
+import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.JwtConst
 import hii.thing.api.security.keypair.KeyPairManage
 import org.amshove.kluent.`should be equal to`
@@ -53,7 +53,7 @@ class JwtAccessTokenManagerTest {
 
     @Before
     fun setUp() {
-        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+        KeyPairManage.setUp(DemoRSAKeyPairDao())
     }
 
     @Test

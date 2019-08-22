@@ -21,7 +21,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.InvalidClaimException
 import com.auth0.jwt.exceptions.TokenExpiredException
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
+import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.JwtConst
 import hii.thing.api.security.keypair.KeyPairManage
 import kotlinx.coroutines.delay
@@ -39,7 +39,7 @@ class JwtConstTest {
 
     @Before
     fun setUp() {
-        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+        KeyPairManage.setUp(DemoRSAKeyPairDao())
     }
 
     @Test

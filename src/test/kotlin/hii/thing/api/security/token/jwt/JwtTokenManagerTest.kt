@@ -19,7 +19,7 @@ package hii.thing.api.security.token.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
+import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.JwtConst
 import hii.thing.api.security.keypair.KeyPairManage
 import org.amshove.kluent.`should be equal to`
@@ -40,7 +40,7 @@ class JwtTokenManagerTest {
 
     @Before
     fun setUp() {
-        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+        KeyPairManage.setUp(DemoRSAKeyPairDao())
     }
 
     @Test

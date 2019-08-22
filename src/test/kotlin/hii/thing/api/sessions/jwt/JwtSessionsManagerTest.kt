@@ -19,7 +19,7 @@ package hii.thing.api.sessions.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
+import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.session.InMemorySessionDao
 import hii.thing.api.security.JwtConst
@@ -44,7 +44,7 @@ class JwtSessionsManagerTest {
 
     @Before
     fun setUp() {
-        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+        KeyPairManage.setUp(DemoRSAKeyPairDao())
     }
 
     @Test

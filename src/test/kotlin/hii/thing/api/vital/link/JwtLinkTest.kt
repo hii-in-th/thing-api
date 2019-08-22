@@ -18,7 +18,7 @@
 package hii.thing.api.vital.link
 
 import com.auth0.jwt.JWT
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
+import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.keypair.KeyPairManage
 import org.amshove.kluent.`should be equal to`
 import org.junit.Before
@@ -28,7 +28,7 @@ class JwtLinkTest {
 
     @Before
     fun setUp() {
-        KeyPairManage.setUp(InMemoryRSAKeyPairDao())
+        KeyPairManage.setUp(DemoRSAKeyPairDao())
     }
 
     val jwtLink = JwtLink()

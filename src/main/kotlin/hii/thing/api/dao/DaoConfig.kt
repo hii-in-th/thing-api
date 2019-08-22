@@ -20,7 +20,7 @@ package hii.thing.api.dao
 import hii.thing.api.dao.apikey.DeviceTokenDao
 import hii.thing.api.dao.apikey.InMemoryDeviceTokenDao
 import hii.thing.api.dao.apikey.JwtDeviceTokenDao
-import hii.thing.api.dao.keyspair.InMemoryRSAKeyPairDao
+import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.dao.keyspair.RSAKeyPairDao
 import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
 import hii.thing.api.dao.lastresult.InMemoryLastResultDao
@@ -97,7 +97,7 @@ inline fun <reified T : Dao> getDao(): T {
         BloodPressuresDao::class -> if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
         HeightsDao::class -> if (standalone) InMemoryHeightsDao() else PgSqlHeightsDao { dataSourcePool.getConnection() }
         WeightDao::class -> if (standalone) InMemoryWeightDao() else PgSqlWeightDao { dataSourcePool.getConnection() }
-        RSAKeyPairDao::class -> if (standalone) InMemoryRSAKeyPairDao() else StringRSAKeyPairDao(
+        RSAKeyPairDao::class -> if (standalone) DemoRSAKeyPairDao() else StringRSAKeyPairDao(
             rsaPrivateKey,
             rsaPublicKey
         )
