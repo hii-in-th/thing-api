@@ -1,11 +1,20 @@
 # Thing api.
 ## [Docker hub.](https://cloud.docker.com/u/hiilab/repository/docker/hiilab/thing-api)
 
+## การใช้งาแบบ Standalone
+1. จำเป็นต้องกำหนด System envelopment **HII_ALONE**  
+    **`HII_ALONE=alone`**
+2. เริ่มการทำงานด้วยคำสั่ง  
+    **`java -Dfile.encoding=UTF-8 -jar thing-api.jar`**  
+    *จำเป็นต้องใช้ Java Runtime 1.8 ขึ้นไป*
+
+
 ## Environment variable
  config for api server or docker env.
 ```log
     HII_ALONE     ->  หากมีการกำหนดค่าระบบจะทำงานแบบ stand alone
                       ทุกอย่างทำงานบนหน่วยความจำ in memory
+                    
     DB_URL        ->  สติง url สำหรับการเขื่อมต่อ database
     DB_USER       ->  database user
     DB_PASSWORD   ->  database password
