@@ -42,9 +42,7 @@ data class Result(
 
 private fun Result.thinkSuggestions(): List<Suggestions>? {
     val list = LinkedList<Suggestions>()
-
     bmiCal()?.let { list.add(checkBMI(it)) }
-
 
     return list.toList().takeIf { it.isNotEmpty() }
 }
