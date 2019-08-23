@@ -47,6 +47,6 @@ data class CreateSessionDetail(
     }
 
     enum class Sex() {
-        MALE, FEMALE, UNKNOWN
+        MALE, FEMALE, UNDEFINED
     }
 }
