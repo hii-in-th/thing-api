@@ -21,7 +21,7 @@ import hii.thing.api.vital.Result
 
 class InMemoryLastResultDao : LastResultDao {
     override fun set(citizenId: String, result: Result, replayId: String): Result {
-        result.replayLink = replayId
+        result.shareableLink = replayId
         memory[citizenId] = result
         return memory[citizenId]!!
     }
@@ -31,7 +31,7 @@ class InMemoryLastResultDao : LastResultDao {
     }
 
     override fun getBy(replayId: String): Result {
-        return memory.toList().find { it.second.replayLink == replayId }!!.second
+        return memory.toList().find { it.second.shareableLink == replayId }!!.second
     }
 
     override fun remove(citizenId: String) {

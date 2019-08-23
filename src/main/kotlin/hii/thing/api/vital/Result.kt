@@ -31,7 +31,7 @@ data class Result(
     val bloodPressure: BloodPressures?,
     val sex: String? = null
 ) {
-    var replayLink: String? = null
+    var shareableLink: String? = null
     val bmi: Float? = bmiCal()
 
     fun bmiCal() =

@@ -111,7 +111,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         return Result(
             age, height, weight, bp, sex
         ).apply {
-            this.replayLink = refLink
+            this.shareableLink = refLink
         }
     }
 

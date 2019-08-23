@@ -89,7 +89,7 @@ class SessionsResource(
                     "anonymous"
                 }"
         }
-        session.subject?.replayLink = null
+        session.subject?.shareableLink = null
         return session
     }
 

@@ -167,7 +167,7 @@ class VitalResource(
                 launch { lastResultDao.set(it, result, replayId) }
                 launch { replayLink = "https://thing-api.hii.in.th/v1/lresult?token=${link.create(replayId)}" }
             }
-            result.replayLink = replayLink
+            result.shareableLink = replayLink
         }
         return result
     }
