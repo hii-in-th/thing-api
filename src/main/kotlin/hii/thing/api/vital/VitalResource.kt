@@ -123,7 +123,7 @@ class VitalResource(
 
     @GET
     @Path("/result")
-    @RolesAllowed("kiosk", "report")
+    @RolesAllowed("kiosk")
     fun getResult(): Result {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         return result(userPrincipal)
@@ -143,7 +143,9 @@ class VitalResource(
 
         return if (!replayId.isNullOrEmpty()) { //  ตรวจสอบว่าเป็น Link แบบดูย้อนหลังหรือไม่
             logger.debug { "Replay result $replayId" }
-            lastResultDao.getBy(replayId) //  ดึงผลเก่าออกมา
+            val lastResult = lastResultDao.getBy(replayId)
+            lastResult.shareableLink = null //  ดึงผลเก่าออกมา
+            lastResult
         } else {
             createNewResult(userPrincipal)
         }
