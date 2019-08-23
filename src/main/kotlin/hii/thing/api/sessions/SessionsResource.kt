@@ -51,18 +51,19 @@ class SessionsResource(
     @POST
     @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
-        val userPrincipal = (context.userPrincipal as ThingPrincipal)
+        val userPrincipal = context.userPrincipal as ThingPrincipal
         val newDetail = // Repeat real deviceId
             CreateSessionDetail(
                 userPrincipal.deviceName,
-                detail.citizenId,
+                detail.citizenId.takeIf { !it.isNullOrBlank() },
                 detail.citizenIdInput,
                 detail.birthDate,
                 detail.name,
                 detail.sex
             )
-        val session = if (!newDetail.citizenId.isNullOrBlank()) { // ตรวจสอบว่าใด้ใส่เลขบัตรประชาชนมาหรือไม่
-            val lastResult = ignore { lastResultDao.get(newDetail.citizenId) }
+        val session = {
+            val lastResult =
+                if (newDetail.citizenId.isNullOrBlank()) null else ignore { lastResultDao.get(newDetail.citizenId) }
             val sessionId = sessionsManager.create(userPrincipal.accessToken, newDetail)
             when (newDetail.citizenIdInput) { // ตรวจสอบรูปแบบการ Input ข้อมูลบัตรประชาชน
                 "CARD" -> {
@@ -74,14 +75,14 @@ class SessionsResource(
                     )
                 }
             }
-        } else
-            Session(sessionsManager.anonymousCreate(userPrincipal.accessToken, newDetail.deviceId))
+        }.invoke()
+
         logger.info {
             "UserUse\t" +
                 "Id:${session.sessionId}\t" +
                 "Name:${userPrincipal.deviceName}\t" +
                 "InputType:${newDetail.citizenIdInput}\t" +
-                "Sex:${newDetail.sex.toString() ?: "Unknown"}\t" +
+                "Sex:${newDetail.sex?.toString() ?: "Unknown"}\t" +
                 "Citizen:${
                 if (!detail.citizenId.isNullOrBlank())
                     detail.citizenId.hashText()
@@ -96,8 +97,9 @@ class SessionsResource(
     @PUT
     @RolesAllowed("kiosk")
     fun updateSessions(detail: CreateSessionDetail): Session {
-        val userPrincipal = (context.userPrincipal as ThingPrincipal)
+        val userPrincipal = context.userPrincipal as ThingPrincipal
         val session = sessionsManager.getBy(userPrincipal.accessToken)
+        require(sessionsManager.getDetail(session).citizenId.isNullOrEmpty()) { "มีการใส่ข้อมูลส่วนตัวไปแล้ว ไม่สามารถใส่ซ้ำได้" }
         sessionsManager.updateCreate(
             userPrincipal.accessToken, CreateSessionDetail(
                 userPrincipal.deviceName,
