@@ -18,6 +18,7 @@
 package hii.thing.api.sessions
 
 import com.google.gson.Gson
+import hii.thing.api.JwtTestRule
 import hii.thing.api.config.GsonJerseyProvider
 import hii.thing.api.dao.lastresult.InMemoryLastResultDao
 import hii.thing.api.sessions.mock.MockRoleTokenSecurity
@@ -34,6 +35,7 @@ import javax.ws.rs.core.Application
 import javax.ws.rs.core.MediaType
 
 class SessionsResourceTest : JerseyTest() {
+    val rule = JwtTestRule()
 
     private val session = UUID.randomUUID().toString()
     private val deviceId = "aabbcc-aabbee"

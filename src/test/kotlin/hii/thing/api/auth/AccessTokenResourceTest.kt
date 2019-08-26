@@ -18,6 +18,7 @@
 package hii.thing.api.auth
 
 import com.google.gson.Gson
+import hii.thing.api.JwtTestRule
 import hii.thing.api.config.GsonJerseyProvider
 import org.amshove.kluent.`should equal`
 import org.amshove.kluent.`should not contain`
@@ -29,6 +30,7 @@ import javax.ws.rs.core.Application
 
 class AccessTokenResourceTest : JerseyTest() {
     lateinit var mouckAccessTokenManager: AccessTokenManager
+    val rule = JwtTestRule()
 
     /* ktlint-disable max-line-length */
     val baseKey =
