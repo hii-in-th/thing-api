@@ -33,44 +33,42 @@ import java.security.interfaces.RSAPublicKey
 /**
  * Configuration และ util ของ JWT
  */
-class JwtConst private constructor() {
-    companion object {
-        val keyPair: KeyPair by lazy { KeyPairManage.setUp(getDao()) }
-        const val issuer = "auth.hii.in.th"
-        const val audience = "hii.in.th"
+object JwtConst {
+    val keyPair: KeyPair by lazy { KeyPairManage.setUp(getDao()) }
+    const val issuer = "auth.hii.in.th"
+    const val audience = "hii.in.th"
 
-        fun decodeAndVerify(accessToken: String): DecodedJWT {
-            var decodedJWT: DecodedJWT? = null
-            runBlocking {
-                launch { verify(accessToken) }
-                launch { decodedJWT = decode(accessToken) }
-            }
-            return decodedJWT!!
+    fun decodeAndVerify(accessToken: String): DecodedJWT {
+        var decodedJWT: DecodedJWT? = null
+        runBlocking {
+            launch { verify(accessToken) }
+            launch { decodedJWT = decode(accessToken) }
         }
+        return decodedJWT!!
+    }
 
-        fun decode(accessToken: String): DecodedJWT = JWT.decode(accessToken)
+    fun decode(accessToken: String): DecodedJWT = JWT.decode(accessToken)
 
-        fun verify(accessToken: String): Boolean {
-            val publicKey: RSAPublicKey = keyPair.publicKey
-            val algorithm = Algorithm.RSA512(object : RSAKeyProvider {
-                override fun getPrivateKeyId(): String = ""
-                override fun getPrivateKey(): RSAPrivateKey? = null
-                override fun getPublicKeyById(keyId: String?): RSAPublicKey = publicKey
-            })
+    fun verify(accessToken: String): Boolean {
+        val publicKey: RSAPublicKey = keyPair.publicKey
+        val algorithm = Algorithm.RSA512(object : RSAKeyProvider {
+            override fun getPrivateKeyId(): String = ""
+            override fun getPrivateKey(): RSAPrivateKey? = null
+            override fun getPublicKeyById(keyId: String?): RSAPublicKey = publicKey
+        })
 
-            val verifier = JWT.require(algorithm)
-                .withIssuer(issuer)
-                .build() // Reusable verifier instance
-            verifier.verify(accessToken)
-            return true
-        }
+        val verifier = JWT.require(algorithm)
+            .withIssuer(issuer)
+            .build() // Reusable verifier instance
+        verifier.verify(accessToken)
+        return true
+    }
 
-        fun verifyPath(accessToken: String, path: String): Boolean {
-            verify(accessToken)
-            val scope = decode(accessToken).getClaim("scope").asArray(String::class.java)
-            val contains = scope.find { "/$path".startsWith(it) } != null
-            if (!contains) throw JWTVerificationException("Part $path not allow")
-            return true
-        }
+    fun verifyPath(accessToken: String, path: String): Boolean {
+        verify(accessToken)
+        val scope = decode(accessToken).getClaim("scope").asArray(String::class.java)
+        val contains = scope.find { "/$path".startsWith(it) } != null
+        if (!contains) throw JWTVerificationException("Part $path not allow")
+        return true
     }
 }
