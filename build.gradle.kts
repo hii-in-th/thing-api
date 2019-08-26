@@ -78,11 +78,6 @@ tasks.register<Jar>("sourcesJar") {
     from(sourceSets.main.get().allJava)
 }
 
-tasks.named<Test>("test") {
-    minHeapSize = "1024m"
-    maxHeapSize = "2048m"
-}
-
 tasks.named<Jar>("jar") {
     configurations.compileClasspath.get().forEach { if (it.isDirectory) from(it) else from(zipTree(it)) }
 
