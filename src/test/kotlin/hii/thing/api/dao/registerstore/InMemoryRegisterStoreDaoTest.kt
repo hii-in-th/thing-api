@@ -18,7 +18,10 @@
 package hii.thing.api.dao.registerstore
 
 import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
+import hii.thing.api.sessions.CreateSessionDetail.InputType.TYPING
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should equal`
 import org.junit.Before
 import org.junit.Test
 
@@ -31,16 +34,18 @@ class InMemoryRegisterStoreDaoTest {
     val createSessionDetail = CreateSessionDetail(
         "max-199-991",
         "1234122345634",
-        "CARD",
+        CARD,
         "1970-10-13",
-        "thanachai"
+        "thanachai",
+        CreateSessionDetail.Sex.MALE
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",
-        "9988",
-        "TYPE",
+        "3342",
+        TYPING,
         "1970-10-16",
-        "nstda"
+        "nstda",
+        CreateSessionDetail.Sex.FEMALE
     )
 
     @Test
@@ -49,9 +54,10 @@ class InMemoryRegisterStoreDaoTest {
 
         reg.deviceId `should be equal to` createSessionDetail.deviceId
         reg.citizenId!! `should be equal to` createSessionDetail.citizenId!!
-        reg.citizenIdInput!! `should be equal to` createSessionDetail.citizenIdInput!!
+        reg.citizenIdInput!! `should equal` createSessionDetail.citizenIdInput!!
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
         reg.name!! `should be equal to` createSessionDetail.name!!
+        reg.sex!! `should equal` createSessionDetail.sex!!
     }
 
     @Test(expected = Exception::class)
@@ -67,9 +73,10 @@ class InMemoryRegisterStoreDaoTest {
 
         update.deviceId `should be equal to` anonymous.deviceId
         update.citizenId!! `should be equal to` anonymous.citizenId!!
-        update.citizenIdInput!! `should be equal to` anonymous.citizenIdInput!!
+        update.citizenIdInput!! `should equal` anonymous.citizenIdInput!!
         update.birthDate!! `should be equal to` anonymous.birthDate!!
         update.name!! `should be equal to` anonymous.name!!
+        update.sex!! `should equal` anonymous.sex!!
     }
 
     @Test(expected = Exception::class)

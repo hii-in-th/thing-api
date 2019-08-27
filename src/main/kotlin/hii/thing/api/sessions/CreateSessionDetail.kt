@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 data class CreateSessionDetail(
     val deviceId: String,
     val citizenId: String? = null,
-    val citizenIdInput: String? = null,
+    val citizenIdInput: InputType? = null,
     val birthDate: String? = null,
     val name: String? = null,
     val sex: Sex? = null
@@ -48,5 +48,9 @@ data class CreateSessionDetail(
 
     enum class Sex() {
         MALE, FEMALE, UNDEFINED
+    }
+
+    enum class InputType() {
+        CARD, TYPING, UNDEFINED
     }
 }

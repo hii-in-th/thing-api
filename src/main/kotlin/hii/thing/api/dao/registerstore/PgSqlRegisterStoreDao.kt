@@ -46,7 +46,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                     it[SqlRegisterDetail.sessionId] = sessionId
                     it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
-                    it[citizenIdInput] = sessionDetail.citizenIdInput
+                    it[citizenIdInput] = sessionDetail.citizenIdInput?.toString()
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
                     it[name] = sessionDetail.name
                     it[time] = Now()
@@ -66,7 +66,11 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
         return CreateSessionDetail(
             it[SqlRegisterDetail.deviceId],
             it[SqlRegisterDetail.citizenId],
-            it[SqlRegisterDetail.citizenIdInput],
+            try {
+                CreateSessionDetail.InputType.valueOf(it[SqlRegisterDetail.citizenIdInput]!!.toUpperCase())
+            } catch (ignore: Exception) {
+                null
+            },
             it[SqlRegisterDetail.birthDate]?.toStringDate(),
             it[SqlRegisterDetail.name],
             try {
@@ -84,10 +88,10 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                 SqlRegisterDetail.update({ SqlRegisterDetail.sessionId eq sessionId }) {
                     it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
-                    it[citizenIdInput] = sessionDetail.citizenIdInput
+                    it[citizenIdInput] = sessionDetail.citizenIdInput?.toString()
                     it[name] = sessionDetail.name
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
-                    it[sex] = sessionDetail.sex.toString()
+                    it[sex] = sessionDetail.sex?.toString()
                 }
             } catch (ex: ExposedSQLException) {
                 require(false)

@@ -26,6 +26,7 @@ import hii.thing.api.dao.session.InMemorySessionDao
 import hii.thing.api.security.JwtConst
 import hii.thing.api.security.keypair.KeyPairManage
 import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
 import hii.thing.api.sessions.SessionsManager
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be greater than`
@@ -41,7 +42,7 @@ class JwtSessionsManagerTest {
     val rule = JwtTestRule()
     val deviceId = "98439-32423-fgd-gfd-gdsg-fds"
     val sessionsManager: SessionsManager = JwtSessionsManager(InMemorySessionDao(), InMemoryRegisterStoreDao())
-    val createDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+    val createDetail = CreateSessionDetail(deviceId, "1234", CARD, "1111-09-65")
     val accessToken = createAccessToken()
 
     @Before

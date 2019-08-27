@@ -21,6 +21,8 @@ import com.google.gson.Gson
 import hii.thing.api.JwtTestRule
 import hii.thing.api.config.GsonJerseyProvider
 import hii.thing.api.dao.lastresult.InMemoryLastResultDao
+import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
+import hii.thing.api.sessions.CreateSessionDetail.InputType.UNDEFINED
 import hii.thing.api.sessions.mock.MockRoleTokenSecurity
 import hii.thing.api.sessions.mock.MockTokenManager
 import hii.thing.api.sessions.mock.MockTokenSecurityContext
@@ -58,10 +60,10 @@ class SessionsResourceTest : JerseyTest() {
             override fun getBy(accessToken: String): String = session
 
             override fun updateCreate(accessToken: String, sessionDetail: CreateSessionDetail): CreateSessionDetail =
-                CreateSessionDetail(deviceId, "", "", "")
+                CreateSessionDetail(deviceId, "", UNDEFINED, "")
 
             override fun getDetail(session: String): CreateSessionDetail =
-                CreateSessionDetail(deviceId, "", "", "")
+                CreateSessionDetail(deviceId, "", UNDEFINED, "")
         }
 
         val sessionsResource = SessionsResource(mockSessionsManager, InMemoryLastResultDao())
@@ -76,7 +78,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsOk() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65", "ธนชัย ชัย")
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", CARD, "1111-09-65", "ธนชัย ชัย")
 
         val res = target("/sessions").request()
             .header("Authorization", "Bearer $accessToken")
@@ -91,7 +93,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun sessionsNotUserInRole() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", CARD, "1111-09-65")
         val res = target("/sessions").request()
             .header("Authorization", "Bearer sdfsdf")
             .header("X-Requested-By", devicename)
@@ -102,7 +104,7 @@ class SessionsResourceTest : JerseyTest() {
 
     @Test
     fun tokenByQueryParameter() {
-        val sessionDetail = CreateSessionDetail(deviceId, "1234", "CARD", "1111-09-65")
+        val sessionDetail = CreateSessionDetail(deviceId, "1234", CARD, "1111-09-65")
         val res = target("/sessions")
             .queryParam("token", accessToken)
             .request()

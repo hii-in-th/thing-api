@@ -23,6 +23,8 @@ import hii.thing.api.getLogger
 import hii.thing.api.hashText
 import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
+import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
+import hii.thing.api.sessions.CreateSessionDetail.InputType.UNDEFINED
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import hii.thing.api.vital.Result
 import hii.thing.api.vital.VitalResource
@@ -56,7 +58,7 @@ class SessionsResource(
             CreateSessionDetail(
                 userPrincipal.deviceName,
                 detail.citizenId.takeIf { !it.isNullOrBlank() },
-                detail.citizenIdInput,
+                detail.citizenIdInput ?: UNDEFINED,
                 detail.birthDate,
                 detail.name,
                 detail.sex
@@ -66,7 +68,7 @@ class SessionsResource(
                 if (newDetail.citizenId.isNullOrBlank()) null else ignore { lastResultDao.get(newDetail.citizenId) }
             val sessionId = sessionsManager.create(userPrincipal.accessToken, newDetail)
             when (newDetail.citizenIdInput) { // ตรวจสอบรูปแบบการ Input ข้อมูลบัตรประชาชน
-                "CARD" -> {
+                CARD -> {
                     Session(sessionId, lastResult)
                 }
                 else -> {
@@ -84,8 +86,8 @@ class SessionsResource(
                 "InputType:${newDetail.citizenIdInput}\t" +
                 "Sex:${newDetail.sex?.toString() ?: "Unknown"}\t" +
                 "Citizen:${
-                if (!detail.citizenId.isNullOrBlank())
-                    detail.citizenId.hashText()
+                if (!newDetail.citizenId.isNullOrBlank())
+                    newDetail.citizenId.hashText()
                 else
                     "anonymous"
                 }"

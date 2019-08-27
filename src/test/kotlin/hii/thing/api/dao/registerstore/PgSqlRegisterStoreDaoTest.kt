@@ -19,6 +19,10 @@ package hii.thing.api.dao.registerstore
 
 import hii.thing.api.PgSqlTestRule
 import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
+import hii.thing.api.sessions.CreateSessionDetail.InputType.TYPING
+import hii.thing.api.sessions.CreateSessionDetail.Sex.FEMALE
+import hii.thing.api.sessions.CreateSessionDetail.Sex.MALE
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.jetbrains.exposed.sql.Table
@@ -41,18 +45,18 @@ class PgSqlRegisterStoreDaoTest {
     val createSessionDetail = CreateSessionDetail(
         "max-199-991",
         "1234122345634",
-        "CARD",
+        CARD,
         "1970-10-13",
         "thanachai",
-        CreateSessionDetail.Sex.MALE
+        MALE
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",
         "3342",
-        "TYPE",
+        TYPING,
         "1970-10-16",
         "nstda",
-        CreateSessionDetail.Sex.FEMALE
+        FEMALE
     )
 
     @Test
@@ -61,7 +65,7 @@ class PgSqlRegisterStoreDaoTest {
 
         reg.deviceId `should be equal to` createSessionDetail.deviceId
         reg.citizenId!! `should be equal to` createSessionDetail.citizenId!!
-        reg.citizenIdInput!! `should be equal to` createSessionDetail.citizenIdInput!!
+        reg.citizenIdInput!! `should equal` createSessionDetail.citizenIdInput!!
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
         reg.name!! `should be equal to` createSessionDetail.name!!
         reg.sex!! `should equal` createSessionDetail.sex!!
@@ -80,7 +84,7 @@ class PgSqlRegisterStoreDaoTest {
 
         update.deviceId `should be equal to` anonymous.deviceId
         update.citizenId!! `should be equal to` anonymous.citizenId!!
-        update.citizenIdInput!! `should be equal to` anonymous.citizenIdInput!!
+        update.citizenIdInput!! `should equal` anonymous.citizenIdInput!!
         update.birthDate!! `should be equal to` anonymous.birthDate!!
         update.name!! `should be equal to` anonymous.name!!
         update.sex!! `should equal` anonymous.sex!!
