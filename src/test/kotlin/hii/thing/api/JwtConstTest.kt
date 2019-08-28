@@ -33,7 +33,7 @@ import java.util.Date
 import java.util.UUID
 
 class JwtConstTest {
-    val rule = TestRule()
+    val rule = InMemoryTestRule()
 
     @Test
     fun tokenNoExpire() {

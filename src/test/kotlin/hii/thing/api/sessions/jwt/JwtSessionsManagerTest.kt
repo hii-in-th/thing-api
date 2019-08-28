@@ -19,7 +19,7 @@ package hii.thing.api.sessions.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.TestRule
+import hii.thing.api.InMemoryTestRule
 import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.session.InMemorySessionDao
@@ -39,7 +39,7 @@ import java.util.Date
 import java.util.UUID
 
 class JwtSessionsManagerTest {
-    val rule = TestRule()
+    val rule = InMemoryTestRule()
     val deviceId = "98439-32423-fgd-gfd-gdsg-fds"
     val sessionsManager: SessionsManager = JwtSessionsManager(InMemorySessionDao(), InMemoryRegisterStoreDao())
     val createDetail = CreateSessionDetail(deviceId, "1234", CARD, "1111-09-65")
