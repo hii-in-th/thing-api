@@ -17,13 +17,14 @@
 
 package hii.thing.api.dao.history.bp
 
+import hii.thing.api.dao.history.BaseTestHistory
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.junit.Before
 import org.junit.Test
 
-class InMemoryHistoryBloodPressuresDaoTest {
+class InMemoryHistoryBloodPressuresDaoTest : BaseTestHistory {
     val daoStorage = InMemoryHistoryBloodPressuresDao()
     val dao: HistoryBloodPressuresDao = daoStorage
 
@@ -40,7 +41,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
     )
 
     @Test
-    fun save() {
+    override fun save() {
         val save = dao.save(citizenId, bp)
 
         save.first().dia `should be equal to` bp.dia
@@ -49,7 +50,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
     }
 
     @Test
-    fun get() {
+    override fun get() {
         dao.save(citizenId, bp)
         val get = dao.get(citizenId)
 
@@ -59,7 +60,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
     }
 
     @Test
-    fun saveMulti() {
+    override fun saveMulti() {
         dao.save(citizenId, bp)
         val save = dao.save(citizenId, bp2)
 
@@ -72,7 +73,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
     }
 
     @Test
-    fun getMulti() {
+    override fun getMulti() {
         dao.save(citizenId, bp)
         dao.save(citizenId, bp2)
 
@@ -87,7 +88,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
     }
 
     @Test
-    fun save2Citizen() {
+    override fun save2Citizen() {
         val save = dao.save(citizenId, bp)
         val save2 = dao.save(citizenId2, bp2)
 
@@ -100,7 +101,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
     }
 
     @Test
-    fun get2Citizen() {
+    override fun get2Citizen() {
         dao.save(citizenId, bp)
         dao.save(citizenId2, bp2)
 
