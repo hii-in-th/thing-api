@@ -25,7 +25,7 @@ class InMemoryHistoryBloodPressuresDao : HistoryBloodPressuresDao {
 
     override fun save(citizenId: String, bp: BloodPressures): List<BloodPressures> {
         try {
-            storage[citizenId]!!.add(bp)
+            storage[citizenId]!!.addFirst(bp)
         } catch (ex: NullPointerException) {
             storage[citizenId] = LinkedList()
             storage[citizenId]!!.add(bp)

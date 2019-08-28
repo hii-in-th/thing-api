@@ -25,7 +25,7 @@ class InmemoryHistoryHeightsDao : HistoryHeightsDao {
 
     override fun save(citizenId: String, height: Height): List<Height> {
         try {
-            storage[citizenId]!!.add(height)
+            storage[citizenId]!!.addFirst(height)
         } catch (ex: NullPointerException) {
             storage[citizenId] = LinkedList()
             storage[citizenId]!!.add(height)

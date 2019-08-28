@@ -64,12 +64,12 @@ class InMemoryHistoryBloodPressuresDaoTest : BaseTestHistory {
         dao.save(citizenId, bp)
         val save = dao.save(citizenId, bp2)
 
-        save.first().dia `should be equal to` bp.dia
-        save.first().sys `should be equal to` bp.sys
-        save.first().time `should be equal to` bp.time
-        save.last().dia `should be equal to` bp2.dia
-        save.last().sys `should be equal to` bp2.sys
-        save.last().time `should be equal to` bp2.time
+        save.first().dia `should be equal to` bp2.dia
+        save.first().sys `should be equal to` bp2.sys
+        save.first().time `should be equal to` bp2.time
+        save.last().dia `should be equal to` bp.dia
+        save.last().sys `should be equal to` bp.sys
+        save.last().time `should be equal to` bp.time
     }
 
     @Test
@@ -79,12 +79,12 @@ class InMemoryHistoryBloodPressuresDaoTest : BaseTestHistory {
 
         val get = dao.get(citizenId)
 
-        get.first().dia `should be equal to` bp.dia
-        get.first().sys `should be equal to` bp.sys
-        get.first().time `should be equal to` bp.time
-        get.last().dia `should be equal to` bp2.dia
-        get.last().sys `should be equal to` bp2.sys
-        get.last().time `should be equal to` bp2.time
+        get.first().dia `should be equal to` bp2.dia
+        get.first().sys `should be equal to` bp2.sys
+        get.first().time `should be equal to` bp2.time
+        get.last().dia `should be equal to` bp.dia
+        get.last().sys `should be equal to` bp.sys
+        get.last().time `should be equal to` bp.time
     }
 
     @Test

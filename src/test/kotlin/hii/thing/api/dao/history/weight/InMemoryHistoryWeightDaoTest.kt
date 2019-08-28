@@ -62,10 +62,10 @@ class InMemoryHistoryWeightDaoTest : BaseTestHistory {
         dao.save(citizenId, weight)
         val save = dao.save(citizenId, weight2)
 
-        save.first().time `should be equal to` weight.time
-        save.first().weight `should be equal to` weight.weight
-        save.last().time `should be equal to` weight2.time
-        save.last().weight `should be equal to` weight2.weight
+        save.first().time `should be equal to` weight2.time
+        save.first().weight `should be equal to` weight2.weight
+        save.last().time `should be equal to` weight.time
+        save.last().weight `should be equal to` weight.weight
     }
 
     @Test
@@ -74,10 +74,10 @@ class InMemoryHistoryWeightDaoTest : BaseTestHistory {
         dao.save(citizenId, weight2)
         val get = dao.get(citizenId)
 
-        get.first().time `should be equal to` weight.time
-        get.first().weight `should be equal to` weight.weight
-        get.last().time `should be equal to` weight2.time
-        get.last().weight `should be equal to` weight2.weight
+        get.first().time `should be equal to` weight2.time
+        get.first().weight `should be equal to` weight2.weight
+        get.last().time `should be equal to` weight.time
+        get.last().weight `should be equal to` weight.weight
     }
 
     @Test

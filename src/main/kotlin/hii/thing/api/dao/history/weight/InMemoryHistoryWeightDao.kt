@@ -25,7 +25,7 @@ class InMemoryHistoryWeightDao : HistoryWeightDao {
 
     override fun save(citizenId: String, weight: Weight): List<Weight> {
         try {
-            storage[citizenId]!!.add(weight)
+            storage[citizenId]!!.addFirst(weight)
         } catch (ex: NullPointerException) {
             storage[citizenId] = LinkedList()
             storage[citizenId]!!.add(weight)

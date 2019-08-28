@@ -62,13 +62,13 @@ class InmemoryHistoryHeightsDaoTest : BaseTestHistory {
         dao.save(citizenId, height)
         val save = dao.save(citizenId, height2)
 
-        save.first().time `should equal` height.time
-        save.first().height `should be equal to` height.height
-        save.first().time `should be equal to` height.time
+        save.first().time `should equal` height2.time
+        save.first().height `should be equal to` height2.height
+        save.first().time `should be equal to` height2.time
 
-        save.last().time `should equal` height2.time
-        save.last().height `should be equal to` height2.height
-        save.last().time `should be equal to` height2.time
+        save.last().time `should equal` height.time
+        save.last().height `should be equal to` height.height
+        save.last().time `should be equal to` height.time
     }
 
     @Test
@@ -78,13 +78,13 @@ class InmemoryHistoryHeightsDaoTest : BaseTestHistory {
 
         val get = dao.get(citizenId)
 
-        get.first().time `should equal` height.time
-        get.first().height `should be equal to` height.height
-        get.first().time `should be equal to` height.time
+        get.first().time `should equal` height2.time
+        get.first().height `should be equal to` height2.height
+        get.first().time `should be equal to` height2.time
 
-        get.last().time `should equal` height2.time
-        get.last().height `should be equal to` height2.height
-        get.last().time `should be equal to` height2.time
+        get.last().time `should equal` height.time
+        get.last().height `should be equal to` height.height
+        get.last().time `should be equal to` height.time
     }
 
     @Test
