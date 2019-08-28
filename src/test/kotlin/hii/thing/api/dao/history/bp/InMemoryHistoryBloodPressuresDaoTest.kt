@@ -19,6 +19,7 @@ package hii.thing.api.dao.history.bp
 
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should equal`
 import org.junit.Before
 import org.junit.Test
 
@@ -44,6 +45,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
 
         save.first().dia `should be equal to` bp.dia
         save.first().sys `should be equal to` bp.sys
+        save.first().time `should equal` bp.time
     }
 
     @Test
@@ -53,6 +55,7 @@ class InMemoryHistoryBloodPressuresDaoTest {
 
         get.first().dia `should be equal to` bp.dia
         get.first().sys `should be equal to` bp.sys
+        get.first().time `should equal` bp.time
     }
 
     @Test
@@ -62,8 +65,10 @@ class InMemoryHistoryBloodPressuresDaoTest {
 
         save.first().dia `should be equal to` bp.dia
         save.first().sys `should be equal to` bp.sys
+        save.first().time `should equal` bp.time
         save.last().dia `should be equal to` bp2.dia
         save.last().sys `should be equal to` bp2.sys
+        save.last().time `should equal` bp2.time
     }
 
     @Test
@@ -75,8 +80,10 @@ class InMemoryHistoryBloodPressuresDaoTest {
 
         get.first().dia `should be equal to` bp.dia
         get.first().sys `should be equal to` bp.sys
+        get.first().time `should equal` bp.time
         get.last().dia `should be equal to` bp2.dia
         get.last().sys `should be equal to` bp2.sys
+        get.last().time `should equal` bp2.time
     }
 
     @Test
@@ -86,8 +93,10 @@ class InMemoryHistoryBloodPressuresDaoTest {
 
         save.first().dia `should be equal to` bp.dia
         save.first().sys `should be equal to` bp.sys
+        save.first().time `should equal` bp.time
         save2.first().dia `should be equal to` bp2.dia
         save2.first().sys `should be equal to` bp2.sys
+        save2.first().time `should equal` bp2.time
     }
 
     @Test
@@ -100,8 +109,10 @@ class InMemoryHistoryBloodPressuresDaoTest {
 
         get.first().dia `should be equal to` bp.dia
         get.first().sys `should be equal to` bp.sys
+        get.first().time `should equal` bp.time
         get2.first().dia `should be equal to` bp2.dia
         get2.first().sys `should be equal to` bp2.sys
+        get2.first().time `should equal` bp2.time
     }
 
     @Before
