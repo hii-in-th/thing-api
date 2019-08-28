@@ -18,7 +18,7 @@
 package hii.thing.api.auth.jwt
 
 import com.auth0.jwt.JWT
-import hii.thing.api.JwtTestRule
+import hii.thing.api.TestRule
 import hii.thing.api.auth.Device
 import hii.thing.api.auth.NotFoundToken
 import hii.thing.api.dao.apikey.DeviceTokenDao
@@ -30,7 +30,7 @@ import org.junit.Before
 import org.junit.Test
 
 class JwtAccessTokenManagerTest {
-    val rule = JwtTestRule()
+    val rule = TestRule()
 
     /* ktlint-disable max-line-length */
     val baseKey =

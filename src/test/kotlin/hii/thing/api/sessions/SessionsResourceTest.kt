@@ -18,7 +18,7 @@
 package hii.thing.api.sessions
 
 import com.google.gson.Gson
-import hii.thing.api.JwtTestRule
+import hii.thing.api.TestRule
 import hii.thing.api.config.GsonJerseyProvider
 import hii.thing.api.dao.lastresult.InMemoryLastResultDao
 import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
@@ -37,7 +37,7 @@ import javax.ws.rs.core.Application
 import javax.ws.rs.core.MediaType
 
 class SessionsResourceTest : JerseyTest() {
-    val rule = JwtTestRule()
+    val rule = TestRule()
 
     private val session = UUID.randomUUID().toString()
     private val deviceId = "aabbcc-aabbee"

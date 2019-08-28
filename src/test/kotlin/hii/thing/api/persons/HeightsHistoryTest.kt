@@ -15,15 +15,18 @@
  * limitations under the License.
  */
 
-package hii.thing.api
+package hii.thing.api.persons
 
-import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
-import hii.thing.api.dao.standalone
-import hii.thing.api.security.keypair.KeyPairManage
+import org.junit.Before
+import org.junit.Test
 
-class JwtTestRule {
-    init {
-        standalone = true
-        KeyPairManage.setUp(DemoRSAKeyPairDao())
+class HeightsHistoryTest {
+
+    @Before
+    fun setUp() {
+    }
+
+    @Test
+    fun get() {
     }
 }

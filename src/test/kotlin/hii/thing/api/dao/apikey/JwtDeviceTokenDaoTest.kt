@@ -17,7 +17,7 @@
 
 package hii.thing.api.dao.apikey
 
-import hii.thing.api.JwtTestRule
+import hii.thing.api.TestRule
 import hii.thing.api.auth.Device
 import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.keypair.KeyPairManage
@@ -28,7 +28,7 @@ import org.junit.Before
 import org.junit.Test
 
 class JwtDeviceTokenDaoTest {
-    val rule = JwtTestRule()
+    val rule = TestRule()
 
     val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()
 
