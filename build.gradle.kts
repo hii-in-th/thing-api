@@ -66,7 +66,7 @@ dependencies {
 
     testImplementation("junit:junit:4.12")
     testImplementation("org.mockito:mockito-core:2.28.2")
-    testImplementation("org.amshove.kluent:kluent:1.48")
+    testImplementation("org.amshove.kluent:kluent:1.53")
 }
 
 tasks.withType<KotlinCompile> {

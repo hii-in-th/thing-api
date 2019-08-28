@@ -18,6 +18,7 @@
 package hii.thing.api.dao.vital.weight
 
 import hii.thing.api.PgSqlTestRule
+import hii.thing.api.`should be equal to`
 import hii.thing.api.vital.Weight
 import org.amshove.kluent.`should be equal to`
 import org.jetbrains.exposed.sql.Table
@@ -44,6 +45,7 @@ class PgSqlWeightDaoTest {
         val save = weightDao.save(sessionId, weight)
 
         save.weight `should be equal to` weight.weight
+        save.time `should be equal to` weight.time
         save.sessionId!! `should be equal to` sessionId
     }
 
@@ -61,6 +63,7 @@ class PgSqlWeightDaoTest {
         val get = weightDao.getBy(sessionId)
 
         get.weight `should be equal to` weight.weight
+        get.time `should be equal to` weight.time
         get.sessionId!! `should be equal to` sessionId
     }
 }

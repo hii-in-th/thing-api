@@ -18,6 +18,7 @@
 package hii.thing.api.dao.vital.height
 
 import hii.thing.api.PgSqlTestRule
+import hii.thing.api.`should be equal to`
 import hii.thing.api.getLogger
 import hii.thing.api.vital.Height
 import org.amshove.kluent.`should be equal to`
@@ -46,6 +47,7 @@ class PgSqlHeightsDaoTest {
         val save = heightsDao.save(sessionId, height)
 
         save.sessionId!! `should be equal to` sessionId
+        save.time `should be equal to` height.time
         save.height `should be equal to` height.height
     }
 
@@ -65,6 +67,7 @@ class PgSqlHeightsDaoTest {
         val get = heightsDao.getBy(sessionId)
 
         get.sessionId!! `should be equal to` sessionId
+        get.time `should be equal to` height.time
         get.height `should be equal to` height.height
     }
 

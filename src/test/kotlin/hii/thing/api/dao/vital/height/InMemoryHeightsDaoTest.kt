@@ -17,9 +17,9 @@
 
 package hii.thing.api.dao.vital.height
 
+import hii.thing.api.`should be equal to`
 import hii.thing.api.vital.Height
 import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.`should be`
 import org.junit.Before
 import org.junit.Test
 
@@ -37,7 +37,7 @@ class InMemoryHeightsDaoTest {
         val save = heightsDao.save(sessionId, height)
 
         save.sessionId!! `should be equal to` sessionId
-        save.time `should be` height.time
+        save.time `should be equal to` height.time
         save.height `should be equal to` height.height
     }
 
@@ -53,7 +53,7 @@ class InMemoryHeightsDaoTest {
         val get = heightsDao.getBy(sessionId)
 
         get.sessionId!! `should be equal to` sessionId
-        get.time `should be` height.time
+        get.time `should be equal to` height.time
         get.height `should be equal to` height.height
     }
 

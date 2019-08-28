@@ -17,9 +17,9 @@
 
 package hii.thing.api.dao.vital.bp
 
+import hii.thing.api.`should be equal to`
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
-import org.amshove.kluent.`should equal`
 import org.junit.Before
 import org.junit.Test
 
@@ -46,7 +46,7 @@ class InMemoryBloodPressuresDaoTest {
         save.sessionId!! `should be equal to` sessionId
         save.dia `should be equal to` pb.dia
         save.sys `should be equal to` pb.sys
-        save.time `should equal` pb.time
+        save.time `should be equal to` pb.time
     }
 
     @Test(expected = Exception::class)
@@ -64,7 +64,7 @@ class InMemoryBloodPressuresDaoTest {
         get.sessionId!! `should be equal to` sessionId
         get.dia `should be equal to` pb.dia
         get.sys `should be equal to` pb.sys
-        get.time `should equal` pb.time
+        get.time `should be equal to` pb.time
     }
 
     @Test(expected = Exception::class)

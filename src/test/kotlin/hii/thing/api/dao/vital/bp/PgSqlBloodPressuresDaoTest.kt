@@ -18,6 +18,7 @@
 package hii.thing.api.dao.vital.bp
 
 import hii.thing.api.PgSqlTestRule
+import hii.thing.api.`should be equal to`
 import hii.thing.api.vital.BloodPressures
 import org.amshove.kluent.`should be equal to`
 import org.jetbrains.exposed.sql.Table
@@ -54,7 +55,7 @@ class PgSqlBloodPressuresDaoTest {
         save.sessionId!! `should be equal to` sessionId
         save.dia `should be equal to` pb.dia
         save.sys `should be equal to` pb.sys
-        println(save.time)
+        save.time `should be equal to` pb.time
     }
 
     @Test(expected = Exception::class)
@@ -72,7 +73,7 @@ class PgSqlBloodPressuresDaoTest {
         get.sessionId!! `should be equal to` sessionId
         get.dia `should be equal to` pb.dia
         get.sys `should be equal to` pb.sys
-        println(get.time)
+        get.time `should be equal to` pb.time
     }
 
     @Test(expected = Exception::class)
