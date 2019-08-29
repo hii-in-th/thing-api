@@ -28,7 +28,7 @@ import org.junit.Test
 class BloodPressuresLevelTest {
     @Test
     fun normal() {
-        val bp = BloodPressures(90F, 60F).calLevel()
+        val bp = BloodPressures(90F, 60F, 60F).calLevel()
 
         bp `should equal` isNormal
         bp `should not equal` isLow
@@ -38,7 +38,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun normal2() {
-        val bp = BloodPressures(119F, 79F).calLevel()
+        val bp = BloodPressures(119F, 79F, 60F).calLevel()
 
         bp `should equal` isNormal
         bp `should not equal` isLow
@@ -48,7 +48,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun low() {
-        val bp = BloodPressures(60F, 50F).calLevel()
+        val bp = BloodPressures(60F, 50F, 60F).calLevel()
 
         bp `should not equal` isNormal
         bp `should equal` isLow
@@ -58,7 +58,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun preHigh() {
-        val bp = BloodPressures(120F, 80F).calLevel()
+        val bp = BloodPressures(120F, 80F, 60F).calLevel()
 
         bp `should not equal` isNormal
         bp `should not equal` isLow
@@ -68,7 +68,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun preHigh2() {
-        val bp = BloodPressures(125F, 85F).calLevel()
+        val bp = BloodPressures(125F, 85F, 60F).calLevel()
 
         bp `should not equal` isNormal
         bp `should not equal` isLow
@@ -78,7 +78,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun preHigh3() {
-        val bp = BloodPressures(139F, 89F).calLevel()
+        val bp = BloodPressures(139F, 89F, 60F).calLevel()
 
         bp `should not equal` isNormal
         bp `should not equal` isLow
@@ -88,7 +88,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun heigh() {
-        val bp = BloodPressures(140F, 99F).calLevel()
+        val bp = BloodPressures(140F, 99F, 60F).calLevel()
 
         bp `should not equal` isNormal
         bp `should not equal` isLow
@@ -98,7 +98,7 @@ class BloodPressuresLevelTest {
 
     @Test
     fun heigh2() {
-        val bp = BloodPressures(180F, 110F).calLevel()
+        val bp = BloodPressures(180F, 110F, 60F).calLevel()
 
         bp `should not equal` isNormal
         bp `should not equal` isLow

@@ -40,6 +40,7 @@ class PgSqlBloodPressuresDao(connection: () -> Connection) :
             SqlBloodPressures.insert {
                 it[dia] = bp.dia
                 it[sys] = bp.sys
+                it[pulse] = bp.pulse
                 it[sessionId] = session
                 it[time] = Now()
             }

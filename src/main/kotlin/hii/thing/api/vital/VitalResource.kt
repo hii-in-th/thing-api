@@ -65,7 +65,14 @@ class VitalResource(
     @Path("/blood-pressures")
     @RolesAllowed("kiosk")
     fun bpMeasure(map: Map<String, String>): BloodPressures {
-        val bp = BloodPressures(map.getValue("sys").toFloat(), map.getValue("dia").toFloat())
+        val pulse = map.getValue("pulse").toFloatOrNull()
+        val sys = map.getValue("sys").toFloatOrNull()
+        val dia = map.getValue("dia").toFloatOrNull()
+        require(pulse != null) { "ต้องมีข้อมูล pulse" }
+        require(sys != null) { "ต้องมีข้อมูล sys" }
+        require(dia != null) { "ต้องมีข้อมูล dia" }
+
+        val bp = BloodPressures(sys, dia, pulse)
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         bp.sessionId = session

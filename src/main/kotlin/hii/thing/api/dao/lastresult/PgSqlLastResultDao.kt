@@ -48,7 +48,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
                 SqlLastResult.insert {
                     it[SqlLastResult.citizenId] = citizenId
                     it[value] = strValue
-                    it[SqlLastResult.refLink] = replayId
+                    it[refLink] = replayId
                     it[updateTime] = Now()
                 }
             }
@@ -56,7 +56,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
             transaction {
                 SqlLastResult.update({ SqlLastResult.citizenId eq citizenId }) {
                     it[value] = strValue
-                    it[SqlLastResult.refLink] = replayId
+                    it[refLink] = replayId
                     it[updateTime] = Now()
                 }
             }
@@ -72,6 +72,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         strValue += "bs$delimiter${result.bloodPressure?.sys}$delimiter$delimiter"
         strValue += "bd$delimiter${result.bloodPressure?.dia}$delimiter$delimiter"
         strValue += "sex$delimiter${result.sex}$delimiter$delimiter"
+        strValue += "pu$delimiter${result.bloodPressure?.pulse}$delimiter$delimiter"
         return strValue
     }
 
@@ -98,6 +99,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         require(!resultStr.isNullOrEmpty()) { "Last result empty." }
 
         val sex = resultStr?.get("sex").takeIf { it != "null" }
+        val pulse = resultStr?.get("pu")?.toFloatOrNull() ?: 0F
         val weight = resultStr?.get("w")?.toFloatOrNull()
         val height = resultStr?.get("h")?.toFloatOrNull()
         val age = resultStr?.get("a")?.toIntOrNull()
@@ -105,7 +107,7 @@ class PgSqlLastResultDao(connection: () -> Connection) : LastResultDao {
         val dia = resultStr?.get("bd")?.toFloatOrNull()
 
         val bp = if (sys != null && dia != null) {
-            BloodPressures(sys, dia)
+            BloodPressures(sys, dia, pulse)
         } else null
 
         return Result(

@@ -28,11 +28,13 @@ internal object SqlBloodPressures : Table("bloodpressures") {
     val time = datetime("time").primaryKey(0)
     val sys = float("sys")
     val dia = float("dia")
+    val pulse = float("pulse")
 
     fun getResult(resultRow: ResultRow): BloodPressures {
         return BloodPressures(
             resultRow[sys],
             resultRow[dia],
+            resultRow[pulse],
             resultRow[sessionId],
             resultRow[time].toJavaTime()
         )

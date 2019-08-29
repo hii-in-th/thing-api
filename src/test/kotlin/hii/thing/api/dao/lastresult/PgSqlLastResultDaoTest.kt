@@ -34,7 +34,7 @@ class PgSqlLastResultDaoTest {
 
     lateinit var dao: LastResultDao
 
-    val laseResult = Result(18, 165F, 54F, BloodPressures(110F, 65F))
+    val laseResult = Result(18, 165F, 54F, BloodPressures(110F, 65F, 60F))
     val citizenId = "3212334483726"
 
     @Test
@@ -72,13 +72,14 @@ class PgSqlLastResultDaoTest {
 
     @Test
     fun setBpNotSetAgeHeightWeight() {
-        val result = dao.set(citizenId, Result(null, null, null, BloodPressures(110F, 65F)))
+        val result = dao.set(citizenId, Result(null, null, null, BloodPressures(110F, 65F, 60F)))
 
         result.height `should equal` null
         result.age `should equal` null
         result.weight `should equal` null
         result.bloodPressure!!.sys `should be equal to` 110F
         result.bloodPressure!!.dia `should be equal to` 65F
+        result.bloodPressure!!.pulse `should be equal to` 60F
     }
 
     @Test
@@ -113,7 +114,7 @@ class PgSqlLastResultDaoTest {
 
     @Test
     fun doubleSet() {
-        dao.set(citizenId, Result(15, 190F, 60F, BloodPressures(113F, 67F)))
+        dao.set(citizenId, Result(15, 190F, 60F, BloodPressures(113F, 67F, 60F)))
         val result = dao.set(citizenId, laseResult)
 
         result.height!! `should be equal to` 165F
@@ -121,6 +122,7 @@ class PgSqlLastResultDaoTest {
         result.weight!! `should be equal to` 54F
         result.bloodPressure!!.sys `should be equal to` 110F
         result.bloodPressure!!.dia `should be equal to` 65F
+        result.bloodPressure!!.pulse `should be equal to` 60F
     }
 
     @Test

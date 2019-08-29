@@ -15,28 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.dao.vital.bp
+package hii.thing.api.config.responsefilter
 
-import hii.thing.api.vital.BloodPressures
+import javax.ws.rs.ClientErrorException
+import javax.ws.rs.core.Response
+import javax.ws.rs.ext.ExceptionMapper
+import javax.ws.rs.ext.Provider
 
-class InMemoryBloodPressuresDao : BloodPressuresDao {
-    override fun save(session: String, bp: BloodPressures): BloodPressures {
-        require(store[session] == null)
-        store[session] = BloodPressures(bp.sys, bp.dia, bp.pulse, session, bp.time)
-        return store[session]!!
-    }
-
-    override fun getBy(session: String): BloodPressures {
-        val bp = store[session]
-        require(bp != null)
-        return bp
-    }
-
-    fun cleanAll() {
-        store.clear()
-    }
-
-    companion object {
-        private val store = LinkedHashMap<String, BloodPressures>()
+@Provider
+class NoSuchElementExceptionFilter : ExceptionMapper<NoSuchElementException> {
+    override fun toResponse(exception: NoSuchElementException): Response {
+        return ErrorDetail.build(ClientErrorException(exception.message, 400), exception)
     }
 }

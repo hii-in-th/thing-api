@@ -39,41 +39,45 @@ class PgSqlBloodPressuresDaoTest {
     }
 
     val sessionId = "13432-sdfdsf-dsf-344435"
-    val pb = BloodPressures(
+    val bp = BloodPressures(
         123.0F,
-        140.6F
+        140.6F,
+        60.0F
     )
     val pb2 = BloodPressures(
         110.0F,
-        60.6F
+        60.6F,
+        58F
     )
 
     @Test
     fun save() {
-        val save = pbDao.save(sessionId, pb)
+        val save = pbDao.save(sessionId, bp)
 
         save.sessionId!! `should be equal to` sessionId
-        save.dia `should be equal to` pb.dia
-        save.sys `should be equal to` pb.sys
-        save.time `should be equal to` pb.time
+        save.dia `should be equal to` bp.dia
+        save.sys `should be equal to` bp.sys
+        save.time `should be equal to` bp.time
+        save.pulse `should be equal to` bp.pulse
     }
 
     @Test(expected = Exception::class)
     fun saveDuplicate() {
-        pbDao.save(sessionId, pb)
+        pbDao.save(sessionId, bp)
         pbDao.save(sessionId, pb2)
     }
 
     @Test
     fun getBy() {
-        pbDao.save(sessionId, pb)
+        pbDao.save(sessionId, bp)
 
         val get = pbDao.getBy(sessionId)
 
         get.sessionId!! `should be equal to` sessionId
-        get.dia `should be equal to` pb.dia
-        get.sys `should be equal to` pb.sys
-        get.time `should be equal to` pb.time
+        get.dia `should be equal to` bp.dia
+        get.sys `should be equal to` bp.sys
+        get.time `should be equal to` bp.time
+        get.pulse `should be equal to` bp.pulse
     }
 
     @Test(expected = Exception::class)

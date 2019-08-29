@@ -22,6 +22,7 @@ import java.time.LocalDateTime
 class BloodPressures(
     val sys: Float,
     val dia: Float,
+    val pulse: Float,
     var sessionId: String? = null,
     val time: LocalDateTime = LocalDateTime.now()
 ) {
