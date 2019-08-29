@@ -57,7 +57,8 @@ class JwtAccessTokenManager(
                     "/blood-pressures",
                     "/heights",
                     "/weights",
-                    "/result"
+                    "/result",
+                    "/persons"
                 )
             )
             .withNotBefore(date)
