@@ -22,26 +22,40 @@ import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
 import hii.thing.api.dao.vital.height.InMemoryHeightsDao
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.vital.Height
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be equal to`
+import org.junit.Before
 import org.junit.Test
 
 class HeightsHistoryTest {
     private val heightsDao = InMemoryHeightsDao()
     private val registerStoreDao = InMemoryRegisterStoreDao()
-    private val heightsHistory = HeightsHistory(registerStoreDao, heightsDao)
+    private val heightsHistory = History(registerStoreDao) {
+        val item = heightsDao.getBy(it)
+        item to item.time
+    }
 
     val citizenId = "1234322340985"
     val citizenId2 = "4830288374203"
 
-    val height = Height(170.1F)
-    val height2 = Height(169.0F)
-    val height3 = Height(140.0F)
+    lateinit var height: Height
+    lateinit var height2: Height
+    lateinit var height3: Height
 
     companion object {
         var everInit = false
     }
 
-    init {
+    @Before
+    fun setUp() {
+        runBlocking {
+            height = Height(170.1F)
+            delay(10)
+            height2 = Height(169.0F)
+            delay(10)
+            height3 = Height(140.0F)
+        }
         if (!everInit) {
             initSetup()
             everInit = true
@@ -65,9 +79,9 @@ class HeightsHistoryTest {
         println(GsonJerseyProvider.hiiGson.toJson(get))
 
         get.size `should be equal to` 3
-        get[0].height `should be equal to` height.height
+        get[0].height `should be equal to` height3.height
         get[1].height `should be equal to` height2.height
-        get[2].height `should be equal to` height3.height
+        get[2].height `should be equal to` height.height
     }
 
     private fun initSetup() {

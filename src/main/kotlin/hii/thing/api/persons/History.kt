@@ -19,23 +19,27 @@ package hii.thing.api.persons
 
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.registerstore.RegisterStoreDao
-import hii.thing.api.dao.vital.height.HeightsDao
 import hii.thing.api.ignore
-import hii.thing.api.vital.Height
+import java.time.LocalDateTime
 import java.util.LinkedList
 
-class HeightsHistory(
+class History<T>(
     private val registerStoreDao: RegisterStoreDao = getDao(),
-    private val heightsDao: HeightsDao = getDao()
+    private val getItem: (sessionId: String) -> Pair<T, LocalDateTime>
 ) {
-
-    fun get(citizenId: String): List<Height> {
-        val heights = LinkedList<Height>()
+    fun get(citizenId: String): List<T> {
+        val itemList = LinkedList<Pair<T, LocalDateTime>>()
         registerStoreDao.getBy(citizenId).forEach { (session, _) ->
-            val height = ignore { heightsDao.getBy(session) }
-            if (height != null) heights.addFirst(height)
+            val item = ignore { getItem(session) }
+            if (item != null) itemList.addFirst(item)
         }
-
-        return heights
+        itemList.sortWith(Comparator { o1, o2 ->
+            when {
+                o1.second.isAfter(o2.second) -> -1
+                o1.second.isBefore(o2.second) -> 1
+                else -> 0
+            }
+        })
+        return itemList.map { it.first }
     }
 }
