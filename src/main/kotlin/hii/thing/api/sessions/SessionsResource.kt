@@ -19,6 +19,7 @@ package hii.thing.api.sessions
 
 import hii.thing.api.dao.getDao
 import hii.thing.api.dao.lastresult.LastResultDao
+import hii.thing.api.dao.registerstore.RegisterStoreDao
 import hii.thing.api.getLogger
 import hii.thing.api.hashText
 import hii.thing.api.ignore
@@ -44,7 +45,8 @@ import javax.ws.rs.core.SecurityContext
 
 class SessionsResource(
     private val sessionsManager: SessionsManager = JwtSessionsManager(),
-    private val lastResultDao: LastResultDao = getDao()
+    private val lastResultDao: LastResultDao = getDao(),
+    private val registerStoreDao: RegisterStoreDao = getDao()
 ) {
 
     @Context
@@ -54,14 +56,22 @@ class SessionsResource(
     @RolesAllowed("kiosk")
     fun newSessions(detail: CreateSessionDetail): Session {
         val userPrincipal = context.userPrincipal as ThingPrincipal
+        val preCitizenId = detail.citizenId.takeIf { !it.isNullOrBlank() }
+        val preSex = detail.sex ?: {
+            if (preCitizenId == null) null
+            else registerStoreDao.getBy(preCitizenId)
+                .filter { it.value.sex != null }
+                .values.firstOrNull()?.sex
+        }.invoke()
+
         val newDetail = // Repeat real deviceId
             CreateSessionDetail(
                 userPrincipal.deviceName,
-                detail.citizenId.takeIf { !it.isNullOrBlank() },
+                preCitizenId,
                 detail.citizenIdInput ?: UNDEFINED,
                 detail.birthDate,
                 detail.name,
-                detail.sex
+                preSex
             )
         val session = {
             val lastResult =
