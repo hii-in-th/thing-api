@@ -90,7 +90,8 @@ class SessionsResource(
                     newDetail.citizenId.hashText()
                 else
                     "anonymous"
-                }"
+                }\t" +
+                "age:${sessionsManager.getDetail(session.sessionId).age}"
         }
         session.subject?.shareableLink = null
         return session
