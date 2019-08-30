@@ -17,7 +17,6 @@
 
 package hii.thing.api
 
-import hii.thing.api.dao.DataSource
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -55,7 +54,7 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
     companion object {
         var count = 1
         lateinit var pgSql: EmbeddedPostgres
-        var dataSource: DataSource? = null
+        var poolDataSource: PoolDataSource? = null
         var url: String = ""
     }
 
@@ -63,7 +62,7 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
         count++
         getLogger().debug { "Count $count" }
         try {
-            dataSource!!.getConnection()
+            poolDataSource!!.getConnection()
         } catch (ex: KotlinNullPointerException) {
             createNewConnection()
         }
@@ -72,7 +71,7 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
     private fun createNewConnection(): Connection {
         pgSql = EmbeddedPostgres()
         url = pgSql.start("127.0.0.1", 27365, "postgres")
-        dataSource = DataSource(url, "postgres", "postgres", 1)
-        return dataSource!!.getConnection()
+        poolDataSource = PoolDataSource(url, "postgres", "postgres", 1)
+        return poolDataSource!!.getConnection()
     }
 }

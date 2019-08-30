@@ -18,8 +18,8 @@
 package hii.thing.api.vital.link
 
 import com.auth0.jwt.JWT
-import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.keypair.KeyPairManage
+import hii.thing.api.security.keypair.dao.DemoRSAKeyPairDao
 import org.amshove.kluent.`should be equal to`
 import org.junit.Before
 import org.junit.Test

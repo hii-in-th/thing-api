@@ -17,18 +17,18 @@
 
 package hii.thing.api.sessions
 
-import hii.thing.api.dao.getDao
-import hii.thing.api.dao.lastresult.LastResultDao
-import hii.thing.api.dao.registerstore.RegisterStoreDao
+import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.hashText
 import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
 import hii.thing.api.sessions.CreateSessionDetail.InputType.UNDEFINED
+import hii.thing.api.sessions.dao.recordsession.RecordSessionDao
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import hii.thing.api.vital.Result
 import hii.thing.api.vital.VitalResource
+import hii.thing.api.vital.dao.lastresult.LastResultDao
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -46,7 +46,7 @@ import javax.ws.rs.core.SecurityContext
 class SessionsResource(
     private val sessionsManager: SessionsManager = JwtSessionsManager(),
     private val lastResultDao: LastResultDao = getDao(),
-    private val registerStoreDao: RegisterStoreDao = getDao()
+    private val recordSessionDao: RecordSessionDao = getDao()
 ) {
 
     @Context
@@ -60,7 +60,7 @@ class SessionsResource(
         val preSex = detail.sex ?: {
             if (preCitizenId == null) null
             else {
-                runCatching { registerStoreDao.getBy(preCitizenId) }.getOrDefault(mapOf())
+                runCatching { recordSessionDao.getBy(preCitizenId) }.getOrDefault(mapOf())
                     .filter { it.value.sex != null }
                     .values.firstOrNull()?.sex
             }

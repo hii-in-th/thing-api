@@ -17,18 +17,18 @@
 
 package hii.thing.api.sessions.jwt
 
-import hii.thing.api.dao.getDao
-import hii.thing.api.dao.registerstore.RegisterStoreDao
-import hii.thing.api.dao.session.SessionsDao
+import hii.thing.api.getDao
 import hii.thing.api.hashText
 import hii.thing.api.security.JwtConst
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
+import hii.thing.api.sessions.dao.SessionsDao
+import hii.thing.api.sessions.dao.recordsession.RecordSessionDao
 import java.util.UUID
 
 class JwtSessionsManager(
     val sessionsDao: SessionsDao = getDao(),
-    val registerStoreManager: RegisterStoreDao = getDao()
+    val recordSessionManager: RecordSessionDao = getDao()
 ) : SessionsManager {
 
     override fun anonymousCreate(accessToken: String, deviceId: String): String {
@@ -41,7 +41,7 @@ class JwtSessionsManager(
 
     override fun create(accessToken: String, sessionDetail: CreateSessionDetail): String {
         val session = anonymousCreate(accessToken, sessionDetail.deviceId)
-        registerStoreManager.register(session, sessionDetail)
+        recordSessionManager.register(session, sessionDetail)
         return session
     }
 
@@ -53,10 +53,10 @@ class JwtSessionsManager(
         val jwt = JwtConst.decode(accessToken)
         require(jwt.subject == sessionDetail.deviceId)
         val session = getBy(accessToken)
-        return registerStoreManager.update(session, sessionDetail)
+        return recordSessionManager.update(session, sessionDetail)
     }
 
     override fun getDetail(session: String): CreateSessionDetail {
-        return registerStoreManager.get(session)
+        return recordSessionManager.get(session)
     }
 }

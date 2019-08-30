@@ -18,19 +18,19 @@
 package hii.thing.api.vital
 
 import hii.thing.api.config.cache.Cache
-import hii.thing.api.dao.getDao
-import hii.thing.api.dao.lastresult.GenUrl
-import hii.thing.api.dao.lastresult.LastResultDao
-import hii.thing.api.dao.refResultLinkLength
-import hii.thing.api.dao.registerstore.toJavaTime
-import hii.thing.api.dao.vital.bp.BloodPressuresDao
-import hii.thing.api.dao.vital.height.HeightsDao
-import hii.thing.api.dao.vital.weight.WeightDao
+import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.ignore
+import hii.thing.api.refResultLinkLength
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.SessionsManager
+import hii.thing.api.sessions.dao.recordsession.toJavaTime
 import hii.thing.api.sessions.jwt.JwtSessionsManager
+import hii.thing.api.vital.dao.bp.BloodPressuresDao
+import hii.thing.api.vital.dao.height.HeightsDao
+import hii.thing.api.vital.dao.lastresult.GenUrl
+import hii.thing.api.vital.dao.lastresult.LastResultDao
+import hii.thing.api.vital.dao.weight.WeightDao
 import hii.thing.api.vital.link.JwtLink
 import hii.thing.api.vital.link.Link
 import kotlinx.coroutines.launch
@@ -164,7 +164,7 @@ class VitalResource(
         val weight = ignore { weightDao.getBy(session) }
         val bp = ignore { pbDao.getBy(session) }
 
-        val userDetail = kotlin.runCatching { sessionsManager.getDetail(session) }.getOrNull()
+        val userDetail = runCatching { sessionsManager.getDetail(session) }.getOrNull()
         val age: Int? = userDetail?.birthDate?.let { calAge(it.toJavaTime()) }
 
         val result = Result(age, height?.height, weight?.weight, bp, userDetail?.sex?.toString())

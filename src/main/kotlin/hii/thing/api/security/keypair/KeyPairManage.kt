@@ -17,8 +17,8 @@
 
 package hii.thing.api.security.keypair
 
-import hii.thing.api.dao.keyspair.RSAKeyPairDao
 import hii.thing.api.getLogger
+import hii.thing.api.security.keypair.dao.RSAKeyPairDao
 import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -27,7 +27,7 @@ object KeyPairManage : KeyPair {
     private lateinit var keyPairDao: RSAKeyPairDao
 
     fun setUp(dao: RSAKeyPairDao): KeyPair {
-        if (kotlin.runCatching { keyPairDao }.isFailure)
+        if (runCatching { keyPairDao }.isFailure)
             keyPairDao = dao
         return this
     }

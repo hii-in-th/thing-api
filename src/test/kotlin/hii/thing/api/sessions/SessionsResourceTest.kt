@@ -20,12 +20,12 @@ package hii.thing.api.sessions
 import com.google.gson.Gson
 import hii.thing.api.InMemoryTestRule
 import hii.thing.api.config.GsonJerseyProvider
-import hii.thing.api.dao.lastresult.InMemoryLastResultDao
 import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
 import hii.thing.api.sessions.CreateSessionDetail.InputType.UNDEFINED
 import hii.thing.api.sessions.mock.MockRoleTokenSecurity
 import hii.thing.api.sessions.mock.MockTokenManager
 import hii.thing.api.sessions.mock.MockTokenSecurityContext
+import hii.thing.api.vital.dao.lastresult.InMemoryLastResultDao
 import org.amshove.kluent.`should equal`
 import org.glassfish.jersey.server.ResourceConfig
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature

@@ -18,10 +18,10 @@
 package hii.thing.api.persons
 
 import hii.thing.api.config.GsonJerseyProvider
-import hii.thing.api.dao.registerstore.InMemoryRegisterStoreDao
-import hii.thing.api.dao.vital.height.InMemoryHeightsDao
 import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sessions.dao.recordsession.InMemoryRecordSessionDao
 import hii.thing.api.vital.Height
+import hii.thing.api.vital.dao.height.InMemoryHeightsDao
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.`should be equal to`
@@ -30,7 +30,7 @@ import org.junit.Test
 
 class HeightsHistoryTest {
     private val heightsDao = InMemoryHeightsDao()
-    private val registerStoreDao = InMemoryRegisterStoreDao()
+    private val registerStoreDao = InMemoryRecordSessionDao()
     private val heightsHistory = History(registerStoreDao) {
         val item = heightsDao.getBy(it)
         item to item.time

@@ -17,9 +17,8 @@
 
 package hii.thing.api
 
-import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
-import hii.thing.api.dao.standalone
 import hii.thing.api.security.keypair.KeyPairManage
+import hii.thing.api.security.keypair.dao.DemoRSAKeyPairDao
 
 class InMemoryTestRule {
     init {

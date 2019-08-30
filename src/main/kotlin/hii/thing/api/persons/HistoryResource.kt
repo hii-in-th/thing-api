@@ -18,18 +18,18 @@
 package hii.thing.api.persons
 
 import hii.thing.api.config.cache.Cache
-import hii.thing.api.dao.getDao
-import hii.thing.api.dao.registerstore.RegisterStoreDao
-import hii.thing.api.dao.vital.bp.BloodPressuresDao
-import hii.thing.api.dao.vital.height.HeightsDao
-import hii.thing.api.dao.vital.weight.WeightDao
+import hii.thing.api.getDao
 import hii.thing.api.security.token.ThingPrincipal
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
+import hii.thing.api.sessions.dao.recordsession.RecordSessionDao
 import hii.thing.api.sessions.jwt.JwtSessionsManager
 import hii.thing.api.vital.BloodPressures
 import hii.thing.api.vital.Height
 import hii.thing.api.vital.Weight
+import hii.thing.api.vital.dao.bp.BloodPressuresDao
+import hii.thing.api.vital.dao.height.HeightsDao
+import hii.thing.api.vital.dao.weight.WeightDao
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
@@ -45,7 +45,7 @@ import javax.ws.rs.core.SecurityContext
 @Consumes(MediaType.APPLICATION_JSON)
 class HistoryResource(
     private val sessionsManager: SessionsManager = JwtSessionsManager(),
-    private val registerStoreDao: RegisterStoreDao = getDao()
+    private val recordSessionDao: RecordSessionDao = getDao()
 ) {
     @Context
     lateinit var context: SecurityContext
@@ -91,7 +91,7 @@ class HistoryResource(
     private fun getRegisterDetail(): CreateSessionDetail {
         val userPrincipal = (context.userPrincipal as ThingPrincipal)
         val sessionId = sessionsManager.getBy(userPrincipal.accessToken)
-        val detail = registerStoreDao.get(sessionId)
+        val detail = recordSessionDao.get(sessionId)
         return detail
     }
 }

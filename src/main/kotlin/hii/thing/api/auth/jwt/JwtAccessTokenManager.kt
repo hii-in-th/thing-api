@@ -21,8 +21,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.auth.AccessToken
 import hii.thing.api.auth.AccessTokenManager
-import hii.thing.api.dao.apikey.DeviceTokenDao
-import hii.thing.api.dao.getDao
+import hii.thing.api.auth.dao.devicetoken.DeviceTokenDao
+import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.security.JwtConst
 import java.security.interfaces.RSAPrivateKey

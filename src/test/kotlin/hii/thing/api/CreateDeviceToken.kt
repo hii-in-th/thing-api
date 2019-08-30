@@ -18,10 +18,10 @@
 package hii.thing.api
 
 import hii.thing.api.auth.DeviceToken
-import hii.thing.api.dao.apikey.DeviceTokenDao
-import hii.thing.api.dao.apikey.JwtDeviceTokenDao
-import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
+import hii.thing.api.auth.dao.devicetoken.DeviceTokenDao
+import hii.thing.api.auth.dao.devicetoken.JwtDeviceTokenDao
 import hii.thing.api.security.keypair.KeyPairManage
+import hii.thing.api.security.keypair.dao.StringRSAKeyPairDao
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test

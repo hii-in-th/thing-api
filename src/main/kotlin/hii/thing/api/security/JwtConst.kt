@@ -22,7 +22,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.auth0.jwt.interfaces.RSAKeyProvider
-import hii.thing.api.dao.getDao
+import hii.thing.api.getDao
 import hii.thing.api.security.keypair.KeyPair
 import hii.thing.api.security.keypair.KeyPairManage
 import kotlinx.coroutines.launch

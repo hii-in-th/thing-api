@@ -17,19 +17,19 @@
 
 package hii.thing.api.persons
 
-import hii.thing.api.dao.getDao
-import hii.thing.api.dao.registerstore.RegisterStoreDao
+import hii.thing.api.getDao
 import hii.thing.api.ignore
+import hii.thing.api.sessions.dao.recordsession.RecordSessionDao
 import java.time.LocalDateTime
 import java.util.LinkedList
 
 class History<T>(
-    private val registerStoreDao: RegisterStoreDao = getDao(),
+    private val recordSessionDao: RecordSessionDao = getDao(),
     private val getItem: (sessionId: String) -> Pair<T, LocalDateTime>
 ) {
     fun get(citizenId: String): List<T> {
         val itemList = LinkedList<Pair<T, LocalDateTime>>()
-        registerStoreDao.getBy(citizenId).forEach { (session, _) ->
+        recordSessionDao.getBy(citizenId).forEach { (session, _) ->
             val item = ignore { getItem(session) }
             if (item != null) itemList.addFirst(item)
         }

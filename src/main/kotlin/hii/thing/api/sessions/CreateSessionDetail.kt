@@ -46,11 +46,11 @@ data class CreateSessionDetail(
             .year
     }
 
-    enum class Sex() {
+    enum class Sex {
         MALE, FEMALE, UNDEFINED
     }
 
-    enum class InputType() {
+    enum class InputType {
         CARD, TYPING, UNDEFINED
     }
 }
