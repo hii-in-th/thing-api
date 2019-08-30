@@ -19,7 +19,7 @@ package hii.thing.api.auth.jwt
 
 import com.auth0.jwt.JWT
 import hii.thing.api.InMemoryTestRule
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.auth.NotFoundToken
 import hii.thing.api.dao.apikey.DeviceTokenDao
 import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
@@ -38,8 +38,8 @@ class JwtAccessTokenManagerTest {
     /* ktlint-enable max-line-length */
 
     val tokenDao = object : DeviceTokenDao {
-        override fun getDeviceBy(baseToken: String): Device {
-            return if (baseToken == baseKey) Device(
+        override fun getDeviceBy(baseToken: String): DeviceToken {
+            return if (baseToken == baseKey) DeviceToken(
                 "hii/d121",
                 baseToken,
                 listOf("kios"),
@@ -49,7 +49,7 @@ class JwtAccessTokenManagerTest {
                 throw NotFoundToken("Not found token")
         }
 
-        override fun registerDevice(device: Device): Device = device
+        override fun registerDevice(deviceToken: DeviceToken): DeviceToken = deviceToken
     }
     val jwtAccessTokenManager = JwtAccessTokenManager(tokenDao)
 

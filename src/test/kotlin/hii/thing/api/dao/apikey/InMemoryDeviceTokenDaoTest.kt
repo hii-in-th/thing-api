@@ -17,7 +17,7 @@
 
 package hii.thing.api.dao.apikey
 
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.junit.Test
@@ -26,7 +26,7 @@ class InMemoryDeviceTokenDaoTest {
 
     val deviceTokenDao: DeviceTokenDao = InMemoryDeviceTokenDao()
 
-    val device = Device(
+    val device = DeviceToken(
         "hii/007",
         "abcde",
         listOf("kios"),

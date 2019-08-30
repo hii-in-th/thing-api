@@ -17,7 +17,7 @@
 
 package hii.thing.api
 
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.dao.apikey.DeviceTokenDao
 import hii.thing.api.dao.apikey.JwtDeviceTokenDao
 import hii.thing.api.dao.keyspair.StringRSAKeyPairDao
@@ -48,7 +48,7 @@ import org.junit.Test
  */
 @Ignore("สำหรับสร้าง Device token")
 class CreateDeviceToken {
-    val device = Device(
+    val device = DeviceToken(
         deviceName = "dev/001",
         baseToken = "", // ไม่ต้องใส่
         roles = listOf("kiosk"),

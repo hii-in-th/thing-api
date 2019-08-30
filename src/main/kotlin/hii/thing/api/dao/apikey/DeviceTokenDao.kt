@@ -17,13 +17,13 @@
 
 package hii.thing.api.dao.apikey
 
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.dao.Dao
 
 /**
  * สำหรับสร้าง และ ดึงข้อมูลของ Device จาก Token
  */
 interface DeviceTokenDao : Dao {
-    fun getDeviceBy(baseToken: String): Device
-    fun registerDevice(device: Device): Device
+    fun getDeviceBy(baseToken: String): DeviceToken
+    fun registerDevice(deviceToken: DeviceToken): DeviceToken
 }

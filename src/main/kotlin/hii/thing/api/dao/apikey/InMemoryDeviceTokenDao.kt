@@ -17,25 +17,25 @@
 
 package hii.thing.api.dao.apikey
 
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.auth.NotFoundToken
 
 class InMemoryDeviceTokenDao : DeviceTokenDao {
-    override fun getDeviceBy(baseToken: String): Device {
+    override fun getDeviceBy(baseToken: String): DeviceToken {
         return storage[baseToken] ?: throw NotFoundToken("ไม่พบ Api key")
     }
 
-    override fun registerDevice(device: Device): Device {
-        storage[device.baseToken] = device
-        return device
+    override fun registerDevice(deviceToken: DeviceToken): DeviceToken {
+        storage[deviceToken.baseToken] = deviceToken
+        return deviceToken
     }
 
     companion object {
-        private val storage = linkedMapOf<String, Device>().apply {
-            put("abcde", Device("hii/07", "abcde", listOf("kiosk"), listOf("/vital", "/height", "/bmi")))
-            put("ab001", Device("hii/001", "ab001", listOf("kiosk"), listOf("/vital")))
-            put("ab002", Device("hii/002", "ab002", listOf("kiosk"), listOf("/height")))
-            put("ab003", Device("hii/003", "ab003", listOf("kiosk"), listOf("/bmi")))
+        private val storage = linkedMapOf<String, DeviceToken>().apply {
+            put("abcde", DeviceToken("hii/07", "abcde", listOf("kiosk"), listOf("/vital", "/height", "/bmi")))
+            put("ab001", DeviceToken("hii/001", "ab001", listOf("kiosk"), listOf("/vital")))
+            put("ab002", DeviceToken("hii/002", "ab002", listOf("kiosk"), listOf("/height")))
+            put("ab003", DeviceToken("hii/003", "ab003", listOf("kiosk"), listOf("/bmi")))
         }
     }
 }

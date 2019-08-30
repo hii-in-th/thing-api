@@ -17,7 +17,7 @@
 
 package hii.thing.api.dao.apikey
 
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.auth.NotFoundToken
 import hii.thing.api.dao.Now
 import org.jetbrains.exposed.sql.Database
@@ -34,18 +34,18 @@ class PgSqlDeviceTokenDao(connection: () -> Connection) : DeviceTokenDao {
         Database.connect(connection)
     }
 
-    override fun getDeviceBy(baseToken: String): Device {
-        var deviceOut: Device? = null
+    override fun getDeviceBy(baseToken: String): DeviceToken {
+        var deviceTokenOut: DeviceToken? = null
         transaction {
             SchemaUtils.create(SqlApiKeyStore)
             SqlApiKeyStore.select { SqlApiKeyStore.baseToken eq baseToken }.limit(1)
-                .map { deviceOut = mapResult(it) }
+                .map { deviceTokenOut = mapResult(it) }
         }
-        return deviceOut ?: throw NotFoundToken("ไม่พบ Api key")
+        return deviceTokenOut ?: throw NotFoundToken("ไม่พบ Api key")
     }
 
-    private fun mapResult(it: ResultRow): Device {
-        return Device(
+    private fun mapResult(it: ResultRow): DeviceToken {
+        return DeviceToken(
             it[SqlApiKeyStore.deviceName],
             it[SqlApiKeyStore.baseToken],
             it[SqlApiKeyStore.roles].toList(),
@@ -54,32 +54,32 @@ class PgSqlDeviceTokenDao(connection: () -> Connection) : DeviceTokenDao {
         )
     }
 
-    override fun registerDevice(device: Device): Device {
-        var deviceOut: Device? = null
+    override fun registerDevice(deviceToken: DeviceToken): DeviceToken {
+        var deviceTokenOut: DeviceToken? = null
         transaction {
             SchemaUtils.create(SqlApiKeyStore)
-            require(runCatching { get(device.deviceID) }.isFailure)
+            require(runCatching { get(deviceToken.deviceID) }.isFailure)
             SqlApiKeyStore.insert {
-                it[deviceId] = device.deviceID
-                it[deviceName] = device.deviceName
-                it[baseToken] = device.baseToken
-                it[roles] = device.roles.toStringRawText()
-                it[scope] = device.scope.toStringRawText()
+                it[deviceId] = deviceToken.deviceID
+                it[deviceName] = deviceToken.deviceName
+                it[baseToken] = deviceToken.baseToken
+                it[roles] = deviceToken.roles.toStringRawText()
+                it[scope] = deviceToken.scope.toStringRawText()
                 it[time] = Now()
             }
-            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq device.deviceID }.limit(1)
-                .map { deviceOut = mapResult(it) }
+            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceToken.deviceID }.limit(1)
+                .map { deviceTokenOut = mapResult(it) }
         }
-        return deviceOut!!
+        return deviceTokenOut!!
     }
 
-    private fun get(deviceId: String): Device {
-        var deviceOut: Device? = null
+    private fun get(deviceId: String): DeviceToken {
+        var deviceTokenOut: DeviceToken? = null
         transaction {
             SchemaUtils.create(SqlApiKeyStore)
-            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceId }.map { deviceOut = mapResult(it) }
+            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceId }.map { deviceTokenOut = mapResult(it) }
         }
-        return deviceOut!!
+        return deviceTokenOut!!
     }
 
     private fun List<String>.toStringRawText(): String {

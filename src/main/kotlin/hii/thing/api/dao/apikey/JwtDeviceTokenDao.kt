@@ -19,7 +19,7 @@ package hii.thing.api.dao.apikey
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.security.JwtConst
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
@@ -27,19 +27,19 @@ import java.util.Date
 import java.util.UUID
 
 class JwtDeviceTokenDao : DeviceTokenDao {
-    override fun getDeviceBy(baseToken: String): Device {
+    override fun getDeviceBy(baseToken: String): DeviceToken {
         val jwt = JwtConst.decodeAndVerify(baseToken)
 
         val role = jwt.claims["role"]!!.asArray(String::class.java).toList()
         val scope = jwt.claims["scope"]!!.asArray(String::class.java).toList()
-        return Device(jwt.subject, baseToken, role, scope)
+        return DeviceToken(jwt.subject, baseToken, role, scope)
     }
 
     /**
      * Device token not expire.
      */
-    override fun registerDevice(device: Device): Device {
-        require(device.baseToken.isBlank()) { "Jwt device token auto gen base token. baseToken is bank." }
+    override fun registerDevice(deviceToken: DeviceToken): DeviceToken {
+        require(deviceToken.baseToken.isBlank()) { "Jwt device token auto gen base token. baseToken is bank." }
         val jwtId = UUID.randomUUID().toString()
 
         val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
@@ -51,10 +51,10 @@ class JwtDeviceTokenDao : DeviceTokenDao {
             .withIssuer(JwtConst.issuer)
             .withIssuedAt(date)
             .withAudience(JwtConst.audience)
-            .withSubject(device.deviceName)
+            .withSubject(deviceToken.deviceName)
             .withJWTId(jwtId)
-            .withArrayClaim("role", device.roles.toTypedArray())
-            .withArrayClaim("scope", device.scope.toTypedArray())
+            .withArrayClaim("role", deviceToken.roles.toTypedArray())
+            .withArrayClaim("scope", deviceToken.scope.toTypedArray())
             .withNotBefore(date)
             .sign(algorithm)
 

@@ -18,7 +18,7 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.InMemoryTestRule
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import hii.thing.api.dao.keyspair.DemoRSAKeyPairDao
 import hii.thing.api.security.keypair.KeyPairManage
 import org.amshove.kluent.`should be equal to`
@@ -32,7 +32,7 @@ class JwtDeviceTokenDaoTest {
 
     val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()
 
-    val device = Device(
+    val device = DeviceToken(
         "hii/007",
         "",
         listOf("kios"),

@@ -19,7 +19,7 @@ package hii.thing.api.auth
 
 import java.util.UUID
 
-data class Device(
+data class DeviceToken(
     val deviceName: String, // sub
     val baseToken: String,
     val roles: List<String>,

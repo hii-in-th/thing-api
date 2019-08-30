@@ -18,7 +18,7 @@
 package hii.thing.api.dao.apikey
 
 import hii.thing.api.PgSqlTestRule
-import hii.thing.api.auth.Device
+import hii.thing.api.auth.DeviceToken
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.jetbrains.exposed.sql.Table
@@ -37,7 +37,7 @@ class PgSqlDeviceTokenDaoTest {
         deviceTokenDao = PgSqlDeviceTokenDao(pgsql.connection)
     }
 
-    val device = Device(
+    val device = DeviceToken(
         "hii/007",
         "abcde",
         listOf("kios"),
