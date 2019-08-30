@@ -18,5 +18,5 @@
 package hii.thing.api.auth
 
 interface AccessTokenManager {
-    fun create(baseToken: String): AccessToken
+    fun create(deviceKey: String): AccessToken
 }

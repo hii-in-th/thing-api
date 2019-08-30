@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.dao.devicetoken
+package hii.thing.api.auth.dao.devicekey
 
 import hii.thing.api.Now
-import hii.thing.api.auth.DeviceToken
+import hii.thing.api.auth.DeviceKeyDetail
 import hii.thing.api.auth.NotFoundToken
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
@@ -28,24 +28,24 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 
-class PgSqlDeviceTokenDao(connection: () -> Connection) : DeviceTokenDao {
+class PgSqlDeviceKeyDao(connection: () -> Connection) : DeviceKeyDao {
 
     init {
         Database.connect(connection)
     }
 
-    override fun getDeviceBy(baseToken: String): DeviceToken {
-        var deviceTokenOut: DeviceToken? = null
+    override fun getDeviceBy(deviceKey: String): DeviceKeyDetail {
+        var deviceKeyDetailOut: DeviceKeyDetail? = null
         transaction {
             SchemaUtils.create(SqlApiKeyStore)
-            SqlApiKeyStore.select { SqlApiKeyStore.baseToken eq baseToken }.limit(1)
-                .map { deviceTokenOut = mapResult(it) }
+            SqlApiKeyStore.select { SqlApiKeyStore.baseToken eq deviceKey }.limit(1)
+                .map { deviceKeyDetailOut = mapResult(it) }
         }
-        return deviceTokenOut ?: throw NotFoundToken("ไม่พบ Api key")
+        return deviceKeyDetailOut ?: throw NotFoundToken("ไม่พบ Api key")
     }
 
-    private fun mapResult(it: ResultRow): DeviceToken {
-        return DeviceToken(
+    private fun mapResult(it: ResultRow): DeviceKeyDetail {
+        return DeviceKeyDetail(
             it[SqlApiKeyStore.deviceName],
             it[SqlApiKeyStore.baseToken],
             it[SqlApiKeyStore.roles].toList(),
@@ -54,32 +54,32 @@ class PgSqlDeviceTokenDao(connection: () -> Connection) : DeviceTokenDao {
         )
     }
 
-    override fun registerDevice(deviceToken: DeviceToken): DeviceToken {
-        var deviceTokenOut: DeviceToken? = null
+    override fun registerDevice(deviceKeyDetail: DeviceKeyDetail): DeviceKeyDetail {
+        var deviceKeyDetailOut: DeviceKeyDetail? = null
         transaction {
             SchemaUtils.create(SqlApiKeyStore)
-            require(runCatching { get(deviceToken.deviceID) }.isFailure)
+            require(runCatching { get(deviceKeyDetail.deviceID) }.isFailure)
             SqlApiKeyStore.insert {
-                it[deviceId] = deviceToken.deviceID
-                it[deviceName] = deviceToken.deviceName
-                it[baseToken] = deviceToken.baseToken
-                it[roles] = deviceToken.roles.toStringRawText()
-                it[scope] = deviceToken.scope.toStringRawText()
+                it[deviceId] = deviceKeyDetail.deviceID
+                it[deviceName] = deviceKeyDetail.deviceName
+                it[baseToken] = deviceKeyDetail.deviceKey
+                it[roles] = deviceKeyDetail.roles.toStringRawText()
+                it[scope] = deviceKeyDetail.scope.toStringRawText()
                 it[time] = Now()
             }
-            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceToken.deviceID }.limit(1)
-                .map { deviceTokenOut = mapResult(it) }
+            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceKeyDetail.deviceID }.limit(1)
+                .map { deviceKeyDetailOut = mapResult(it) }
         }
-        return deviceTokenOut!!
+        return deviceKeyDetailOut!!
     }
 
-    private fun get(deviceId: String): DeviceToken {
-        var deviceTokenOut: DeviceToken? = null
+    private fun get(deviceId: String): DeviceKeyDetail {
+        var deviceKeyDetailOut: DeviceKeyDetail? = null
         transaction {
             SchemaUtils.create(SqlApiKeyStore)
-            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceId }.map { deviceTokenOut = mapResult(it) }
+            SqlApiKeyStore.select { SqlApiKeyStore.deviceId eq deviceId }.map { deviceKeyDetailOut = mapResult(it) }
         }
-        return deviceTokenOut!!
+        return deviceKeyDetailOut!!
     }
 
     private fun List<String>.toStringRawText(): String {

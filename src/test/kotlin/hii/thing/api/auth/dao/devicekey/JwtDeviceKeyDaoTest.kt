@@ -15,48 +15,48 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.dao.devicetoken
+package hii.thing.api.auth.dao.devicekey
 
-import hii.thing.api.PgSqlTestRule
-import hii.thing.api.auth.DeviceToken
+import hii.thing.api.InMemoryTestRule
+import hii.thing.api.auth.DeviceKeyDetail
+import hii.thing.api.security.keypair.KeyPairManage
+import hii.thing.api.security.keypair.dao.DemoRSAKeyPairDao
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
-import org.jetbrains.exposed.sql.Table
+import org.amshove.kluent.`should not equal`
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
-class PgSqlDeviceTokenDaoTest {
-    @JvmField
-    @Rule
-    val pgsql = PgSqlTestRule(Table("keystore"))
-    lateinit var deviceTokenDao: DeviceTokenDao
+class JwtDeviceKeyDaoTest {
+    val rule = InMemoryTestRule()
 
-    @Before
-    fun setUp() {
-        deviceTokenDao = PgSqlDeviceTokenDao(pgsql.connection)
-    }
+    val deviceKeyDao: DeviceKeyDao = JwtDeviceKeyDao()
 
-    val device = DeviceToken(
+    val device = DeviceKeyDetail(
         "hii/007",
-        "abcde",
+        "",
         listOf("kios"),
         listOf("/vital", "/height", "/bmi")
     )
 
+    @Before
+    fun setUp() {
+        KeyPairManage.setUp(DemoRSAKeyPairDao())
+    }
+
     @Test
     fun registerDevice() {
-        deviceTokenDao.registerDevice(device)
+        deviceKeyDao.registerDevice(device)
     }
 
     @Test
     fun registerAndGet() {
-        deviceTokenDao.registerDevice(device)
-        val getDevice = deviceTokenDao.getDeviceBy(device.baseToken)
+        val register = deviceKeyDao.registerDevice(device)
+        val getDevice = deviceKeyDao.getDeviceBy(register.deviceKey)
 
-        getDevice.deviceID `should be equal to` device.deviceID
+        getDevice.deviceID `should not equal` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName
-        getDevice.baseToken `should be equal to` device.baseToken
+        getDevice.deviceKey `should not equal` device.deviceKey
         getDevice.roles `should equal` device.roles
         getDevice.scope `should equal` device.scope
     }

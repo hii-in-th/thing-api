@@ -15,48 +15,37 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.dao.devicetoken
+package hii.thing.api.auth.dao.devicekey
 
-import hii.thing.api.InMemoryTestRule
-import hii.thing.api.auth.DeviceToken
-import hii.thing.api.security.keypair.KeyPairManage
-import hii.thing.api.security.keypair.dao.DemoRSAKeyPairDao
+import hii.thing.api.auth.DeviceKeyDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
-import org.amshove.kluent.`should not equal`
-import org.junit.Before
 import org.junit.Test
 
-class JwtDeviceTokenDaoTest {
-    val rule = InMemoryTestRule()
+class InMemoryDeviceKeyDaoTest {
 
-    val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()
+    val deviceKeyDao: DeviceKeyDao = InMemoryDeviceKeyDao()
 
-    val device = DeviceToken(
+    val device = DeviceKeyDetail(
         "hii/007",
-        "",
+        "abcde",
         listOf("kios"),
         listOf("/vital", "/height", "/bmi")
     )
 
-    @Before
-    fun setUp() {
-        KeyPairManage.setUp(DemoRSAKeyPairDao())
-    }
-
     @Test
     fun registerDevice() {
-        deviceTokenDao.registerDevice(device)
+        deviceKeyDao.registerDevice(device)
     }
 
     @Test
     fun registerAndGet() {
-        val register = deviceTokenDao.registerDevice(device)
-        val getDevice = deviceTokenDao.getDeviceBy(register.baseToken)
+        deviceKeyDao.registerDevice(device)
+        val getDevice = deviceKeyDao.getDeviceBy(device.deviceKey)
 
-        getDevice.deviceID `should not equal` device.deviceID
+        getDevice.deviceID `should be equal to` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName
-        getDevice.baseToken `should not equal` device.baseToken
+        getDevice.deviceKey `should be equal to` device.deviceKey
         getDevice.roles `should equal` device.roles
         getDevice.scope `should equal` device.scope
     }

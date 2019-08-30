@@ -15,15 +15,14 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.dao.devicetoken
+package hii.thing.api.auth
 
-import hii.thing.api.Dao
-import hii.thing.api.auth.DeviceToken
+import java.util.UUID
 
-/**
- * สำหรับสร้าง และ ดึงข้อมูลของ Device จาก Token
- */
-interface DeviceTokenDao : Dao {
-    fun getDeviceBy(baseToken: String): DeviceToken
-    fun registerDevice(deviceToken: DeviceToken): DeviceToken
-}
+data class DeviceKeyDetail(
+    val deviceName: String, // sub
+    val deviceKey: String,
+    val roles: List<String>,
+    val scope: List<String>,
+    val deviceID: String = UUID.randomUUID().toString()
+)

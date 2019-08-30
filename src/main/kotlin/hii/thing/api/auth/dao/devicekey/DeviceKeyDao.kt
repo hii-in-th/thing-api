@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.dao.devicetoken
+package hii.thing.api.auth.dao.devicekey
 
-import org.jetbrains.exposed.sql.Table
+import hii.thing.api.Dao
+import hii.thing.api.auth.DeviceKeyDetail
 
-internal object SqlApiKeyStore : Table("keystore") {
-    val deviceId = varchar("device_id", 36).primaryKey(0).primaryKey(1)
-    val time = datetime("time").primaryKey(0)
-    val deviceName = varchar("name", 255) // sub
-    val baseToken = varchar("api_key", 500)
-    val roles = varchar("roles", 255)
-    val scope = varchar("scope", 255)
+/**
+ * สำหรับสร้าง และ ดึงข้อมูลของ Device จาก Token
+ */
+interface DeviceKeyDao : Dao {
+    fun getDeviceBy(deviceKey: String): DeviceKeyDetail
+    fun registerDevice(deviceKeyDetail: DeviceKeyDetail): DeviceKeyDetail
 }

@@ -15,18 +15,29 @@
  * limitations under the License.
  */
 
-package hii.thing.api.auth.dao.devicetoken
+package hii.thing.api.auth.dao.devicekey
 
-import hii.thing.api.auth.DeviceToken
+import hii.thing.api.PgSqlTestRule
+import hii.thing.api.auth.DeviceKeyDetail
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
+import org.jetbrains.exposed.sql.Table
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
-class InMemoryDeviceTokenDaoTest {
+class PgSqlDeviceKeyDaoTest {
+    @JvmField
+    @Rule
+    val pgsql = PgSqlTestRule(Table("keystore"))
+    lateinit var deviceKeyDao: DeviceKeyDao
 
-    val deviceTokenDao: DeviceTokenDao = InMemoryDeviceTokenDao()
+    @Before
+    fun setUp() {
+        deviceKeyDao = PgSqlDeviceKeyDao(pgsql.connection)
+    }
 
-    val device = DeviceToken(
+    val device = DeviceKeyDetail(
         "hii/007",
         "abcde",
         listOf("kios"),
@@ -35,17 +46,17 @@ class InMemoryDeviceTokenDaoTest {
 
     @Test
     fun registerDevice() {
-        deviceTokenDao.registerDevice(device)
+        deviceKeyDao.registerDevice(device)
     }
 
     @Test
     fun registerAndGet() {
-        deviceTokenDao.registerDevice(device)
-        val getDevice = deviceTokenDao.getDeviceBy(device.baseToken)
+        deviceKeyDao.registerDevice(device)
+        val getDevice = deviceKeyDao.getDeviceBy(device.deviceKey)
 
         getDevice.deviceID `should be equal to` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName
-        getDevice.baseToken `should be equal to` device.baseToken
+        getDevice.deviceKey `should be equal to` device.deviceKey
         getDevice.roles `should equal` device.roles
         getDevice.scope `should equal` device.scope
     }

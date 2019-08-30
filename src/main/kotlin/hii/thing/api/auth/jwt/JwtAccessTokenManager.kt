@@ -21,7 +21,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.auth.AccessToken
 import hii.thing.api.auth.AccessTokenManager
-import hii.thing.api.auth.dao.devicetoken.DeviceTokenDao
+import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
 import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.security.JwtConst
@@ -31,10 +31,10 @@ import java.util.Date
 import java.util.UUID
 
 class JwtAccessTokenManager(
-    val deviceTokenDao: DeviceTokenDao = getDao()
+    val deviceKeyDao: DeviceKeyDao = getDao()
 ) : AccessTokenManager {
-    override fun create(baseToken: String): AccessToken {
-        val device = deviceTokenDao.getDeviceBy(baseToken)
+    override fun create(deviceKey: String): AccessToken {
+        val device = deviceKeyDao.getDeviceBy(deviceKey)
         val jwtId = UUID.randomUUID().toString()
 
         val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey

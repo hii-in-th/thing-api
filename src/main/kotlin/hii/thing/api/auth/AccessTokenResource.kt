@@ -62,13 +62,13 @@ class AccessTokenResource(
         require(bearer.startsWith("Bearer ")) { "รูปแบบ Authorization ใน http header ไม่ถูกต้อง" }
         logger.debug { "Bearer $bearer" }
 
-        val baseKey = bearer.replaceFirst("Bearer ", "").trim().takeIf { it.isNotBlank() }
-        require(!baseKey.isNullOrBlank()) { "ไม่พบ Base token ใน Authorization" }
-        logger.debug { "Base token $baseKey" }
+        val deviceKey = bearer.replaceFirst("Bearer ", "").trim().takeIf { it.isNotBlank() }
+        require(!deviceKey.isNullOrBlank()) { "ไม่พบ Base token ใน Authorization" }
+        logger.debug { "Base token $deviceKey" }
 
-        val create = managerAccess.create(baseKey)
+        val create = managerAccess.create(deviceKey)
         logger.info {
-            val userPrincipal = (context.userPrincipal as ThingPrincipal)
+            val userPrincipal = context.userPrincipal as ThingPrincipal
             "Auth\tName:${userPrincipal.deviceName}"
         }
         return create

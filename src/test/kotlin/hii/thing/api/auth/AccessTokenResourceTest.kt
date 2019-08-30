@@ -33,7 +33,7 @@ class AccessTokenResourceTest : JerseyTest() {
     val rule = InMemoryTestRule()
 
     /* ktlint-disable max-line-length */
-    val baseKey =
+    val deviceKey =
         """eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoLmhpaS5pbi50aCIsImlhdCI6MTU1OTcxMzA2NSwiZXhwIjoxNTkxMjQ5MTk3LCJhdWQiOiJhdXRoLmhpaS5pbi50aCIsInN1YiI6ImRldmljZXMvMTA1NDg3MTExIiwicm9sZSI6Imtpb3NrIiwianRpIjoiNWI5YmNmNDMtZWRhOC00MjAwLWI5MzgtY2RiMDUwNjMxMmRkIn0.YpGLky41UHwtLGBlbhUUYerKz0SD0-Ff3PapUde-JhDphf9LzfiJ9NfCjUdqagat7YY_HAWv_RJf6xNUcl3ZLw""".trimIndent()
     val accessToken =
         """eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoLmhpaS5pbi50aCIsImlhdCI6MTU1OTcxMzA2NSwiZXhwIjoxNTU5NzE0MjY4LCJhdWQiOiJ2aXRhbC5oaWkuaW4udGgiLCJzdWIiOiJkZXZpY2VzLzEwNTQ4NzExMSIsInJvbGUiOiJraW9zayIsImp0aSI6ImE4Y2E1ZGUyLTg3NTItMTFlOS1iYzQyLTUyNmFmNzc2NGY2NCJ9.D9L65_f4dpFMkOpzuguWpg0fZq2olSOLaYqTVNXzslPFgVaLst6oqkZYRmaWrsWxXxTG0orCqIboovn3jeHhmg""".trimMargin()
@@ -41,8 +41,8 @@ class AccessTokenResourceTest : JerseyTest() {
 
     override fun configure(): Application {
         mouckAccessTokenManager = object : AccessTokenManager {
-            override fun create(baseToken: String): AccessToken {
-                if (baseToken == baseKey)
+            override fun create(deviceKey: String): AccessToken {
+                if (deviceKey == this@AccessTokenResourceTest.deviceKey)
                     return AccessToken(accessToken)
                 else
                     throw NotFoundToken("Cannot found base token.")
@@ -56,7 +56,7 @@ class AccessTokenResourceTest : JerseyTest() {
     @Test
     fun createAccessTokenOK() {
         val res = target("/auth/tokens").request()
-            .header("Authorization", "Bearer $baseKey")
+            .header("Authorization", "Bearer $deviceKey")
             .post(Entity.json(null))
 
         val accessTokenReq = Gson().fromJson(res.readEntity(String::class.java), AccessToken::class.java)
@@ -78,7 +78,7 @@ class AccessTokenResourceTest : JerseyTest() {
     @Test
     fun createAccessTokenNotStartWithBearer() {
         val res = target("/auth/tokens").request()
-            .header("Authorization", baseKey)
+            .header("Authorization", deviceKey)
             .post(Entity.json(null))
 
         val bodyReturn = res.readEntity(String::class.java)

@@ -17,9 +17,9 @@
 
 package hii.thing.api
 
-import hii.thing.api.auth.DeviceToken
-import hii.thing.api.auth.dao.devicetoken.DeviceTokenDao
-import hii.thing.api.auth.dao.devicetoken.JwtDeviceTokenDao
+import hii.thing.api.auth.DeviceKeyDetail
+import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
+import hii.thing.api.auth.dao.devicekey.JwtDeviceKeyDao
 import hii.thing.api.security.keypair.KeyPairManage
 import hii.thing.api.security.keypair.dao.StringRSAKeyPairDao
 import org.junit.Before
@@ -47,23 +47,23 @@ import org.junit.Test
  * @see publicKey
  */
 @Ignore("สำหรับสร้าง Device token")
-class CreateDeviceToken {
-    val device = DeviceToken(
+class CreateDeviceKeyDetail {
+    val device = DeviceKeyDetail(
         deviceName = "dev/001",
-        baseToken = "", // ไม่ต้องใส่
+        deviceKey = "", // ไม่ต้องใส่
         roles = listOf("kiosk"),
         scope = listOf(
             "/auth"
         )
     )
-    val deviceTokenDao: DeviceTokenDao = JwtDeviceTokenDao()
+    val deviceKeyDao: DeviceKeyDao = JwtDeviceKeyDao()
 
     /**
      * สำหรับสร้าง Device token
      */
     @Test
     fun registerDevice() {
-        println(deviceTokenDao.registerDevice(device).baseToken)
+        println(deviceKeyDao.registerDevice(device).deviceKey)
     }
 
     @Before
