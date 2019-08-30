@@ -30,7 +30,7 @@ import org.junit.Test
 class PgSqlLastResultDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(Table("tmp_lastresult"))
+    val pgsql = PgSqlTestRule(Table("tmp_last_result"))
 
     lateinit var dao: LastResultDao
 

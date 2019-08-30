@@ -33,7 +33,7 @@ import org.junit.Test
 class PgSqlRegisterStoreDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(Table("register"))
+    val pgsql = PgSqlTestRule(Table("session"))
     lateinit var registerStoreDao: RegisterStoreDao
 
     @Before

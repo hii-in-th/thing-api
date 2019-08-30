@@ -20,9 +20,9 @@ package hii.thing.api.dao.lastresult
 import hii.thing.api.dao.refResultLinkLength
 import org.jetbrains.exposed.sql.Table
 
-object SqlLastResult : Table("tmp_lastresult") {
+object SqlLastResult : Table("tmp_last_result") {
     val citizenId = varchar("citizen", 30).primaryKey(0)
-    val refLink = varchar("reflink", refResultLinkLength).index("linkindes", true)
+    val refLink = varchar("ref_link", refResultLinkLength).index("idx", true)
     val value = varchar("value", 255)
-    val updateTime = datetime("updatedate")
+    val updateTime = datetime("update")
 }

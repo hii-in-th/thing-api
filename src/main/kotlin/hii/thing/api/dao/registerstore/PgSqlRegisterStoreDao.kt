@@ -39,11 +39,11 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
     override fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
         var reg: CreateSessionDetail? = null
         transaction {
-            SchemaUtils.create(SqlRegisterDetail)
+            SchemaUtils.create(SqlSessionDetail)
             require(runCatching { get(sessionId) }.isFailure)
             try {
-                SqlRegisterDetail.insert {
-                    it[SqlRegisterDetail.sessionId] = sessionId
+                SqlSessionDetail.insert {
+                    it[SqlSessionDetail.sessionId] = sessionId
                     it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput?.toString()
@@ -56,7 +56,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
                 require(false)
             }
 
-            SqlRegisterDetail.select { SqlRegisterDetail.sessionId eq sessionId }.limit(1)
+            SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
                 .map { reg = mapResult(it) }
         }
         return reg!!
@@ -64,17 +64,17 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
 
     private fun mapResult(it: ResultRow): CreateSessionDetail {
         return CreateSessionDetail(
-            it[SqlRegisterDetail.deviceId],
-            it[SqlRegisterDetail.citizenId],
+            it[SqlSessionDetail.deviceId],
+            it[SqlSessionDetail.citizenId],
             try {
-                CreateSessionDetail.InputType.valueOf(it[SqlRegisterDetail.citizenIdInput]!!.toUpperCase())
+                CreateSessionDetail.InputType.valueOf(it[SqlSessionDetail.citizenIdInput]!!.toUpperCase())
             } catch (ignore: Exception) {
                 null
             },
-            it[SqlRegisterDetail.birthDate]?.toStringDate(),
-            it[SqlRegisterDetail.name],
+            it[SqlSessionDetail.birthDate]?.toStringDate(),
+            it[SqlSessionDetail.name],
             try {
-                CreateSessionDetail.Sex.valueOf(it[SqlRegisterDetail.sex]!!.toUpperCase())
+                CreateSessionDetail.Sex.valueOf(it[SqlSessionDetail.sex]!!.toUpperCase())
             } catch (ignore: Exception) {
                 null
             }
@@ -85,7 +85,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
         var reg: CreateSessionDetail? = null
         transaction {
             try {
-                SqlRegisterDetail.update({ SqlRegisterDetail.sessionId eq sessionId }) {
+                SqlSessionDetail.update({ SqlSessionDetail.sessionId eq sessionId }) {
                     it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput?.toString()
@@ -96,7 +96,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
             } catch (ex: ExposedSQLException) {
                 require(false)
             }
-            SqlRegisterDetail.select { SqlRegisterDetail.sessionId eq sessionId }.limit(1)
+            SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
                 .map { reg = mapResult(it) }
         }
         return reg!!
@@ -105,9 +105,9 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
     override fun getBy(citizenId: String): Map<String, CreateSessionDetail> {
         val resultAll = hashMapOf<String, CreateSessionDetail>()
         transaction {
-            SqlRegisterDetail.select { SqlRegisterDetail.citizenId eq citizenId }
+            SqlSessionDetail.select { SqlSessionDetail.citizenId eq citizenId }
                 .map {
-                    resultAll[it[SqlRegisterDetail.sessionId]] = mapResult(it)
+                    resultAll[it[SqlSessionDetail.sessionId]] = mapResult(it)
                 }
         }
         return resultAll.takeIf { it.isNotEmpty() }!!
@@ -116,7 +116,7 @@ class PgSqlRegisterStoreDao(connection: () -> Connection) :
     override fun get(sessionId: String): CreateSessionDetail {
         var reg: CreateSessionDetail? = null
         transaction {
-            SqlRegisterDetail.select { SqlRegisterDetail.sessionId eq sessionId }.limit(1)
+            SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
                 .map { reg = mapResult(it) }
         }
         return reg!!
