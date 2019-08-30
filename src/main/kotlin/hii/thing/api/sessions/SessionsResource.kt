@@ -59,9 +59,11 @@ class SessionsResource(
         val preCitizenId = detail.citizenId.takeIf { !it.isNullOrBlank() }
         val preSex = detail.sex ?: {
             if (preCitizenId == null) null
-            else registerStoreDao.getBy(preCitizenId)
-                .filter { it.value.sex != null }
-                .values.firstOrNull()?.sex
+            else {
+                runCatching { registerStoreDao.getBy(preCitizenId) }.getOrDefault(mapOf())
+                    .filter { it.value.sex != null }
+                    .values.firstOrNull()?.sex
+            }
         }.invoke()
 
         val newDetail = // Repeat real deviceId
