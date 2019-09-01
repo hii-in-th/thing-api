@@ -48,16 +48,17 @@ import org.junit.Test
  */
 @Ignore("สำหรับสร้าง Device token")
 class CreateDeviceKeyDetail {
+    val group = "ธ.ก.ส."
+    val name = "007"
+
     val device = DeviceKeyDetail(
-        deviceName = "dev/001",
-        deviceKey = "", // ไม่ต้องใส่
-        roles = listOf("kiosk"),
-        scope = listOf(
-            "/auth"
-        )
+        "$group/$name",
+        "",
+        listOf(group),
+        listOf("/auth")
     )
     val deviceKeyDao: DeviceKeyDao = JwtDeviceKeyDao()
-
+    val rule = InMemoryTestRule()
     /**
      * สำหรับสร้าง Device token
      */
@@ -68,6 +69,7 @@ class CreateDeviceKeyDetail {
 
     @Before
     fun setUp() {
+        InMemoryTestRule()
         KeyPairManage.setUp(stringRsaKeyPari)
     }
 
