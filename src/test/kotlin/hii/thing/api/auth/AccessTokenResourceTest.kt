@@ -41,12 +41,11 @@ class AccessTokenResourceTest : JerseyTest() {
 
     override fun configure(): Application {
         mouckAccessTokenManager = object : AccessTokenManager {
-            override fun create(deviceKey: String): AccessToken {
-                if (deviceKey == this@AccessTokenResourceTest.deviceKey)
-                    return AccessToken(accessToken)
-                else
-                    throw NotFoundToken("Cannot found base token.")
-            }
+            override fun create(deviceKey: String): AccessToken =
+                if (deviceKey == this@AccessTokenResourceTest.deviceKey) AccessToken(accessToken)
+                else throw NotFoundToken("Cannot found base token.")
+
+            override fun get(accessToken: String): DeviceKeyDetail = DeviceKeyDetail("", "", listOf(), listOf())
         }
         return ResourceConfig()
             .register(GsonJerseyProvider::class.java)

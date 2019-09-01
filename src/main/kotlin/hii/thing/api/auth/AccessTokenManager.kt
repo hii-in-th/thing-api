@@ -19,4 +19,5 @@ package hii.thing.api.auth
 
 interface AccessTokenManager {
     fun create(deviceKey: String): AccessToken
+    fun get(accessToken: String): DeviceKeyDetail
 }

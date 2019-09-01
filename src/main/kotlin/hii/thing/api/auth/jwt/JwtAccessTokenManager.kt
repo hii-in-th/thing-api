@@ -21,6 +21,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.auth.AccessToken
 import hii.thing.api.auth.AccessTokenManager
+import hii.thing.api.auth.DeviceKeyDetail
 import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
 import hii.thing.api.getDao
 import hii.thing.api.getLogger
@@ -28,10 +29,11 @@ import hii.thing.api.security.JwtConst
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.util.Date
+import java.util.LinkedList
 import java.util.UUID
 
 class JwtAccessTokenManager(
-    val deviceKeyDao: DeviceKeyDao = getDao()
+    private val deviceKeyDao: DeviceKeyDao = getDao()
 ) : AccessTokenManager {
     override fun create(deviceKey: String): AccessToken {
         val device = deviceKeyDao.getDeviceBy(deviceKey)
@@ -42,6 +44,10 @@ class JwtAccessTokenManager(
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
         val date = Date()
 
+        val role = LinkedList<String>()
+        role.addAll(device.roles)
+        role.addFirst(device.deviceID)
+
         val accessToken = JWT.create()
             .withIssuer(JwtConst.issuer)
             .withIssuedAt(date)
@@ -49,7 +55,7 @@ class JwtAccessTokenManager(
             .withAudience(JwtConst.audience)
             .withSubject(device.deviceName)
             .withJWTId(jwtId)
-            .withArrayClaim("role", device.roles.toTypedArray())
+            .withArrayClaim("role", role.toTypedArray())
             .withArrayClaim(
                 "scope",
                 arrayOf(
@@ -67,6 +73,17 @@ class JwtAccessTokenManager(
         logger.info { "Register access token by ${device.deviceName} jwtId:$jwtId" }
 
         return AccessToken(accessToken)
+    }
+
+    override fun get(accessToken: String): DeviceKeyDetail {
+        val decode = JWT().decodeJwt(accessToken)
+        val deviceName = decode.subject!!
+        val roles = decode.claims["role"]?.asArray(String::class.java)?.toMutableList() ?: mutableListOf()
+        val scope = listOf("Undefined") // ไม่สามารถดึง scope เดิมของ Base token ได้
+        val deviceKeyId = roles.first()!!
+        roles.removeAt(0)
+
+        return DeviceKeyDetail(deviceName, "Hide", roles, scope, deviceKeyId)
     }
 
     companion object {
