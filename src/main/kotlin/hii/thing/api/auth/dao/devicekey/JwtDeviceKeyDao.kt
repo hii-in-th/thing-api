@@ -32,7 +32,7 @@ class JwtDeviceKeyDao : DeviceKeyDao {
 
         val role = jwt.claims["role"]!!.asArray(String::class.java).toList()
         val scope = jwt.claims["scope"]!!.asArray(String::class.java).toList()
-        return DeviceKeyDetail(jwt.subject, deviceKey, role, scope)
+        return DeviceKeyDetail(jwt.subject, deviceKey, role, scope, jwt.id)
     }
 
     /**
