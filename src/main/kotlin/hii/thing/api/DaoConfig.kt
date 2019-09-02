@@ -20,6 +20,9 @@ package hii.thing.api
 import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
 import hii.thing.api.auth.dao.devicekey.InMemoryDeviceKeyDao
 import hii.thing.api.auth.dao.devicekey.JwtDeviceKeyDao
+import hii.thing.api.device.dao.DeviceDao
+import hii.thing.api.device.dao.InMemoryDeviceDao
+import hii.thing.api.device.dao.PgSqlDeviceDao
 import hii.thing.api.security.keypair.dao.DemoRSAKeyPairDao
 import hii.thing.api.security.keypair.dao.RSAKeyPairDao
 import hii.thing.api.security.keypair.dao.StringRSAKeyPairDao
@@ -55,6 +58,7 @@ var standalone = System.getenv("HII_ALONE") != null
 
 // sql config
 const val SQL_SESSION_LENGTH = 36
+const val SQL_DEVICE_ID_LENGTH = 36
 val dataSourcePool by lazy { PoolDataSource() }
 
 // Database configuration
@@ -101,6 +105,7 @@ inline fun <reified T : Dao> getDao(): T {
             rsaPrivateKey,
             rsaPublicKey
         )
+        DeviceDao::class -> if (standalone) InMemoryDeviceDao() else PgSqlDeviceDao { dataSourcePool.getConnection() }
         else -> throw TypeCastException("Cannot type dao.")
     }
     return dao as T
