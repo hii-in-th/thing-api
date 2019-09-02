@@ -21,12 +21,13 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import hii.thing.api.auth.DeviceKeyDetail
 import hii.thing.api.security.JwtConst
+import hii.thing.api.security.keypair.KeyPair
 import java.security.interfaces.RSAPrivateKey
 import java.security.interfaces.RSAPublicKey
 import java.util.Date
 import java.util.UUID
 
-class JwtDeviceKeyDao : DeviceKeyDao {
+class JwtDeviceKeyDao(val keyPair: KeyPair = JwtConst.keyPair) : DeviceKeyDao {
     override fun getDeviceBy(deviceKey: String): DeviceKeyDetail {
         val jwt = JwtConst.decodeAndVerify(deviceKey)
 
@@ -42,8 +43,8 @@ class JwtDeviceKeyDao : DeviceKeyDao {
         require(deviceKeyDetail.deviceKey.isBlank()) { "Jwt device token auto gen base token. baseToken is bank." }
         val jwtId = UUID.randomUUID().toString()
 
-        val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
-        val privateKey: RSAPrivateKey = JwtConst.keyPair.privateKey
+        val publicKey: RSAPublicKey = keyPair.publicKey
+        val privateKey: RSAPrivateKey = keyPair.privateKey
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
         val date = Date()
 
