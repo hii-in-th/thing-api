@@ -48,13 +48,13 @@ import org.junit.Test
  */
 @Ignore("สำหรับสร้าง Device token")
 class CreateDeviceKeyDetail {
-    val group = "ธ.ก.ส."
+    val group = "NSHO"
     val name = "007"
 
     val device = DeviceKeyDetail(
         "$group/$name",
         "",
-        listOf(group),
+        listOf("kiosk", group),
         listOf("/auth")
     )
     val deviceKeyDao: DeviceKeyDao = JwtDeviceKeyDao()
