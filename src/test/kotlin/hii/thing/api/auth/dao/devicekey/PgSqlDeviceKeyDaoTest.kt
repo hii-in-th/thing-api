@@ -29,7 +29,7 @@ import org.junit.Test
 class PgSqlDeviceKeyDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(Table("keystore"))
+    val pgsql = PgSqlTestRule(Table(SqlApiKeyStore.tableName))
     lateinit var deviceKeyDao: DeviceKeyDao
 
     @Before

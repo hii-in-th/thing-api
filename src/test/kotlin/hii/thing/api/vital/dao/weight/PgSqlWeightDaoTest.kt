@@ -29,7 +29,7 @@ import org.junit.Test
 class PgSqlWeightDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(Table("weight"))
+    val pgsql = PgSqlTestRule(Table(SqlWeight.tableName))
     lateinit var weightDao: WeightDao
 
     @Before

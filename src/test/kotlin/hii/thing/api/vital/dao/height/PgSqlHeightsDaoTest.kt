@@ -30,7 +30,7 @@ import org.junit.Test
 class PgSqlHeightsDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(Table("height"))
+    val pgsql = PgSqlTestRule(Table(SqlHeight.tableName))
     lateinit var heightsDao: HeightsDao
 
     @Before

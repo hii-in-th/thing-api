@@ -29,7 +29,7 @@ import org.junit.Test
 class PgSqlBloodPressuresDaoTest {
     @JvmField
     @Rule
-    val pgsql = PgSqlTestRule(Table("bloodpressures"))
+    val pgsql = PgSqlTestRule(Table(SqlBloodPressures.tableName))
 
     lateinit var pbDao: PgSqlBloodPressuresDao
 
