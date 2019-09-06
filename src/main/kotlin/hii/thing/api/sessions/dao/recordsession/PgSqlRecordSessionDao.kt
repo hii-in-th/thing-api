@@ -19,6 +19,7 @@ package hii.thing.api.sessions.dao.recordsession
 
 import hii.thing.api.Now
 import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sqlSequentCreateDao
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
@@ -34,12 +35,12 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
 
     init {
         Database.connect(connection)
+        transaction { SchemaUtils.create(SqlSessionDetail) }
     }
 
     override fun register(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
         var reg: CreateSessionDetail? = null
         transaction {
-            SchemaUtils.create(SqlSessionDetail)
             require(runCatching { get(sessionId) }.isFailure)
             try {
                 SqlSessionDetail.insert {
@@ -53,7 +54,12 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
                     it[sex] = sessionDetail.sex?.toString()
                 }
             } catch (ex: ExposedSQLException) {
-                require(false)
+                ex.message?.let {
+                    if (it.contains("violates foreign key constraint"))
+                        sqlSequentCreateDao.invoke()
+                }
+                throw ex
+                // require(false)
             }
 
             SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)

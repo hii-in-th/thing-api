@@ -54,7 +54,7 @@ import java.util.TimeZone
 /**
  * หากกำหนดค่า HII_ALONE ใน System env จะทำงานแบบ in memory ทั้งหมด
  */
-var standalone = System.getenv("HII_ALONE") != null
+var standalone = property("HII_ALONE") != null
 
 // sql config
 const val SQL_SESSION_LENGTH = 36
@@ -62,9 +62,9 @@ const val SQL_DEVICE_ID_LENGTH = 36
 val dataSourcePool by lazy { PoolDataSource() }
 
 // Database configuration
-val dbUrl by lazy { System.getenv("DB_URL") }
-val dbUsername by lazy { System.getenv("DB_USER") }
-val dbPassword by lazy { System.getenv("DB_PASSWORD") }
+val dbUrl by lazy { property("DB_URL") }
+val dbUsername by lazy { property("DB_USER") }
+val dbPassword by lazy { property("DB_PASSWORD") }
 val dbDriver = "org.postgresql.Driver"
 val dbProperties by lazy {
     hashMapOf(
@@ -75,16 +75,24 @@ val dbProperties by lazy {
 }
 
 // Redis configuration.
-val redisHost by lazy { System.getenv("RE_HOST") }
-val redisPort by lazy { System.getenv("RE_PORT").toInt() }
-val redisExpireSec by lazy { System.getenv("RE_EXPIRE_SEC").toInt() }
+val redisHost by lazy { property("RE_HOST") }
+val redisPort by lazy { property("RE_PORT").toInt() }
+val redisExpireSec by lazy { property("RE_EXPIRE_SEC").toInt() }
 
 val timeZone = ZoneId.of("Asia/Bangkok")!!
 
-val rsaPrivateKey by lazy { System.getenv("HII_PRIVATE") }
-val rsaPublicKey by lazy { System.getenv("HII_PUBLIC") }
+val rsaPrivateKey by lazy { property("HII_PRIVATE") }
+val rsaPublicKey by lazy { property("HII_PUBLIC") }
 
 const val refResultLinkLength = 16
+
+/**
+ * คำสั่งในการสร้างโครงสร้าง Database ในรูปแบบ SQL
+ */
+val sqlSequentCreateDao = {
+    getDao<DeviceDao>()
+    getDao<RecordSessionDao>()
+}
 
 /**
  * เกี่ยวกับการสร้าง Dao ใช้แยกระหว่าง standalone กับ production
@@ -127,3 +135,8 @@ internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.of(
     this.secondOfMinute,
     this.millisOfSecond * 1000000
 ).plusSeconds(TimeZone.getTimeZone(timeZone).rawOffset / 1000L)
+
+private fun property(keyName: String): String {
+    System.getProperty(keyName)?.let { return it }
+    return System.getenv(keyName) ?: "null"
+}

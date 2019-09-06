@@ -18,12 +18,13 @@
 package hii.thing.api.sessions.dao.recordsession
 
 import hii.thing.api.SQL_SESSION_LENGTH
+import hii.thing.api.device.dao.SqlDevice
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlSessionDetail : Table("session") {
     val sessionId = varchar("session_id", SQL_SESSION_LENGTH).primaryKey(0)
     val time = datetime("time")
-    val deviceId = varchar("device_id", 36)
+    val deviceId = reference("device_id", SqlDevice.deviceId)
     val citizenId = varchar("citizen_id", 36).nullable()
     val citizenIdInput = varchar("citizen_id_input", 10).nullable()
     val birthDate = date("birth_date").nullable()

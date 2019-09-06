@@ -18,6 +18,10 @@
 package hii.thing.api.sessions.dao.recordsession
 
 import hii.thing.api.PgSqlTestRule
+import hii.thing.api.device.Device
+import hii.thing.api.device.dao.DeviceDao
+import hii.thing.api.device.dao.PgSqlDeviceDao
+import hii.thing.api.ignore
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
 import hii.thing.api.sessions.CreateSessionDetail.InputType.TYPING
@@ -39,6 +43,11 @@ class PgSqlRecordSessionDaoTest {
     @Before
     fun setUp() {
         recordSessionDao = PgSqlRecordSessionDao(pgsql.connection)
+        ignore {
+            val dao: DeviceDao = PgSqlDeviceDao(pgsql.connection)
+            dao.create(Device("nstda", "max-199-991", "sss"))
+            dao.create(Device("nstda", "aaa/000", "sss"))
+        }
     }
 
     val sessionId = "12384-sdf-b-a-2-321-32-4"

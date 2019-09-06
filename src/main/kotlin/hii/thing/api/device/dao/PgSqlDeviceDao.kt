@@ -31,13 +31,13 @@ import java.sql.Connection
 class PgSqlDeviceDao(connection: () -> Connection) : DeviceDao {
     init {
         Database.connect(connection)
+        transaction { SchemaUtils.create(SqlDevice) }
     }
 
     override fun create(device: Device): Device {
         var deviceOut: Device? = null
 
         transaction {
-            SchemaUtils.create(SqlDevice)
             require(device.deviceId != null) { "Device id is not null" }
             require(device.type != null) { "Device type is not null" }
             require(runCatching { get(device.deviceId!!) }.isFailure)
