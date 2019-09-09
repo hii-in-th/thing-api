@@ -17,10 +17,11 @@
 
 package hii.thing.api.auth.dao.devicekey
 
+import hii.thing.api.device.dao.SqlDevice
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlApiKeyStore : Table("keystore") {
-    val deviceId = varchar("device_id", 36).primaryKey(0).primaryKey(1)
+    val deviceId = reference("device_id", SqlDevice.deviceId).index()
     val time = datetime("time").primaryKey(0)
     val deviceName = varchar("name", 255) // sub
     val baseToken = varchar("api_key", 500)

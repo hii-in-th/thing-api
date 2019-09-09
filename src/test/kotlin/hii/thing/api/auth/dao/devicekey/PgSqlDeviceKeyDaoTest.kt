@@ -19,6 +19,10 @@ package hii.thing.api.auth.dao.devicekey
 
 import hii.thing.api.PgSqlTestRule
 import hii.thing.api.auth.DeviceKeyDetail
+import hii.thing.api.device.Device
+import hii.thing.api.device.dao.DeviceDao
+import hii.thing.api.device.dao.PgSqlDeviceDao
+import hii.thing.api.ignore
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should equal`
 import org.jetbrains.exposed.sql.Table
@@ -35,13 +39,18 @@ class PgSqlDeviceKeyDaoTest {
     @Before
     fun setUp() {
         deviceKeyDao = PgSqlDeviceKeyDao(pgsql.connection)
+        ignore {
+            val dao: DeviceDao = PgSqlDeviceDao(pgsql.connection)
+            dao.create(Device("nstda", "max-199-991", "sss"))
+        }
     }
 
     val device = DeviceKeyDetail(
         "hii/007",
         "abcde",
         listOf("kios"),
-        listOf("/vital", "/height", "/bmi")
+        listOf("/vital", "/height", "/bmi"),
+        "max-199-991"
     )
 
     @Test
