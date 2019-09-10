@@ -64,7 +64,8 @@ class JwtAccessTokenManager(
                     "/heights",
                     "/weights",
                     "/result",
-                    "/persons"
+                    "/persons",
+                    "/device"
                 )
             )
             .withNotBefore(date)
