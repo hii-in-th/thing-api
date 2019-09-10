@@ -50,6 +50,7 @@ class ThingApiServer(val args: Array<String>) {
                     if (key != "Authorization")
                         message += "\t$key:${request.getHeader(key)}"
                 }
+                message += "\tInputIpAddress:${request.remoteAddr}"
                 message
             }
         }
