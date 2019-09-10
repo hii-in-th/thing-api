@@ -19,10 +19,10 @@ package hii.thing.api.sessions.dao.recordsession
 
 import hii.thing.api.Now
 import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sessions.dao.recordsession.SqlSessionDetail.getResult
 import hii.thing.api.sqlSequentCreateDao
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -52,6 +52,7 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
                     it[name] = sessionDetail.name
                     it[time] = Now()
                     it[sex] = sessionDetail.sex?.toString()
+                    it[ipAddress] = sessionDetail.ipAddress
                 }
             } catch (ex: ExposedSQLException) {
                 ex.message?.let {
@@ -63,28 +64,9 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
             }
 
             SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
-                .map { reg = mapResult(it) }
+                .map { reg = getResult(it) }
         }
         return reg!!
-    }
-
-    private fun mapResult(it: ResultRow): CreateSessionDetail {
-        return CreateSessionDetail(
-            it[SqlSessionDetail.deviceId],
-            it[SqlSessionDetail.citizenId],
-            try {
-                CreateSessionDetail.InputType.valueOf(it[SqlSessionDetail.citizenIdInput]!!.toUpperCase())
-            } catch (ignore: Exception) {
-                null
-            },
-            it[SqlSessionDetail.birthDate]?.toStringDate(),
-            it[SqlSessionDetail.name],
-            try {
-                CreateSessionDetail.Sex.valueOf(it[SqlSessionDetail.sex]!!.toUpperCase())
-            } catch (ignore: Exception) {
-                null
-            }
-        )
     }
 
     override fun update(sessionId: String, sessionDetail: CreateSessionDetail): CreateSessionDetail {
@@ -98,12 +80,13 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
                     it[name] = sessionDetail.name
                     it[birthDate] = sessionDetail.birthDate?.toJavaTime()?.toSqlTime()
                     it[sex] = sessionDetail.sex?.toString()
+                    it[ipAddress] = sessionDetail.ipAddress
                 }
             } catch (ex: ExposedSQLException) {
                 throw ex
             }
             SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
-                .map { reg = mapResult(it) }
+                .map { reg = getResult(it) }
         }
         return reg!!
     }
@@ -113,7 +96,7 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
         transaction {
             SqlSessionDetail.select { SqlSessionDetail.citizenId eq citizenId }
                 .map {
-                    resultAll[it[SqlSessionDetail.sessionId]] = mapResult(it)
+                    resultAll[it[SqlSessionDetail.sessionId]] = getResult(it)
                 }
         }
         return resultAll.takeIf { it.isNotEmpty() }!!
@@ -123,7 +106,7 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
         var reg: CreateSessionDetail? = null
         transaction {
             SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
-                .map { reg = mapResult(it) }
+                .map { reg = getResult(it) }
         }
         return reg!!
     }

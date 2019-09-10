@@ -37,7 +37,8 @@ class InMemoryRecordSessionDaoTest {
         CARD,
         "1970-10-13",
         "thanachai",
-        CreateSessionDetail.Sex.MALE
+        CreateSessionDetail.Sex.MALE,
+        "192.168.1.1"
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",
@@ -45,7 +46,8 @@ class InMemoryRecordSessionDaoTest {
         TYPING,
         "1970-10-16",
         "nstda",
-        CreateSessionDetail.Sex.FEMALE
+        CreateSessionDetail.Sex.FEMALE,
+        "192.168.1.2"
     )
 
     @Test
@@ -58,6 +60,7 @@ class InMemoryRecordSessionDaoTest {
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
         reg.name!! `should be equal to` createSessionDetail.name!!
         reg.sex!! `should equal` createSessionDetail.sex!!
+        reg.ipAddress!! `should equal` createSessionDetail.ipAddress!!
     }
 
     @Test(expected = Exception::class)
@@ -77,6 +80,7 @@ class InMemoryRecordSessionDaoTest {
         update.birthDate!! `should be equal to` anonymous.birthDate!!
         update.name!! `should be equal to` anonymous.name!!
         update.sex!! `should equal` anonymous.sex!!
+        update.ipAddress!! `should equal` anonymous.ipAddress!!
     }
 
     @Test(expected = Exception::class)

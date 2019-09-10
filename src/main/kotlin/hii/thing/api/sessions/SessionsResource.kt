@@ -36,6 +36,7 @@ import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
 import javax.ws.rs.core.Context
+import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.SecurityContext
 
@@ -48,6 +49,8 @@ class SessionsResource(
     private val lastResultDao: LastResultDao = getDao(),
     private val recordSessionDao: RecordSessionDao = getDao()
 ) {
+    @Context
+    lateinit var headers: HttpHeaders
 
     @Context
     lateinit var context: SecurityContext
@@ -73,7 +76,8 @@ class SessionsResource(
                 detail.citizenIdInput ?: UNDEFINED,
                 detail.birthDate,
                 detail.name,
-                preSex
+                preSex,
+                headers.getHeaderString("CF-Connecting-IP")
             )
         val session = {
             val lastResult =
@@ -122,7 +126,8 @@ class SessionsResource(
                 detail.citizenIdInput,
                 detail.birthDate,
                 detail.name,
-                detail.sex
+                detail.sex,
+                headers.getHeaderString("CF-Connecting-IP")
             )
         )
 

@@ -19,6 +19,8 @@ package hii.thing.api.sessions.dao.recordsession
 
 import hii.thing.api.SQL_SESSION_LENGTH
 import hii.thing.api.device.dao.SqlDevice
+import hii.thing.api.sessions.CreateSessionDetail
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlSessionDetail : Table("session") {
@@ -30,4 +32,25 @@ internal object SqlSessionDetail : Table("session") {
     val birthDate = date("birth_date").nullable()
     val name = varchar("name", 100).nullable()
     val sex = varchar("sex", 10).nullable()
+    val ipAddress = varchar("ip_address", 40).nullable()
+
+    fun getResult(it: ResultRow): CreateSessionDetail {
+        return CreateSessionDetail(
+            it[deviceId],
+            it[citizenId],
+            try {
+                CreateSessionDetail.InputType.valueOf(it[citizenIdInput]!!.toUpperCase())
+            } catch (ignore: Exception) {
+                null
+            },
+            it[birthDate]?.toStringDate(),
+            it[name],
+            try {
+                CreateSessionDetail.Sex.valueOf(it[sex]!!.toUpperCase())
+            } catch (ignore: Exception) {
+                null
+            },
+            it[ipAddress]
+        )
+    }
 }

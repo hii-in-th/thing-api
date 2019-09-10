@@ -57,7 +57,8 @@ class PgSqlRecordSessionDaoTest {
         CARD,
         "1970-10-13",
         "thanachai",
-        MALE
+        MALE,
+        "192.168.1.1"
     )
     val anonymous = CreateSessionDetail(
         "aaa/000",
@@ -65,7 +66,8 @@ class PgSqlRecordSessionDaoTest {
         TYPING,
         "1970-10-16",
         "nstda",
-        FEMALE
+        FEMALE,
+        "192.168.1.2"
     )
 
     @Test
@@ -78,6 +80,7 @@ class PgSqlRecordSessionDaoTest {
         reg.birthDate!! `should be equal to` createSessionDetail.birthDate!!
         reg.name!! `should be equal to` createSessionDetail.name!!
         reg.sex!! `should equal` createSessionDetail.sex!!
+        reg.ipAddress!! `should equal` createSessionDetail.ipAddress!!
     }
 
     @Test(expected = Exception::class)
@@ -97,6 +100,7 @@ class PgSqlRecordSessionDaoTest {
         update.birthDate!! `should be equal to` anonymous.birthDate!!
         update.name!! `should be equal to` anonymous.name!!
         update.sex!! `should equal` anonymous.sex!!
+        update.ipAddress!! `should equal` anonymous.ipAddress!!
     }
 
     @Test(expected = Exception::class)
