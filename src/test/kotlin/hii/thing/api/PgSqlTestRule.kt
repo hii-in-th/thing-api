@@ -17,6 +17,7 @@
 
 package hii.thing.api
 
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -45,15 +46,15 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
                 SchemaUtils.drop(table)
             }
         } catch (ex: PSQLException) {
-            pgSql.stop()
-            pgSql = EmbeddedPostgres()
-            url = pgSql.start()
+            // setupPgSql()
+        } catch (ex: ExposedSQLException) {
+            // setupPgSql()
         }
     }
 
     companion object {
         var count = 1
-        lateinit var pgSql: EmbeddedPostgres
+        var pgSql: EmbeddedPostgres = EmbeddedPostgres()
         var poolDataSource: PoolDataSource? = null
         var url: String = ""
     }
@@ -69,12 +70,17 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
     }
 
     private fun createNewConnection(): Connection {
+        setupPgSql()
+        poolDataSource = PoolDataSource(url, "postgres", "postgres", 1)
+        return poolDataSource!!.getConnection()
+    }
+
+    private fun setupPgSql() {
+        ignore { pgSql.stop() }
         pgSql = EmbeddedPostgres()
         url = pgSql.start("127.0.0.1", 27365, "postgres")
         System.setProperty("DB_URL", url)
         System.setProperty("DB_USER", "postgres")
         System.setProperty("DB_PASSWORD", "postgres")
-        poolDataSource = PoolDataSource(url, "postgres", "postgres", 1)
-        return poolDataSource!!.getConnection()
     }
 }

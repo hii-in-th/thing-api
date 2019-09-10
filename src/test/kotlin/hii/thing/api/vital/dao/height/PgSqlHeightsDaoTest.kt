@@ -19,7 +19,14 @@ package hii.thing.api.vital.dao.height
 
 import hii.thing.api.PgSqlTestRule
 import hii.thing.api.`should be equal to`
+import hii.thing.api.device.Device
+import hii.thing.api.device.dao.PgSqlDeviceDao
 import hii.thing.api.getLogger
+import hii.thing.api.ignore
+import hii.thing.api.sessions.CreateSessionDetail
+import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
+import hii.thing.api.sessions.CreateSessionDetail.Sex.MALE
+import hii.thing.api.sessions.dao.recordsession.PgSqlRecordSessionDao
 import hii.thing.api.vital.Height
 import org.amshove.kluent.`should be equal to`
 import org.jetbrains.exposed.sql.Table
@@ -33,12 +40,21 @@ class PgSqlHeightsDaoTest {
     val pgsql = PgSqlTestRule(Table(SqlHeight.tableName))
     lateinit var heightsDao: HeightsDao
 
+    val sessionId = "max-999-888-111"
+
     @Before
     fun setUp() {
         heightsDao = PgSqlHeightsDao(pgsql.connection)
+        ignore {
+            val deviceId = "max990"
+            val device = PgSqlDeviceDao(pgsql.connection)
+            val session = PgSqlRecordSessionDao(pgsql.connection)
+            val detail = CreateSessionDetail(deviceId, "1234122345634", CARD, "1970-10-13", "thanachai", MALE)
+            ignore { device.create(Device("nstda", deviceId, "sss")) }
+            ignore { session.register(sessionId, detail) }
+        }
     }
 
-    val sessionId = "max-999-888-111"
     val height = Height(170.1F)
     val height2 = Height(169.0F)
 

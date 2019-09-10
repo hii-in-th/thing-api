@@ -54,7 +54,7 @@ import java.util.TimeZone
 /**
  * หากกำหนดค่า HII_ALONE ใน System env จะทำงานแบบ in memory ทั้งหมด
  */
-var standalone = property("HII_ALONE") != null
+var standalone = property("HII_ALONE") != "null"
 
 // sql config
 const val SQL_SESSION_LENGTH = 36

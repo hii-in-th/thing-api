@@ -17,14 +17,14 @@
 
 package hii.thing.api.vital.dao.weight
 
-import hii.thing.api.SQL_SESSION_LENGTH
+import hii.thing.api.sessions.dao.recordsession.SqlSessionDetail
 import hii.thing.api.toJavaTime
 import hii.thing.api.vital.Weight
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlWeight : Table("weight") {
-    val sessionId = varchar("session_id", SQL_SESSION_LENGTH).primaryKey(1)
+    val sessionId = reference("session_id", SqlSessionDetail.sessionId).index()
     val time = datetime("time").primaryKey(0)
     var weight = float("weight")
 

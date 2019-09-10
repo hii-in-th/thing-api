@@ -100,7 +100,7 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
                     it[sex] = sessionDetail.sex?.toString()
                 }
             } catch (ex: ExposedSQLException) {
-                require(false)
+                throw ex
             }
             SqlSessionDetail.select { SqlSessionDetail.sessionId eq sessionId }.limit(1)
                 .map { reg = mapResult(it) }

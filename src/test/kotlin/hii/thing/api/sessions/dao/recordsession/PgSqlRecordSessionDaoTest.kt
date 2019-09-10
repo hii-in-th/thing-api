@@ -45,8 +45,8 @@ class PgSqlRecordSessionDaoTest {
         recordSessionDao = PgSqlRecordSessionDao(pgsql.connection)
         ignore {
             val dao: DeviceDao = PgSqlDeviceDao(pgsql.connection)
-            dao.create(Device("nstda", "max-199-991", "sss"))
-            dao.create(Device("nstda", "aaa/000", "sss"))
+            ignore { dao.create(Device("nstda", "max-199-991", "sss")) }
+            ignore { dao.create(Device("nstda", "aaa/000", "sss")) }
         }
     }
 
