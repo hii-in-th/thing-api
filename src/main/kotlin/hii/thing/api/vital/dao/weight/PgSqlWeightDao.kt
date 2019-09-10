@@ -35,7 +35,7 @@ class PgSqlWeightDao(connection: () -> Connection) : WeightDao {
         var weightOut: Weight? = null
         transaction {
             SchemaUtils.create(SqlWeight)
-            require(runCatching { getBy(session) }.isFailure)
+            require(runCatching { getBy(session) }.isFailure) { "ไม่สามารถบันทึกข้อมูลซ้ำ session เดิมได้" }
 
             SqlWeight.insert {
                 it[sessionId] = session

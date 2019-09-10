@@ -112,7 +112,7 @@ class PgSqlDeviceDaoTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun getEmpty() {
-        dao.get(deviceId)
+        println(dao.get(deviceId))
     }
 
     @Test(expected = IllegalArgumentException::class)

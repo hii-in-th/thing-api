@@ -40,7 +40,9 @@ class PgSqlDeviceDao(connection: () -> Connection) : DeviceDao {
         transaction {
             require(device.deviceId != null) { "Device id is not null" }
             require(device.type != null) { "Device type is not null" }
-            require(runCatching { get(device.deviceId!!) }.isFailure)
+            require(runCatching { get(device.deviceId!!) }.isFailure) {
+                "ไม่สามารถสร้าง device ซ้ำที่มีอยู่ได้จำเป็นต้องใช้ update"
+            }
             val now = Now()
             SqlDevice.insert {
                 it[deviceId] = device.deviceId!!

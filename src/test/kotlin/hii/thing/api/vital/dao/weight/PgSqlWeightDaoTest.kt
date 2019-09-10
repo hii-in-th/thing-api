@@ -40,6 +40,7 @@ class PgSqlWeightDaoTest {
     lateinit var weightDao: WeightDao
 
     val sessionId = "max-199-991-888"
+    val sessionId2 = "max-199-991-889"
 
     @Before
     fun setUp() {
@@ -52,6 +53,7 @@ class PgSqlWeightDaoTest {
 
             ignore { device.create(Device("nstda", deviceId, "sss")) }
             ignore { session.register(sessionId, detail) }
+            ignore { session.register(sessionId2, detail) }
         }
     }
 
@@ -75,7 +77,7 @@ class PgSqlWeightDaoTest {
     @Test
     fun getBy() {
         weightDao.save(sessionId, weight)
-        weightDao.save(sessionId, Weight(50F))
+        weightDao.save(sessionId2, Weight(50F))
 
         val get = weightDao.getBy(sessionId)
 

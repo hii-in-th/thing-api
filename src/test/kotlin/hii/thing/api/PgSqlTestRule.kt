@@ -17,14 +17,16 @@
 
 package hii.thing.api
 
+import hii.thing.api.device.dao.SqlDevice
+import hii.thing.api.sessions.dao.recordsession.SqlSessionDetail
 import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.postgresql.util.PSQLException
 import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres
 import java.sql.Connection
 
@@ -32,7 +34,7 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
     override fun apply(base: Statement, description: Description): Statement = object : Statement() {
         override fun evaluate() {
             try {
-                // before()
+                before()
                 base.evaluate()
             } finally {
                 after()
@@ -40,15 +42,24 @@ class PgSqlTestRule<T : Table>(private val table: T) : TestRule {
         }
     }
 
+    private fun before() {
+        Database.connect(connection)
+        after()
+    }
+
     private fun after() {
         try {
             transaction {
-                SchemaUtils.drop(table)
+                ignore { SchemaUtils.drop(table) }
+                ignore { SchemaUtils.drop(SqlSessionDetail) }
+                ignore { SchemaUtils.drop(SqlDevice) }
+                ignore { SchemaUtils.drop(table) }
+                ignore { SchemaUtils.drop(SqlSessionDetail) }
+                ignore { SchemaUtils.drop(SqlDevice) }
             }
-        } catch (ex: PSQLException) {
-            // setupPgSql()
         } catch (ex: ExposedSQLException) {
-            // setupPgSql()
+            if (!ex.message!!.contains("cannot drop table"))
+                throw ex
         }
     }
 
