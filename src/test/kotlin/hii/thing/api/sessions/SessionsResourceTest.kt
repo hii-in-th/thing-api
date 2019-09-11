@@ -22,6 +22,7 @@ import hii.thing.api.InMemoryTestRule
 import hii.thing.api.config.GsonJerseyProvider
 import hii.thing.api.sessions.CreateSessionDetail.InputType.CARD
 import hii.thing.api.sessions.CreateSessionDetail.InputType.UNDEFINED
+import hii.thing.api.sessions.dao.recordsession.InMemoryRecordSessionDao
 import hii.thing.api.sessions.mock.MockRoleTokenSecurity
 import hii.thing.api.sessions.mock.MockTokenManager
 import hii.thing.api.sessions.mock.MockTokenSecurityContext
@@ -40,14 +41,14 @@ class SessionsResourceTest : JerseyTest() {
     val rule = InMemoryTestRule()
 
     private val session = UUID.randomUUID().toString()
-    private val deviceId = "aabbcc-aabbee"
-    val devicename = "devices/105487111"
+    private val deviceId = "1e8aaf6c-7748-4bac-9d98-8f5d1a840689"
+    val devicename = "dev/007"
 
     /* ktlint-disable max-line-length */
     companion object {
         val mockTokenManager = MockTokenManager()
         val accessToken =
-            """eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoLmhpaS5pbi50aCIsImlhdCI6MTU1OTcxMzA2NSwiZXhwIjoxNTU5NzE0MjY4LCJhdWQiOiJ2aXRhbC5oaWkuaW4udGgiLCJzdWIiOiJkZXZpY2VzLzEwNTQ4NzExMSIsInJvbGUiOiJraW9zayIsImp0aSI6ImE4Y2E1ZGUyLTg3NTItMTFlOS1iYzQyLTUyNmFmNzc2NGY2NCJ9.D9L65_f4dpFMkOpzuguWpg0fZq2olSOLaYqTVNXzslPFgVaLst6oqkZYRmaWrsWxXxTG0orCqIboovn3jeHhmg""".trimMargin()
+            """eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJhdWQiOiJoaWkuaW4udGgiLCJzdWIiOiJkZXYvMDA3Iiwicm9sZSI6WyIxZThhYWY2Yy03NzQ4LTRiYWMtOWQ5OC04ZjVkMWE4NDA2ODkiLCJraW9zayJdLCJuYmYiOjE1NjgxNzM1MzksInNjb3BlIjpbIi9zZXNzaW9ucyIsIi9ibG9vZC1wcmVzc3VyZXMiLCIvaGVpZ2h0cyIsIi93ZWlnaHRzIiwiL3Jlc3VsdCIsIi9wZXJzb25zIiwiL2RldmljZSJdLCJpc3MiOiJhdXRoLmhpaS5pbi50aCIsImV4cCI6MTU2ODE3NTMzOSwiaWF0IjoxNTY4MTczNTM5LCJqdGkiOiJhYTFiMzM1Ny1jOTZlLTQ0ZGMtYjVjYS0xODgxODEwNjI0YzQifQ.HPWp18RnqeTZt7qbozvzXjwJunNUMMXWhOCXKbWY6QFE59h_HRpENy-CluQBcYLtq5gg7EiQ1spRgGl2zkv5chD7Xk8N_I78XzSBMtGuLck3QKgNZNP5P4R2XzGll5X_ynZxbTFaMhHhKsKHtDAYLkWG7Gx1AI9AfNb1585Lnj7H3bw7-av5uRLlfZAJmkYWz1EIux-C9RGC6IYY7BYjqxhmpTF9LWR-qrDGJ0-5Q4bZgk3Cy75O11N0XiSDb6TZVmZ5eokqh_D9lPriJyk-PUYNW3hb2N4lhCyHU40KlWH1wYMxt1N66igMDRiSglWkEV1b7xA0kNtqc-3023tL1EqAEuZw7vgJXKRMJfFmCAGA60hBK2bg3tRnIJGLUEhBIIkrCz6YZxoOzbCy6lEaqw9OqvMH-1twFd09nhoL6IAcLj0EdVAgTU-rDrSL2G-xfWJS5Qo2XWfIsp1TlDdnhcU3uR5Id5ds27Izgszhu_5OKZeln-iYZDLOyogAO606mTDcxjBf2b5XOwVB_i_eNyrdH47DwlTruMdraJ5tJKMmko1P4K8aPFfzMdrYSunZQD3tMk3203_abEBQ9zm5pyWwO4gWZnREBvXYPAZCYIyyR7ScEiBiC04k61kvPvbien1AWnf1rCvSwRipIw7qqkUwS8ggzVHJ4dT5TpN11V0""".trimMargin()
     }
     /* ktlint-enable max-line-length */
 
@@ -66,7 +67,8 @@ class SessionsResourceTest : JerseyTest() {
                 CreateSessionDetail(deviceId, "", UNDEFINED, "")
         }
 
-        val sessionsResource = SessionsResource(mockSessionsManager, InMemoryLastResultDao())
+        val sessionsResource =
+            SessionsResource(mockSessionsManager, InMemoryLastResultDao(), InMemoryRecordSessionDao())
         sessionsResource.context = MockTokenSecurityContext(accessToken, mockTokenManager)
 
         return ResourceConfig()

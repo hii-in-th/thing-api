@@ -71,7 +71,7 @@ class SessionsResource(
 
         val newDetail = // Repeat real deviceId
             CreateSessionDetail(
-                userPrincipal.deviceName,
+                userPrincipal.deviceId,
                 preCitizenId,
                 detail.citizenIdInput ?: UNDEFINED,
                 detail.birthDate,
@@ -121,7 +121,7 @@ class SessionsResource(
         require(sessionsManager.getDetail(session).citizenId.isNullOrEmpty()) { "มีการใส่ข้อมูลส่วนตัวไปแล้ว ไม่สามารถใส่ซ้ำได้" }
         sessionsManager.updateCreate(
             userPrincipal.accessToken, CreateSessionDetail(
-                userPrincipal.deviceName,
+                userPrincipal.deviceId,
                 detail.citizenId,
                 detail.citizenIdInput,
                 detail.birthDate,

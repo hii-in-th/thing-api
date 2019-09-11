@@ -72,3 +72,6 @@ object JwtConst {
         return true
     }
 }
+
+fun DecodedJWT.role(): Array<String> = this.getClaim("role").asArray(String::class.java)
+fun DecodedJWT.deviceId(): String = this.role().first()

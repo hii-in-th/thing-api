@@ -18,11 +18,14 @@
 package hii.thing.api.security.token.jwt
 
 import hii.thing.api.security.JwtConst
+import hii.thing.api.security.deviceId
+import hii.thing.api.security.role
 import hii.thing.api.security.token.ThingPrincipal
 
 class JwtThingPrincipal(override val accessToken: String) : ThingPrincipal {
     override fun getName(): String = jwt.subject
-    override fun getRole(): Array<String> = jwt.getClaim("role").asArray(String::class.java)
+    override fun getRole(): Array<String> = jwt.role()
     override val deviceName: String get() = jwt.subject
+    override val deviceId: String get() = jwt.deviceId()
     val jwt = JwtConst.decode(accessToken)
 }

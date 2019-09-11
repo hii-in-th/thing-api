@@ -26,5 +26,6 @@ interface ThingPrincipal : Principal {
     fun getRole(): Array<String>
     val accessToken: String
     val deviceName: String
+    val deviceId: String
     override fun getName(): String
 }

@@ -43,7 +43,7 @@ class JwtSessionsManagerTest {
     val deviceId = "98439-32423-fgd-gfd-gdsg-fds"
     val sessionsManager: SessionsManager = JwtSessionsManager(InMemorySessionDao(), InMemoryRecordSessionDao())
     val createDetail = CreateSessionDetail(deviceId, "1234", CARD, "1111-09-65")
-    val accessToken = createAccessToken()
+    val accessToken = createAccessToken(deviceId)
 
     @Before
     fun setUp() {
@@ -89,7 +89,7 @@ class JwtSessionsManagerTest {
         sessionsManager.updateCreate(accessToken, CreateSessionDetail(deviceId, null, null, null))
     }
 
-    private fun createAccessToken(expire: Long = 1000000, issuer: String = JwtConst.issuer): String {
+    private fun createAccessToken(deviceId: String, expire: Long = 1000000, issuer: String = JwtConst.issuer): String {
         val publicKey: RSAPublicKey = JwtConst.keyPair.publicKey
         val privateKey: RSAPrivateKey = JwtConst.keyPair.privateKey
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
@@ -103,6 +103,7 @@ class JwtSessionsManagerTest {
             .withNotBefore(date)
             .withSubject(deviceId)
             .withJWTId(UUID.randomUUID().toString())
+            .withArrayClaim("role", arrayOf(deviceId))
             .withClaim("int", 10)
             .withClaim("string", "thanachai")
             .sign(algorithm)
