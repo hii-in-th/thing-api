@@ -32,6 +32,8 @@ object KeyPairManage : KeyPair {
         return this
     }
 
+    fun isSetup(): Boolean = runCatching { keyPairDao }.isSuccess
+
     override val privateKey: RSAPrivateKey
         get() {
             val private = keyPairDao.privateKey

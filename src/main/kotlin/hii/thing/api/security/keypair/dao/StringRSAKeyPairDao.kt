@@ -32,6 +32,8 @@ class StringRSAKeyPairDao(privateKeyString: String, publicKeyString: String) :
     private lateinit var priKey: RSAPrivateKey
 
     init {
+        require(privateKeyString != "null")
+        require(publicKeyString != "null")
         val kf = KeyFactory.getInstance("RSA")
         runBlocking {
             launch {
@@ -54,11 +56,9 @@ class StringRSAKeyPairDao(privateKeyString: String, publicKeyString: String) :
     override var privateKey: RSAPrivateKey?
         get() = priKey
         set(value) {
-            println(value)
         }
     override var publicKey: RSAPublicKey?
         get() = pubKey
         set(value) {
-            println(value)
         }
 }

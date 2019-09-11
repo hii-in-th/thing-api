@@ -34,7 +34,12 @@ import java.security.interfaces.RSAPublicKey
  * Configuration และ util ของ JWT
  */
 object JwtConst {
-    val keyPair: KeyPair by lazy { KeyPairManage.setUp(getDao()) }
+    val keyPair: KeyPair by lazy {
+        if (KeyPairManage.isSetup())
+            KeyPairManage
+        else
+            KeyPairManage.setUp(getDao())
+    }
     const val issuer = "auth.hii.in.th"
     const val audience = "hii.in.th"
 

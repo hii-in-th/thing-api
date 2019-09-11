@@ -20,7 +20,9 @@ package hii.thing.api
 import hii.thing.api.auth.DeviceKeyDetail
 import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
 import hii.thing.api.auth.dao.devicekey.JwtDeviceKeyDao
+import hii.thing.api.security.JwtConst
 import hii.thing.api.security.keypair.KeyPairManage
+import hii.thing.api.security.keypair.dao.RSAKeyPairDao
 import hii.thing.api.security.keypair.dao.StringRSAKeyPairDao
 import org.junit.Before
 import org.junit.Ignore
@@ -54,25 +56,26 @@ class CreateDeviceKeyDetail {
     val device = DeviceKeyDetail(
         "$group/$name",
         "",
-        listOf("kiosk", group),
+        listOf("kiosk"),
         listOf("/auth")
     )
-    val deviceKeyDao: DeviceKeyDao = JwtDeviceKeyDao()
-    val rule = InMemoryTestRule()
-    /**
-     * สำหรับสร้าง Device token
-     */
+    lateinit var deviceKeyDao: DeviceKeyDao
+
     @Test
     fun registerDevice() {
-        println(deviceKeyDao.registerDevice(device).deviceKey)
+        val base = deviceKeyDao.registerDevice(device)
+        JwtConst.verify(base.deviceKey)
+        println(base.deviceKey)
     }
 
     @Before
     fun setUp() {
-        InMemoryTestRule()
+        stringRsaKeyPari = StringRSAKeyPairDao(privatekey, publicKey)
         KeyPairManage.setUp(stringRsaKeyPari)
+        deviceKeyDao = JwtDeviceKeyDao(KeyPairManage)
     }
 
+    /* ktlint-disable max-line-length */
     val privatekey =
         """
 -----BEGIN PRIVATE KEY-----
@@ -145,5 +148,6 @@ COSDa+tn+tuEagTUNK2otGFxndV5OXlORGLL6AQJA49nqCtbmqp8nd5suKRq271M
 ztV9vJGeL+Vmsk446IJbezsCAwEAAQ==
 -----END PUBLIC KEY-----
     """.trimIndent()
-    val stringRsaKeyPari = StringRSAKeyPairDao(privatekey, publicKey)
+    /* ktlint-enable max-line-length */
+    lateinit var stringRsaKeyPari: RSAKeyPairDao
 }
