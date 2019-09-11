@@ -24,8 +24,8 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlBloodPressures : Table("bloodpressures") {
-    val sessionId = reference("session_id", SqlSessionDetail.sessionId).index()
     val time = datetime("time").primaryKey(0)
+    val sessionId = reference("session_id", SqlSessionDetail.sessionId).index()
     val sys = float("sys")
     val dia = float("dia")
     val pulse = float("pulse")

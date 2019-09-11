@@ -24,8 +24,8 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
 internal object SqlHeight : Table("height") {
-    val sessionId = reference("session_id", SqlSessionDetail.sessionId).index()
     val time = datetime("time").primaryKey(0)
+    val sessionId = reference("session_id", SqlSessionDetail.sessionId).index()
     var height = float("height")
 
     fun getResult(it: ResultRow): Height {
