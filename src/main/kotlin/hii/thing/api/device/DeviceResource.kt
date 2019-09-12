@@ -21,6 +21,7 @@ import hii.thing.api.auth.AccessTokenManager
 import hii.thing.api.auth.jwt.JwtAccessTokenManager
 import hii.thing.api.device.dao.DeviceDao
 import hii.thing.api.getDao
+import hii.thing.api.security.JwtConst
 import hii.thing.api.security.token.ThingPrincipal
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -48,7 +49,7 @@ class DeviceResource(
     fun createDevice(device: Device): Device {
         val userPrincipal = context.userPrincipal as ThingPrincipal
         val deviceKeyDetail = accessTokenManager.get(userPrincipal.accessToken)
-        device.deviceId = deviceKeyDetail.deviceID
+        device.deviceId = JwtConst.decode(userPrincipal.accessToken).id
         device.type = deviceKeyDetail.roles.lastOrNull()
 
         return deviceDao.create(device)
