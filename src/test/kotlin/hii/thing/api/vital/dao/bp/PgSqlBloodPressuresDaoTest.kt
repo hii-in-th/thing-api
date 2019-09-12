@@ -50,7 +50,7 @@ class PgSqlBloodPressuresDaoTest {
             val session = PgSqlRecordSessionDao(pgsql.connection)
             val detail = CreateSessionDetail(deviceId, "1234122345634", CARD, "1970-10-13", "thanachai", MALE)
 
-            ignore { device.create(Device("nstda", deviceId, "sss")) }
+            ignore { device.create(Device("nstda", deviceId, "sss", "sss")) }
             ignore { session.register(sessionId, detail) }
         }
     }

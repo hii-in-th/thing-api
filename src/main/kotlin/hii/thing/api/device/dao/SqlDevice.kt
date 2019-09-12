@@ -24,6 +24,7 @@ import org.jetbrains.exposed.sql.Table
 
 internal object SqlDevice : Table("device") {
     val deviceId = varchar("device_id", SQL_DEVICE_ID_LENGTH).primaryKey()
+    val deviceName = varchar("device_name", 100)
     val create = datetime("create")
     val update = datetime("update")
     val location = varchar("location", 255)
@@ -33,6 +34,7 @@ internal object SqlDevice : Table("device") {
         return Device(
             result[location],
             result[deviceId],
+            result[deviceName],
             result[type]
         )
     }

@@ -68,4 +68,9 @@ class DeviceResource(
     }
 }
 
-data class Device(val location: String, var deviceId: String? = null, var type: String? = null)
+data class Device(
+    val location: String,
+    var deviceId: String? = null,
+    val deviceName: String,
+    var type: String? = null
+)

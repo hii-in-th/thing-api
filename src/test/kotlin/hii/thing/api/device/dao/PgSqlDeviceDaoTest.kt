@@ -32,15 +32,17 @@ class PgSqlDeviceDaoTest {
     lateinit var dao: DeviceDao
 
     private val deviceId = "12345-3453-435"
+    private val deviceName = "king"
     private val location = "คลองหลวง 999"
     private val type = "hii"
 
     private val deviceId2 = "213213-21321-34-13"
+    private val deviceName2 = "kong"
     private val location2 = "สาธร 888"
     private val type2 = "888"
 
-    private val device = Device(location, deviceId, type)
-    private val device2 = Device(location2, deviceId2, type2)
+    private val device = Device(location, deviceId, deviceName, type)
+    private val device2 = Device(location2, deviceId2, deviceName2, type2)
 
     @Test
     fun create() {
@@ -62,6 +64,7 @@ class PgSqlDeviceDaoTest {
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
         create.type!! `should be equal to` type
+        create.deviceName!! `should be equal to` deviceName
     }
 
     @Test
@@ -75,10 +78,12 @@ class PgSqlDeviceDaoTest {
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
         create.type!! `should be equal to` type
+        create.deviceName!! `should be equal to` deviceName
 
         create2.location `should be equal to` location2
         create2.deviceId!! `should be equal to` deviceId2
         create2.type!! `should be equal to` type2
+        create2.deviceName!! `should be equal to` deviceName2
     }
 
     @Test
@@ -88,6 +93,7 @@ class PgSqlDeviceDaoTest {
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
         create.type!! `should be equal to` type
+        create.deviceName!! `should be equal to` deviceName
     }
 
     @Test
@@ -98,10 +104,12 @@ class PgSqlDeviceDaoTest {
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
         create.type!! `should be equal to` type
+        create.deviceName!! `should be equal to` deviceName
 
         create2.location `should be equal to` location2
         create2.deviceId!! `should be equal to` deviceId2
         create2.type!! `should be equal to` type2
+        create2.deviceName!! `should be equal to` deviceName2
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -112,7 +120,7 @@ class PgSqlDeviceDaoTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun getEmpty() {
-        println(dao.get(deviceId))
+        dao.get(deviceId)
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -132,12 +140,14 @@ class PgSqlDeviceDaoTest {
         dao.create(device)
         val location1 = "สามเสน"
         val type1 = "nectec"
+        val deviceName1 = "888"
 
-        val update = dao.update(deviceId, Device(location1, deviceId, type1))
+        val update = dao.update(deviceId, Device(location1, deviceId, deviceName1, type1))
 
         update.location `should be equal to` location1
         update.deviceId!! `should be equal to` deviceId
         update.type!! `should be equal to` type1
+        update.deviceName!! `should be equal to` deviceName1
     }
 
     @Test(expected = IllegalArgumentException::class)
