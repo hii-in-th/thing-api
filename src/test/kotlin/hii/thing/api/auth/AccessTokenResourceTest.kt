@@ -17,6 +17,7 @@
 
 package hii.thing.api.auth
 
+import com.auth0.jwt.JWT
 import com.google.gson.Gson
 import hii.thing.api.InMemoryTestRule
 import hii.thing.api.config.GsonJerseyProvider
@@ -46,6 +47,7 @@ class AccessTokenResourceTest : JerseyTest() {
                 else throw NotFoundToken("Cannot found base token.")
 
             override fun get(accessToken: String): DeviceKeyDetail = DeviceKeyDetail("", "", listOf(), listOf())
+            override fun getAccessId(accessToken: String): String = JWT.decode(accessToken).id
         }
         return ResourceConfig()
             .register(GsonJerseyProvider::class.java)

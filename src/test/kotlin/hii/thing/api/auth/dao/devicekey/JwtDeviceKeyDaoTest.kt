@@ -22,6 +22,7 @@ import hii.thing.api.auth.DeviceKeyDetail
 import hii.thing.api.security.keypair.KeyPairManage
 import hii.thing.api.security.keypair.dao.DemoRSAKeyPairDao
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should contain some`
 import org.amshove.kluent.`should equal`
 import org.amshove.kluent.`should not equal`
 import org.junit.Before
@@ -58,6 +59,6 @@ class JwtDeviceKeyDaoTest {
         getDevice.deviceName `should be equal to` device.deviceName
         getDevice.deviceKey `should not equal` device.deviceKey
         getDevice.roles `should equal` device.roles
-        getDevice.scope `should equal` device.scope
+        getDevice.scope `should contain some` device.scope
     }
 }

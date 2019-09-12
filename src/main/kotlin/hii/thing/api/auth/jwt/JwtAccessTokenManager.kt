@@ -64,8 +64,7 @@ class JwtAccessTokenManager(
                     "/heights",
                     "/weights",
                     "/result",
-                    "/persons",
-                    "/device"
+                    "/persons"
                 )
             )
             .withNotBefore(date)
@@ -86,6 +85,8 @@ class JwtAccessTokenManager(
 
         return DeviceKeyDetail(deviceName, "Hide", roles, scope, deviceKeyId)
     }
+
+    override fun getAccessId(accessToken: String): String = JWT.decode(accessToken).id
 
     companion object {
         private val logger by lazy { getLogger() }

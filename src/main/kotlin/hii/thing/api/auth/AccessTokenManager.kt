@@ -20,4 +20,9 @@ package hii.thing.api.auth
 interface AccessTokenManager {
     fun create(deviceKey: String): AccessToken
     fun get(accessToken: String): DeviceKeyDetail
+    /**
+     * ดึงหมายเลข access id จาก access token
+     * เป็นคนละ id กับ device id
+     */
+    fun getAccessId(accessToken: String): String
 }

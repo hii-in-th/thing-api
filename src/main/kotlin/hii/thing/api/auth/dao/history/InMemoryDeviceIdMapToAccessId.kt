@@ -15,17 +15,23 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api.auth.dao.history
 
-import java.security.Principal
+class InMemoryDeviceIdMapToAccessId : DeviceIdMapToAccessId {
+    // issuedTo, deviceId
+    private val store = hashMapOf<String, String>()
 
-/**
- * api จะใช้ ThingPrincipal ทั้งหมด
- */
-interface ThingPrincipal : Principal {
-    fun getRole(): Array<String>
-    val accessToken: String
-    val deviceName: String
-    val id: String
-    override fun getName(): String
+    override fun record(deviceId: String, accessId: String) {
+        store[accessId] = deviceId
+    }
+
+    override fun getDeviceIdBy(issuedTo: String): String {
+        val deviceId = store[issuedTo]
+        require(deviceId != null)
+        return deviceId
+    }
+
+    fun clean() {
+        store.clear()
+    }
 }

@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api.config.responsefilter
 
-import java.security.Principal
+import javax.ws.rs.ClientErrorException
+import javax.ws.rs.core.Response
+import javax.ws.rs.ext.ExceptionMapper
+import javax.ws.rs.ext.Provider
 
-/**
- * api จะใช้ ThingPrincipal ทั้งหมด
- */
-interface ThingPrincipal : Principal {
-    fun getRole(): Array<String>
-    val accessToken: String
-    val deviceName: String
-    val id: String
-    override fun getName(): String
+@Provider
+class IllegalStateExceptionFilter : ExceptionMapper<IllegalStateException> {
+    override fun toResponse(exception: IllegalStateException): Response {
+        return ErrorDetail.build(ClientErrorException(exception.message, 400), exception)
+    }
 }

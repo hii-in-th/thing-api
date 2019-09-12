@@ -20,7 +20,6 @@ package hii.thing.api.sessions.jwt
 import hii.thing.api.getDao
 import hii.thing.api.hashText
 import hii.thing.api.security.JwtConst
-import hii.thing.api.security.deviceId
 import hii.thing.api.sessions.CreateSessionDetail
 import hii.thing.api.sessions.SessionsManager
 import hii.thing.api.sessions.dao.SessionsDao
@@ -33,8 +32,6 @@ class JwtSessionsManager(
 ) : SessionsManager {
 
     override fun anonymousCreate(accessToken: String, deviceId: String): String {
-        val jwt = JwtConst.decode(accessToken)
-        require(jwt.deviceId() == deviceId) { "ข้อมูล Device ไม่ตรงกับ Access token" }
         val session = UUID.randomUUID().toString()
         sessionsDao.save(accessToken.hashText(), session)
         return session

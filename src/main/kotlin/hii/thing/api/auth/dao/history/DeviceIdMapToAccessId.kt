@@ -15,17 +15,21 @@
  * limitations under the License.
  */
 
-package hii.thing.api.security.token
+package hii.thing.api.auth.dao.history
 
-import java.security.Principal
+import hii.thing.api.Dao
 
-/**
- * api จะใช้ ThingPrincipal ทั้งหมด
- */
-interface ThingPrincipal : Principal {
-    fun getRole(): Array<String>
-    val accessToken: String
-    val deviceName: String
-    val id: String
-    override fun getName(): String
+interface DeviceIdMapToAccessId : Dao {
+    /**
+     * บันทึกการขอ auth
+     * @param deviceId ของ device ที่ออกให้จะเป็น id ของ token key
+     * @param accessId เป็น id ของ access token ที่ device key ออกให้
+     */
+    fun record(deviceId: String, accessId: String)
+
+    /**
+     * ค้นหาว่า id ว่า device ไหนเป็นคนออกให้
+     * @param issuedTo หมายเลข id ของ issued
+     */
+    fun getDeviceIdBy(issuedTo: String): String
 }

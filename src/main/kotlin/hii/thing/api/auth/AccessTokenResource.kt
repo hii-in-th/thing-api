@@ -17,7 +17,9 @@
 
 package hii.thing.api.auth
 
+import hii.thing.api.auth.dao.history.DeviceIdMapToAccessId
 import hii.thing.api.auth.jwt.JwtAccessTokenManager
+import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.ignore
 import hii.thing.api.security.token.ThingPrincipal
@@ -39,7 +41,8 @@ import javax.ws.rs.core.SecurityContext
  * ใช้เพื่อสร้าง accessToken สำหรับบริการอื่นต่อ
  */
 class AccessTokenResource(
-    private val managerAccess: AccessTokenManager = JwtAccessTokenManager()
+    private val managerAccess: AccessTokenManager = JwtAccessTokenManager(),
+    private val deviceIdMapToAccessId: DeviceIdMapToAccessId = getDao()
 ) {
 
     @Context
@@ -71,6 +74,9 @@ class AccessTokenResource(
             val userPrincipal = context.userPrincipal as ThingPrincipal
             "Auth\tName:${userPrincipal.deviceName}"
         }
+        val deviceId = managerAccess.get(create.accessToken).deviceID
+        val issuedTo = managerAccess.getAccessId(create.accessToken)
+        deviceIdMapToAccessId.record(deviceId, issuedTo)
         return create
     }
 

@@ -20,6 +20,9 @@ package hii.thing.api
 import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
 import hii.thing.api.auth.dao.devicekey.InMemoryDeviceKeyDao
 import hii.thing.api.auth.dao.devicekey.JwtDeviceKeyDao
+import hii.thing.api.auth.dao.history.DeviceIdMapToAccessId
+import hii.thing.api.auth.dao.history.InMemoryDeviceIdMapToAccessId
+import hii.thing.api.auth.dao.history.RedisDeviceIdMapToAccessId
 import hii.thing.api.device.dao.DeviceDao
 import hii.thing.api.device.dao.InMemoryDeviceDao
 import hii.thing.api.device.dao.PgSqlDeviceDao
@@ -99,12 +102,13 @@ val sqlSequentCreateDao = {
  * @see standalone
  */
 inline fun <reified T : Dao> getDao(): T {
+    val redisConnection = { setOf(HostAndPort(redisHost, redisPort)) }
     val dao = when (T::class) {
         DeviceKeyDao::class -> if (standalone) InMemoryDeviceKeyDao() else JwtDeviceKeyDao()
         RecordSessionDao::class -> if (standalone) InMemoryRecordSessionDao() else PgSqlRecordSessionDao { dataSourcePool.getConnection() }
-        SessionsDao::class -> if (standalone) InMemorySessionDao() else RedisSessionDao(
-            setOf(HostAndPort(redisHost, redisPort)), redisExpireSec
-        )
+        SessionsDao::class -> if (standalone) InMemorySessionDao() else {
+            RedisSessionDao(redisConnection.invoke(), redisExpireSec)
+        }
         LastResultDao::class -> if (standalone) InMemoryLastResultDao() else PgSqlLastResultDao { dataSourcePool.getConnection() }
         BloodPressuresDao::class -> if (standalone) InMemoryBloodPressuresDao() else PgSqlBloodPressuresDao { dataSourcePool.getConnection() }
         HeightsDao::class -> if (standalone) InMemoryHeightsDao() else PgSqlHeightsDao { dataSourcePool.getConnection() }
@@ -114,6 +118,10 @@ inline fun <reified T : Dao> getDao(): T {
             rsaPublicKey
         )
         DeviceDao::class -> if (standalone) InMemoryDeviceDao() else PgSqlDeviceDao { dataSourcePool.getConnection() }
+        DeviceIdMapToAccessId::class -> if (standalone) InMemoryDeviceIdMapToAccessId() else RedisDeviceIdMapToAccessId(
+            redisConnection.invoke(),
+            redisExpireSec
+        )
         else -> throw TypeCastException("Cannot type dao.")
     }
     return dao as T

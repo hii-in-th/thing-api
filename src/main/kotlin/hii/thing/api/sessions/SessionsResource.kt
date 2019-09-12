@@ -17,6 +17,7 @@
 
 package hii.thing.api.sessions
 
+import hii.thing.api.auth.dao.history.DeviceIdMapToAccessId
 import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.hashText
@@ -47,7 +48,8 @@ import javax.ws.rs.core.SecurityContext
 class SessionsResource(
     private val sessionsManager: SessionsManager = JwtSessionsManager(),
     private val lastResultDao: LastResultDao = getDao(),
-    private val recordSessionDao: RecordSessionDao = getDao()
+    private val recordSessionDao: RecordSessionDao = getDao(),
+    private val deviceIdMapToAccessId: DeviceIdMapToAccessId = getDao()
 ) {
     @Context
     lateinit var headers: HttpHeaders
@@ -69,9 +71,10 @@ class SessionsResource(
             }
         }.invoke()
 
+        val deviceId = deviceIdMapToAccessId.getDeviceIdBy(userPrincipal.id)
         val newDetail = // Repeat real deviceId
             CreateSessionDetail(
-                userPrincipal.deviceId,
+                deviceId,
                 preCitizenId,
                 detail.citizenIdInput ?: UNDEFINED,
                 detail.birthDate,
@@ -107,6 +110,7 @@ class SessionsResource(
                 else
                     "anonymous"
                 }\t" +
+                "DeviceId:$deviceId\t" +
                 "age:${sessionsManager.getDetail(session.sessionId).age}"
         }
         session.subject?.shareableLink = null
@@ -121,7 +125,7 @@ class SessionsResource(
         require(sessionsManager.getDetail(session).citizenId.isNullOrEmpty()) { "มีการใส่ข้อมูลส่วนตัวไปแล้ว ไม่สามารถใส่ซ้ำได้" }
         sessionsManager.updateCreate(
             userPrincipal.accessToken, CreateSessionDetail(
-                userPrincipal.deviceId,
+                deviceIdMapToAccessId.getDeviceIdBy(userPrincipal.id),
                 detail.citizenId,
                 detail.citizenIdInput,
                 detail.birthDate,

@@ -48,6 +48,10 @@ class JwtDeviceKeyDao(val keyPair: KeyPair = JwtConst.keyPair) : DeviceKeyDao {
         val algorithm = Algorithm.RSA512(publicKey, privateKey)
         val date = Date()
 
+        val scoptList = arrayListOf<String>()
+        scoptList.addAll(deviceKeyDetail.scope)
+        scoptList.add("/device/$jwtId")
+
         val baseToken = JWT.create()
             .withIssuer(JwtConst.issuer)
             .withIssuedAt(date)
@@ -55,7 +59,7 @@ class JwtDeviceKeyDao(val keyPair: KeyPair = JwtConst.keyPair) : DeviceKeyDao {
             .withSubject(deviceKeyDetail.deviceName)
             .withJWTId(jwtId)
             .withArrayClaim("role", deviceKeyDetail.roles.toTypedArray())
-            .withArrayClaim("scope", deviceKeyDetail.scope.toTypedArray())
+            .withArrayClaim("scope", scoptList.toTypedArray())
             .withNotBefore(date)
             .sign(algorithm)
 
