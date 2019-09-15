@@ -863,87 +863,6 @@
       ]
     },
     {
-      "name": "Get Result",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "id": "86ef264c-8e09-4b84-8e4a-b5be394a3940",
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test(\"Content-Type is present\", function () {",
-              "    pm.response.to.have.header(\"Content-Type\");",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "{{accessToken}}",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [
-          {
-            "key": "X-Requested-By",
-            "value": "hii/7",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{url}}/persons/98349534/height",
-          "host": [
-            "{{url}}"
-          ],
-          "path": [
-            "persons",
-            "98349534",
-            "height"
-          ]
-        },
-        "description": "ร้องขอผลสรุปของการบริการวัดสัญญาณชีพครั้งนั้นๆ\n"
-      },
-      "response": [
-        {
-          "name": "Get Result",
-          "originalRequest": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{url}}/result",
-              "host": [
-                "{{url}}"
-              ],
-              "path": [
-                "result"
-              ]
-            }
-          },
-          "status": "OK",
-          "code": 200,
-          "_postman_previewlanguage": "json",
-          "header": [
-            {
-              "key": "Content-Type",
-              "value": "application/json; charset=utf-8"
-            }
-          ],
-          "cookie": [],
-          "body": "{\n\t\"age\" : 43,\n    \"height\" : 170,\n    \"weight\": 70.5,\n    \"bmi\": 24.3944,\n    \"bloodPressure\": {\n        \"sys\": 120.6,\n        \"dia\": 78.5,\n        \"level\": \"RISK\"\n    },\n    \"suggestions\" : [\n    \t{\n    \t\t\"imgUrl\": \"https://generali.co.th/wp-content/uploads/2017/09/GenWellnessContent_Sep2017_%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%94%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%A5%E0%B8%AB%E0%B8%B4%E0%B8%95%E0%B8%AA%E0%B8%B9%E0%B8%87-1.jpg\",\n    \t    \"text\": \"คุณมีความเสี่ยงที่จะเป็นโรคความดันโลหิตสูง ควรออกกำลังกายเป็นประจำ และลดการทานเค็ม\",\n    \t\t\"causes\": [ \"bloodPressure\", \"age\" ]\n    \t},\n    \t{\n    \t\t\"text\": \"นำหนักตัวของคุณอยู่ในเกณฑ์ที่เหมาะสม\",\n    \t\t\"causes\": [ \"bmi\" ]\n    \t}\n    ]\n}"
-        }
-      ]
-    },
-    {
       "name": "Register device location",
       "event": [
         {
@@ -1605,6 +1524,87 @@
 					]
         }
 			},
+      "response": [
+        {
+          "name": "Get Result",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/result",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "result"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n\t\"age\" : 43,\n    \"height\" : 170,\n    \"weight\": 70.5,\n    \"bmi\": 24.3944,\n    \"bloodPressure\": {\n        \"sys\": 120.6,\n        \"dia\": 78.5,\n        \"level\": \"RISK\"\n    },\n    \"suggestions\" : [\n    \t{\n    \t\t\"imgUrl\": \"https://generali.co.th/wp-content/uploads/2017/09/GenWellnessContent_Sep2017_%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%94%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%A5%E0%B8%AB%E0%B8%B4%E0%B8%95%E0%B8%AA%E0%B8%B9%E0%B8%87-1.jpg\",\n    \t    \"text\": \"คุณมีความเสี่ยงที่จะเป็นโรคความดันโลหิตสูง ควรออกกำลังกายเป็นประจำ และลดการทานเค็ม\",\n    \t\t\"causes\": [ \"bloodPressure\", \"age\" ]\n    \t},\n    \t{\n    \t\t\"text\": \"นำหนักตัวของคุณอยู่ในเกณฑ์ที่เหมาะสม\",\n    \t\t\"causes\": [ \"bmi\" ]\n    \t}\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get height history",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "86ef264c-8e09-4b84-8e4a-b5be394a3940",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Content-Type is present\", function () {",
+              "    pm.response.to.have.header(\"Content-Type\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Requested-By",
+            "type": "text",
+            "value": "hii/7"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/persons/98349534/height",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "persons",
+            "98349534",
+            "height"
+          ]
+        },
+        "description": "ร้องขอผลสรุปของการบริการวัดสัญญาณชีพครั้งนั้นๆ\n"
+      },
 			"response": [
 				{
 					"name": "Get Result",
