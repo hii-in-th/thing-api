@@ -37,8 +37,18 @@ class InMemoryDeviceDaoTest {
     private val location2 = "สาธร 888"
     private val type2 = "888"
 
-    private val device = Device(location, deviceId, deviceName, type)
-    private val device2 = Device(location2, deviceId2, deviceName2, type2)
+    private val device = Device(
+        deviceName,
+        location,
+        type,
+        deviceId
+    )
+    private val device2 = Device(
+        deviceName2,
+        location2,
+        type2,
+        deviceId2
+    )
 
     @Test
     fun create() {
@@ -59,8 +69,8 @@ class InMemoryDeviceDaoTest {
 
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
-        create.type!! `should be equal to` type
-        create.deviceName!! `should be equal to` deviceName
+        create.type `should be equal to` type
+        create.deviceName `should be equal to` deviceName
     }
 
     @Test
@@ -73,13 +83,13 @@ class InMemoryDeviceDaoTest {
 
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
-        create.type!! `should be equal to` type
-        create.deviceName!! `should be equal to` deviceName
+        create.type `should be equal to` type
+        create.deviceName `should be equal to` deviceName
 
         create2.location `should be equal to` location2
         create2.deviceId!! `should be equal to` deviceId2
-        create2.type!! `should be equal to` type2
-        create2.deviceName!! `should be equal to` deviceName2
+        create2.type `should be equal to` type2
+        create2.deviceName `should be equal to` deviceName2
     }
 
     @Test
@@ -88,8 +98,8 @@ class InMemoryDeviceDaoTest {
 
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
-        create.type!! `should be equal to` type
-        create.deviceName!! `should be equal to` deviceName
+        create.type `should be equal to` type
+        create.deviceName `should be equal to` deviceName
     }
 
     @Test
@@ -99,13 +109,13 @@ class InMemoryDeviceDaoTest {
 
         create.location `should be equal to` location
         create.deviceId!! `should be equal to` deviceId
-        create.type!! `should be equal to` type
-        create.deviceName!! `should be equal to` deviceName
+        create.type `should be equal to` type
+        create.deviceName `should be equal to` deviceName
 
         create2.location `should be equal to` location2
         create2.deviceId!! `should be equal to` deviceId2
-        create2.type!! `should be equal to` type2
-        create2.deviceName!! `should be equal to` deviceName2
+        create2.type `should be equal to` type2
+        create2.deviceName `should be equal to` deviceName2
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -128,7 +138,7 @@ class InMemoryDeviceDaoTest {
     @Test
     fun createAndUpdate() {
         dao.create(device)
-        dao.update(deviceId, Device("สามเสน", deviceId, "nectec"))
+        dao.update(deviceId, Device("name", "nectec", "สามเสน", deviceId))
     }
 
     @Test
@@ -138,12 +148,12 @@ class InMemoryDeviceDaoTest {
         val type1 = "nectec"
         val deviceName1 = "888"
 
-        val update = dao.update(deviceId, Device(location1, deviceId, deviceName1, type1))
+        val update = dao.update(deviceId, Device(deviceName1, location1, type1, deviceId))
 
         update.location `should be equal to` location1
         update.deviceId!! `should be equal to` deviceId
-        update.type!! `should be equal to` type1
-        update.deviceName!! `should be equal to` deviceName1
+        update.type `should be equal to` type1
+        update.deviceName `should be equal to` deviceName1
     }
 
     @Test(expected = IllegalArgumentException::class)

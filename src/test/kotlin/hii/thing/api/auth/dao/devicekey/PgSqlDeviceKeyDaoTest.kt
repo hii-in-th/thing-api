@@ -41,7 +41,7 @@ class PgSqlDeviceKeyDaoTest {
         deviceKeyDao = PgSqlDeviceKeyDao(pgsql.connection)
         ignore {
             val dao: DeviceDao = PgSqlDeviceDao(pgsql.connection)
-            dao.create(Device("nstda", "max-199-991", "name", "type"))
+            dao.create(Device("name", "nstda", "type", "max-199-991"))
         }
     }
 

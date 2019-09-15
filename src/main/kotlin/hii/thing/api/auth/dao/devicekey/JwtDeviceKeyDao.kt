@@ -41,7 +41,7 @@ class JwtDeviceKeyDao(val keyPair: KeyPair = JwtConst.keyPair) : DeviceKeyDao {
      */
     override fun registerDevice(deviceKeyDetail: DeviceKeyDetail): DeviceKeyDetail {
         require(deviceKeyDetail.deviceKey.isBlank()) { "Jwt device token auto gen base token. baseToken is bank." }
-        val jwtId = UUID.randomUUID().toString()
+        val jwtId = deviceKeyDetail.deviceID
 
         val publicKey: RSAPublicKey = keyPair.publicKey
         val privateKey: RSAPrivateKey = keyPair.privateKey
@@ -64,5 +64,26 @@ class JwtDeviceKeyDao(val keyPair: KeyPair = JwtConst.keyPair) : DeviceKeyDao {
             .sign(algorithm)
 
         return getDeviceBy(baseToken)
+    }
+
+    fun createMasterKey(): String {
+        val keyId = UUID.randomUUID().toString()
+
+        val publicKey: RSAPublicKey = keyPair.publicKey
+        val privateKey: RSAPrivateKey = keyPair.privateKey
+        val algorithm = Algorithm.RSA512(publicKey, privateKey)
+        val date = Date()
+
+        return JWT.create()
+            .withIssuer(JwtConst.issuer)
+            .withIssuedAt(date)
+            .withAudience(JwtConst.audience)
+            .withSubject("Master")
+            .withJWTId(keyId)
+            .withArrayClaim("role", arrayOf("master"))
+            .withArrayClaim("scope", arrayOf("/device"))
+            .withExpiresAt(Date(date.time + 31536000000))
+            .withNotBefore(date)
+            .sign(algorithm)
     }
 }

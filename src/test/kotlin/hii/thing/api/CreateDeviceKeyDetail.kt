@@ -56,7 +56,7 @@ class CreateDeviceKeyDetail {
     val device = DeviceKeyDetail(
         "$group/$name",
         "",
-        listOf("kiosk"),
+        listOf("kiosk", group),
         listOf("/auth")
     )
     lateinit var deviceKeyDao: DeviceKeyDao

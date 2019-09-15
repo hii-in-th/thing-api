@@ -24,18 +24,18 @@ import org.jetbrains.exposed.sql.Table
 
 internal object SqlDevice : Table("device") {
     val deviceId = varchar("device_id", SQL_DEVICE_ID_LENGTH).primaryKey()
-    val deviceName = varchar("device_name", 100)
-    val create = datetime("create")
-    val update = datetime("update")
+    val deviceName = varchar("device_name", 100).uniqueIndex()
     val location = varchar("location", 255)
     val type = varchar("type", 36)
+    val create = datetime("create")
+    val update = datetime("update")
 
     fun mapResult(result: ResultRow): Device {
         return Device(
-            result[location],
-            result[deviceId],
             result[deviceName],
-            result[type]
+            result[location],
+            result[type],
+            result[deviceId]
         )
     }
 }

@@ -39,19 +39,17 @@ class PgSqlDeviceDao(connection: () -> Connection) : DeviceDao {
 
         transaction {
             require(device.deviceId != null) { "Device id is not null" }
-            require(device.type != null) { "Device type is not null" }
-            require(device.deviceName != null) { "Device name is not null" }
             require(runCatching { get(device.deviceId!!) }.isFailure) {
                 "ไม่สามารถสร้าง device ซ้ำที่มีอยู่ได้จำเป็นต้องใช้ update"
             }
             val now = Now()
             SqlDevice.insert {
-                it[deviceId] = device.deviceId!!
                 it[deviceName] = device.deviceName
+                it[location] = device.location
+                it[type] = device.type
+                it[deviceId] = device.deviceId!!
                 it[create] = now
                 it[update] = now
-                it[location] = device.location
-                it[type] = device.type!!
             }
             deviceOut = get(device.deviceId!!)
         }
@@ -64,10 +62,10 @@ class PgSqlDeviceDao(connection: () -> Connection) : DeviceDao {
         try {
             transaction {
                 SqlDevice.update({ SqlDevice.deviceId eq deviceId }) { table ->
-                    device.deviceName?.let { table[deviceName] = it }
-                    device.type?.let { table[type] = it }
-                    table[update] = Now()
+                    table[deviceName] = device.deviceName
                     table[location] = device.location
+                    table[type] = device.type
+                    table[update] = Now()
                 }
                 deviceOut = get(deviceId)
             }

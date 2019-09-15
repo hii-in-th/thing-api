@@ -18,10 +18,12 @@
 package hii.thing.api.device
 
 import hii.thing.api.auth.AccessTokenManager
+import hii.thing.api.auth.DeviceKeyDetail
+import hii.thing.api.auth.dao.devicekey.DeviceKeyDao
 import hii.thing.api.auth.jwt.JwtAccessTokenManager
 import hii.thing.api.device.dao.DeviceDao
 import hii.thing.api.getDao
-import hii.thing.api.security.JwtConst
+import hii.thing.api.getLogger
 import hii.thing.api.security.token.ThingPrincipal
 import javax.annotation.security.RolesAllowed
 import javax.ws.rs.Consumes
@@ -39,20 +41,31 @@ import javax.ws.rs.core.SecurityContext
 @Produces(MediaType.APPLICATION_JSON)
 class DeviceResource(
     private val deviceDao: DeviceDao = getDao(),
+    private val deviceKeyDao: DeviceKeyDao = getDao(),
     private val accessTokenManager: AccessTokenManager = JwtAccessTokenManager()
 ) {
     @Context
     lateinit var context: SecurityContext
 
+    /**
+     * สร้าง device แล้วส่งค่ากลับเป็น key
+     */
     @POST
-    @RolesAllowed("kiosk")
-    fun createDevice(device: Device): Device {
-        val userPrincipal = context.userPrincipal as ThingPrincipal
-        val deviceKeyDetail = accessTokenManager.get(userPrincipal.accessToken)
-        device.deviceId = JwtConst.decode(userPrincipal.accessToken).id
-        device.type = deviceKeyDetail.roles.lastOrNull()
-
-        return deviceDao.create(device)
+    @RolesAllowed("master")
+    fun register(device: Device): DeviceToken {
+        //  สร้าง key
+        val deviceKeyDetail = deviceKeyDao.registerDevice(
+            DeviceKeyDetail(
+                "${device.type}/${device.deviceName}",
+                "",
+                listOf("kiosk", device.type),
+                listOf("/auth")
+            )
+        )
+        device.deviceId = deviceKeyDetail.deviceID
+        deviceDao.create(device) // สร้างข้อมูล device
+        logger.info { "Create device token name ${deviceKeyDetail.deviceName}" }
+        return DeviceToken(deviceKeyDetail.deviceKey)
     }
 
     @PUT
@@ -63,15 +76,21 @@ class DeviceResource(
         val deviceKeyDetail = accessTokenManager.get(userPrincipal.accessToken)
         require(deviceKeyDetail.deviceID == deviceId) { "ค่า Device ID ที่ระบุไม่ตรงกับ Device ID ของ Token" }
         device.deviceId = deviceKeyDetail.deviceID
-        device.type = deviceKeyDetail.roles.lastOrNull()
+        device.type = deviceKeyDetail.roles.lastOrNull()!!
 
         return deviceDao.update(deviceId, device)
+    }
+
+    companion object {
+        val logger by lazy { getLogger() }
     }
 }
 
 data class Device(
-    val location: String,
-    var deviceId: String? = null,
-    val deviceName: String,
-    var type: String? = null
+    val deviceName: String, // require create
+    val location: String, // require create
+    var type: String, // group
+    var deviceId: String? = null
 )
+
+data class DeviceToken(val deviceToken: String)

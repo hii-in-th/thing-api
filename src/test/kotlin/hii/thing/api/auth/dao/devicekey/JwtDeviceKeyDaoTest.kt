@@ -55,7 +55,7 @@ class JwtDeviceKeyDaoTest {
         val register = deviceKeyDao.registerDevice(device)
         val getDevice = deviceKeyDao.getDeviceBy(register.deviceKey)
 
-        getDevice.deviceID `should not equal` device.deviceID
+        getDevice.deviceID `should equal` device.deviceID
         getDevice.deviceName `should be equal to` device.deviceName
         getDevice.deviceKey `should not equal` device.deviceKey
         getDevice.roles `should equal` device.roles
