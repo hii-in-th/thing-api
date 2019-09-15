@@ -901,14 +901,14 @@
           }
         ],
         "url": {
-          "raw": "{{url}}/persons/98349534/bloodpressure",
+          "raw": "{{url}}/persons/98349534/height",
           "host": [
             "{{url}}"
           ],
           "path": [
             "persons",
             "98349534",
-            "bloodpressure"
+            "height"
           ]
         },
         "description": "ร้องขอผลสรุปของการบริการวัดสัญญาณชีพครั้งนั้นๆ\n"
@@ -956,14 +956,7 @@
               "});",
               "",
               "var jsonData = pm.response.json();",
-              "pm.test(\"sessionId value is present\", function () {",
-              "    pm.expect(jsonData.sessionId).not.eql(null);",
-              "    ",
-              "    pm.environment.set(\"sessionId\", jsonData.sessionId);",
-              "});",
-              "",
-              "",
-              ""
+              "pm.environment.set(\"mobileToken\", jsonData.deviceToken);"
             ],
             "type": "text/javascript"
           }
@@ -975,7 +968,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "{{accessToken}}",
+              "value": "{{masterToken}}",
               "type": "string"
             }
           ]
@@ -1001,7 +994,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n\t\"location\": \"nectec/test\"\n}"
+          "raw": "{\n\t\"location\": \"nectec/ทดสอ\",\n\t\"deviceName\" : \"test2\",\n\t\"type\" : \"HII\"\n}"
         },
         "url": {
           "raw": "{{url}}/device",
@@ -1285,7 +1278,7 @@
           "bearer": [
             {
               "key": "token",
-              "value": "{{accessToken}}",
+              "value": "{{mobileToken}}",
               "type": "string"
             }
           ]
