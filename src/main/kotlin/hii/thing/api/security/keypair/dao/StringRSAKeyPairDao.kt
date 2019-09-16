@@ -38,14 +38,14 @@ class StringRSAKeyPairDao(privateKeyString: String, publicKeyString: String) :
         runBlocking {
             launch {
                 val privateKeyContent =
-                    privateKeyString.replace(Regex("\\n"), "").replace("-----BEGIN PRIVATE KEY-----", "")
+                    privateKeyString.replace(Regex("\n"), "").replace("-----BEGIN PRIVATE KEY-----", "")
                         .replace("-----END PRIVATE KEY-----", "")
                 val keySpecPKCS8 = PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKeyContent))
                 priKey = kf.generatePrivate(keySpecPKCS8) as RSAPrivateKey
             }
             launch {
                 val publicKeyContent =
-                    publicKeyString.replace(Regex("\\n"), "").replace("-----BEGIN PUBLIC KEY-----", "")
+                    publicKeyString.replace(Regex("\n"), "").replace("-----BEGIN PUBLIC KEY-----", "")
                         .replace("-----END PUBLIC KEY-----", "")
                 val keySpecX509 = X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyContent))
                 pubKey = kf.generatePublic(keySpecX509) as RSAPublicKey
