@@ -74,7 +74,6 @@ class PgSqlRecordSessionDao(connection: () -> Connection) :
         transaction {
             try {
                 SqlSessionDetail.update({ SqlSessionDetail.sessionId eq sessionId }) {
-                    it[deviceId] = sessionDetail.deviceId
                     it[citizenId] = sessionDetail.citizenId
                     it[citizenIdInput] = sessionDetail.citizenIdInput?.toString()
                     it[name] = sessionDetail.name

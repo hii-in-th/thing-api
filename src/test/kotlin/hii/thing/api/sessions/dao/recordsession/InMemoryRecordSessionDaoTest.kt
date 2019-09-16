@@ -74,7 +74,6 @@ class InMemoryRecordSessionDaoTest {
         recordSessionDao.register(sessionId, createSessionDetail)
         val update = recordSessionDao.update(sessionId, anonymous)
 
-        update.deviceId `should be equal to` anonymous.deviceId
         update.citizenId!! `should be equal to` anonymous.citizenId!!
         update.citizenIdInput!! `should equal` anonymous.citizenIdInput!!
         update.birthDate!! `should be equal to` anonymous.birthDate!!

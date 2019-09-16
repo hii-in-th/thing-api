@@ -46,7 +46,7 @@ class PgSqlRecordSessionDaoTest {
         ignore {
             val dao: DeviceDao = PgSqlDeviceDao(pgsql.connection)
             ignore { dao.create(Device("name", "nstda", "sss", "max-199-991")) }
-            ignore { dao.create(Device("name", "nstda", "sss", "aaa/000")) }
+            ignore { dao.create(Device("name02", "nstda", "sss", "aaa/000")) }
         }
     }
 
@@ -94,7 +94,6 @@ class PgSqlRecordSessionDaoTest {
         recordSessionDao.register(sessionId, createSessionDetail)
         val update = recordSessionDao.update(sessionId, anonymous)
 
-        update.deviceId `should be equal to` anonymous.deviceId
         update.citizenId!! `should be equal to` anonymous.citizenId!!
         update.citizenIdInput!! `should equal` anonymous.citizenIdInput!!
         update.birthDate!! `should be equal to` anonymous.birthDate!!

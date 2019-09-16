@@ -17,7 +17,6 @@
 
 package hii.thing.api.sessions
 
-import hii.thing.api.auth.dao.history.DeviceIdMapToAccessId
 import hii.thing.api.getDao
 import hii.thing.api.getLogger
 import hii.thing.api.hashText
@@ -48,8 +47,7 @@ import javax.ws.rs.core.SecurityContext
 class SessionsResource(
     private val sessionsManager: SessionsManager = JwtSessionsManager(),
     private val lastResultDao: LastResultDao = getDao(),
-    private val recordSessionDao: RecordSessionDao = getDao(),
-    private val deviceIdMapToAccessId: DeviceIdMapToAccessId = getDao()
+    private val recordSessionDao: RecordSessionDao = getDao()
 ) {
     @Context
     lateinit var headers: HttpHeaders
@@ -71,16 +69,17 @@ class SessionsResource(
             }
         }.invoke()
 
-        val deviceId = deviceIdMapToAccessId.getDeviceIdBy(userPrincipal.id)
+        val ipAddress = headers.getHeaderString("CF-Connecting-IP")
+
         val newDetail = // Repeat real deviceId
             CreateSessionDetail(
-                deviceId,
+                userPrincipal.deviceId,
                 preCitizenId,
                 detail.citizenIdInput ?: UNDEFINED,
                 detail.birthDate,
                 detail.name,
                 preSex,
-                headers.getHeaderString("CF-Connecting-IP")
+                ipAddress
             )
         val session = {
             val lastResult =
@@ -110,7 +109,7 @@ class SessionsResource(
                 else
                     "anonymous"
                 }\t" +
-                "DeviceId:$deviceId\t" +
+                "DeviceId:${userPrincipal.deviceId}\t" +
                 "age:${sessionsManager.getDetail(session.sessionId).age}"
         }
         session.subject?.shareableLink = null
@@ -123,15 +122,16 @@ class SessionsResource(
         val userPrincipal = context.userPrincipal as ThingPrincipal
         val session = sessionsManager.getBy(userPrincipal.accessToken)
         require(sessionsManager.getDetail(session).citizenId.isNullOrEmpty()) { "มีการใส่ข้อมูลส่วนตัวไปแล้ว ไม่สามารถใส่ซ้ำได้" }
+        val ipAddress = headers.getHeaderString("CF-Connecting-IP")
         sessionsManager.updateCreate(
             userPrincipal.accessToken, CreateSessionDetail(
-                deviceIdMapToAccessId.getDeviceIdBy(userPrincipal.id),
+                userPrincipal.deviceId,
                 detail.citizenId,
                 detail.citizenIdInput,
                 detail.birthDate,
                 detail.name,
                 detail.sex,
-                headers.getHeaderString("CF-Connecting-IP")
+                ipAddress
             )
         )
 
