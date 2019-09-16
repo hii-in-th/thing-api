@@ -17,14 +17,22 @@
 
 package hii.thing.api.security.token.jwt
 
+import hii.thing.api.auth.dao.history.DeviceIdMapToAccessId
+import hii.thing.api.device.dao.DeviceDao
+import hii.thing.api.getDao
 import hii.thing.api.security.JwtConst
 import hii.thing.api.security.role
 import hii.thing.api.security.token.ThingPrincipal
 
 class JwtThingPrincipal(override val accessToken: String) : ThingPrincipal {
+    private val deviceMap by lazy { getDao<DeviceIdMapToAccessId>() }
+    private val devices by lazy { getDao<DeviceDao>() }
+
     override fun getName(): String = jwt.subject
     override fun getRole(): Array<String> = jwt.role()
     override val deviceName: String get() = jwt.subject
-    override val id: String = JwtConst.decode(accessToken).id
+    override val deviceId: String = deviceMap.getDeviceIdBy(JwtConst.decode(accessToken).id)
+    override val type: String = devices.get(deviceId).type
+    override val deviceLocation: String = devices.get(deviceId).location
     val jwt = JwtConst.decode(accessToken)
 }
