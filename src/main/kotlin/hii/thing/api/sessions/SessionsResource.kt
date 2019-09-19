@@ -100,7 +100,7 @@ class SessionsResource(
         logger.info {
             "UserUse\t" +
                 "Id:${session.sessionId}\t" +
-                "Name:${userPrincipal.deviceName}\t" +
+                "Name:${userPrincipal.name}\t" +
                 "InputType:${newDetail.citizenIdInput}\t" +
                 "Sex:${newDetail.sex?.toString() ?: "Unknown"}\t" +
                 "Citizen:${

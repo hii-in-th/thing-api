@@ -25,9 +25,17 @@ import java.security.Principal
 interface ThingPrincipal : Principal {
     fun getRole(): Array<String>
     val accessToken: String
-    val deviceName: String
     val deviceLocation: String
     val type: String
+
+    /**
+     * ใช้กับ access token
+     * คืนค่าเป็น device id ที่สร้าง access token
+     */
     val deviceId: String
+
+    /**
+     * คืนค่าเป็น device name
+     */
     override fun getName(): String
 }

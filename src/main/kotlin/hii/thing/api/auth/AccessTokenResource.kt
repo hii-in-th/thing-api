@@ -72,7 +72,7 @@ class AccessTokenResource(
         val create = managerAccess.create(deviceKey)
         logger.info {
             val userPrincipal = context.userPrincipal as ThingPrincipal
-            "Auth\tName:${userPrincipal.deviceName}"
+            "Auth\tName:${userPrincipal.name}"
         }
         val deviceId = managerAccess.get(create.accessToken).deviceID
         val issuedTo = managerAccess.getAccessId(create.accessToken)

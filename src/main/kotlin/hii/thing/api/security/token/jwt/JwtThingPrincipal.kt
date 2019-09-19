@@ -30,7 +30,6 @@ class JwtThingPrincipal(override val accessToken: String) : ThingPrincipal {
 
     override fun getName(): String = jwt.subject
     override fun getRole(): Array<String> = jwt.role()
-    override val deviceName: String get() = jwt.subject
     override val deviceId: String = deviceMap.getDeviceIdBy(JwtConst.decode(accessToken).id)
     override val type: String = devices.get(deviceId).type
     override val deviceLocation: String = devices.get(deviceId).location
