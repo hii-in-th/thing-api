@@ -118,3 +118,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/java,intellij
+/src/test/kotlin/hii/thing/api/CreateMasterKey.kt
