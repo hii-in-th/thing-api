@@ -27,6 +27,7 @@ import com.fatboyindustrial.gsonjavatime.ZonedDateTimeConverter
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import hii.thing.api.config.GsonJerseyProvider.Companion.hiiGson
 import hii.thing.api.getLogger
 import java.io.IOException
 import java.io.InputStream
@@ -146,3 +147,5 @@ private inline fun <reified T> GsonBuilder.adapterFor(adapter: Any): GsonBuilder
 }
 
 inline fun <reified T> typeTokenOf(): Type = object : TypeToken<T>() {}.type
+
+fun Any.toJson(): String = hiiGson.toJson(this)

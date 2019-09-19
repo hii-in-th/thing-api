@@ -15,6 +15,16 @@
  * limitations under the License.
  */
 
-package hii.thing.api.sessions
+package hii.thing.api.sendnhso
 
-data class PersonalResult(val data: Map<String, Any>)
+internal val nhsoEndpoint by lazy { property("NHSO_ENDPOINT") }
+internal val nhsoUsername by lazy { property("NHSO_USER") }
+internal val nhsoPassword by lazy { property("NHSO_PASSWORD") }
+
+internal data class LoginBody(val username: String, val password: String)
+internal data class TokenBody(val token: String)
+
+private fun property(keyName: String): String {
+    System.getProperty(keyName)?.let { return it }
+    return System.getenv(keyName) ?: "null"
+}
