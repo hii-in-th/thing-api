@@ -82,7 +82,7 @@ class JwtDeviceKeyDao(val keyPair: KeyPair = JwtConst.keyPair) : DeviceKeyDao {
             .withJWTId(keyId)
             .withArrayClaim("role", arrayOf("master"))
             .withArrayClaim("scope", arrayOf("/device"))
-            .withExpiresAt(Date(date.time + 31536000000))
+            .withExpiresAt(Date(date.time + 86400000))
             .withNotBefore(date)
             .sign(algorithm)
     }
