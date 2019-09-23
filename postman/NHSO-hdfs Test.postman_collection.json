@@ -207,6 +207,73 @@
           "response": []
         },
         {
+          "name": "Read file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1cd81fbf-33d0-4d53-9a1b-351b58af4ead",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/root-test.csv?op=OPEN",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "OPEN"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "LISTSTATUS Check create file.",
           "event": [
             {
@@ -528,7 +595,7 @@
                   "});",
                   "",
                   "pm.test(\"Check deleter\", function () {",
-                  "    if (flag === false) { throw new Error(\"\") }",
+                  "    if (flag === true) { throw new Error(\"\") }",
                   "});"
                 ],
                 "type": "text/javascript"
@@ -894,6 +961,74 @@
           "response": []
         },
         {
+          "name": "Read file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1cd81fbf-33d0-4d53-9a1b-351b58af4ead",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/root-test.csv?op=OPEN",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "OPEN"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "LISTSTATUS Check create file.",
           "event": [
             {
@@ -1219,7 +1354,7 @@
                   "});",
                   "",
                   "pm.test(\"Check deleter\", function () {",
-                  "    if (flag === false) { throw new Error(\"\") }",
+                  "    if (flag === true ) { throw new Error(\"\") }",
                   "});"
                 ],
                 "type": "text/javascript"
