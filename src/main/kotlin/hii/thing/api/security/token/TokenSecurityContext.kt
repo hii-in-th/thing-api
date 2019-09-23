@@ -39,8 +39,13 @@ class TokenSecurityContext(
     override fun getUserPrincipal(): Principal {
         return if (token.isEmpty())
             Principal { "visitor" }
-        else
-            JwtThingPrincipal(token)
+        else {
+            val run = kotlin.runCatching { JwtThingPrincipal(token) }
+            if (run.isSuccess)
+                run.getOrNull()!!
+            else
+                Principal { "visitor" }
+        }
     }
 
     override fun isSecure() = true
