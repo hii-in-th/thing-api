@@ -1,12 +1,320 @@
 {
 	"info": {
-		"_postman_id": "f2115a47-0c5c-4a4c-ad5a-d4a6ef44afa3",
+    "_postman_id": "ff3642ab-b8bf-4fc8-be3a-114bc38e9d7a",
 		"name": "HII-Thing-API",
 		"description": "API ที่เกี่ยวข้องกับส่วนของ Kiosk",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
+      "name": "Register device location",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "9d1719e5-715b-40a9-8e1c-9e210d7cce9d",
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "pm.environment.set(\"mobileToken\", jsonData.deviceToken);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{masterToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"location\": \"ทดสอบ\",\n\t\"deviceName\" : \"hiide2\",\n\t\"type\" : \"NHSO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url}}/device",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "device"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "New session by typing citizen id",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"TYPING\" \n}"
+            },
+            "url": {
+              "raw": "{{url}}/sessions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 05 Jun 2019 05:55:03 GMT"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"107-TKfhgId2XQrLKOeCaLU0iA\""
+            },
+            {
+              "key": "Server",
+              "value": "nginx"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "x-srv-span",
+              "value": "v=1;s=02182d390fa0958b"
+            },
+            {
+              "key": "x-srv-trace",
+              "value": "v=1;t=ec8dd327c00e6d03"
+            },
+            {
+              "key": "Content-Length",
+              "value": "263"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"height\": 170\n    }\n}"
+        },
+        {
+          "name": "New session without CitizenId",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"105487111\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/sessions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 05 Jun 2019 05:55:03 GMT"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"107-TKfhgId2XQrLKOeCaLU0iA\""
+            },
+            {
+              "key": "Server",
+              "value": "nginx"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "x-srv-span",
+              "value": "v=1;s=02182d390fa0958b"
+            },
+            {
+              "key": "x-srv-trace",
+              "value": "v=1;t=ec8dd327c00e6d03"
+            },
+            {
+              "key": "Content-Length",
+              "value": "263"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\"\n}"
+        },
+        {
+          "name": "New session with citizen card",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\",\n\t\"name\": \"พารุณ พานิชผล\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/sessions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Encoding",
+              "value": "gzip"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"age\": 43,\n    \t\"height\": 170,\n    \t\"weigth\": 65.2,\n    \t\"bloodPressure\" : {\n    \t\t\"sys\": 110,\n    \t\t\"dia\" : 70,\n    \t\t\"level\": \"NORMAL\"\n    \t}\n    }\n}"
+        }
+      ]
+    },
+    {
 			"name": "Request Access Token",
 			"event": [
 				{
@@ -43,6 +351,17 @@
 						"key": "Accept",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "kios",
+            "type": "text"
 					}
 				],
 				"url": {
@@ -149,11 +468,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\"\n}"
+          "raw": "{\n\t\"deviceId\": \"1e8aaf6c-7748-4bac-9d98-8f5d1a840689\",\n\t\"citizenId\": \"98349534\",\n\t\"birthDate\" : \"1990-06-05\",\n\t\"citizenIdInput\":\"CARD\",\n\t\"name\":\"devMax\",\n\t\"sex\":\"MALE\"\n}"
 				},
 				"url": {
 					"raw": "{{url}}/sessions",
@@ -168,7 +492,7 @@
 			},
 			"response": [
 				{
-					"name": "New session without CitizenId",
+          "name": "New session by typing citizen id",
 					"originalRequest": {
 						"method": "POST",
 						"header": [
@@ -186,7 +510,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"deviceId\": \"105487111\"\n}"
+              "raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"TYPING\" \n}"
 						},
 						"url": {
 							"raw": "{{url}}/sessions",
@@ -260,10 +584,10 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\"\n}"
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"height\": 170\n    }\n}"
 				},
 				{
-					"name": "New session by typing citizen id",
+          "name": "New session without CitizenId",
 					"originalRequest": {
 						"method": "POST",
 						"header": [
@@ -281,7 +605,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"TYPING\" \n}"
+              "raw": "{\n\t\"deviceId\": \"105487111\"\n}"
 						},
 						"url": {
 							"raw": "{{url}}/sessions",
@@ -355,7 +679,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"height\": 170\n    }\n}"
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\"\n}"
 				},
 				{
 					"name": "New session with citizen card",
@@ -452,11 +776,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"height\": 170\n}"
+          "raw": "{\n    \"height\": 140\n}"
 				},
 				"url": {
 					"raw": "{{url}}/heights",
@@ -564,11 +893,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"weight\": 70.5\n}"
+          "raw": "{\n    \"weight\": 72\n}"
 				},
 				"url": {
 					"raw": "{{url}}/weights",
@@ -677,11 +1011,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"sys\": 120.6,\n\t\"dia\": 78.5\n}"
+          "raw": "{\n\t\"sys\": 111.0,\n\t\"dia\": 60.0,\n\t\"pulse\": 59\n}"
 				},
 				"url": {
 					"raw": "{{url}}/blood-pressures",
@@ -761,11 +1100,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\"\n}"
+          "raw": "{\n\t\"deviceId\": \"hii/7\",\n\t\"citizenId\": \"1101401444875\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1970-06-05\"\n}"
 				},
 				"url": {
 					"raw": "{{url}}/sessions",
@@ -774,6 +1118,13 @@
 					],
 					"path": [
 						"sessions"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "disabled": true
+            }
 					]
 				},
 				"description": "สำหรับผู้ใช้ที่เปลี่ยนใจให้ข้อมูลด้วยการพิมพ์ หรือเสียบบัตรประชาชนภายหลัง เพื่อให้ได้รับข้อมูลมากขึ้น"
@@ -816,6 +1167,317 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"age\": 43,\n    \t\"height\": 170,\n    \t\"weigth\": 65.2,\n    \t\"bloodPressure\" : {\n    \t\t\"sys\": 110,\n    \t\t\"dia\" : 70,\n    \t\t\"level\": \"NORMAL\"\n    \t}\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Updatedevice location",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "9d1719e5-715b-40a9-8e1c-9e210d7cce9d",
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "pm.test(\"sessionId value is present\", function () {",
+              "    pm.expect(jsonData.sessionId).not.eql(null);",
+              "    ",
+              "    pm.environment.set(\"sessionId\", jsonData.sessionId);",
+              "});",
+              "",
+              "",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{mobileToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "X-Requested-By",
+            "value": "hii",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"location\": \"nectec/test\"\n}"
+        },
+        "url": {
+          "raw": "{{url}}/device/1e8aaf6c-7748-4bac-9d98-8f5d1a840689",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "device",
+            "1e8aaf6c-7748-4bac-9d98-8f5d1a840689"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "New session without CitizenId",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"105487111\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/sessions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 05 Jun 2019 05:55:03 GMT"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"107-TKfhgId2XQrLKOeCaLU0iA\""
+            },
+            {
+              "key": "Server",
+              "value": "nginx"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "x-srv-span",
+              "value": "v=1;s=02182d390fa0958b"
+            },
+            {
+              "key": "x-srv-trace",
+              "value": "v=1;t=ec8dd327c00e6d03"
+            },
+            {
+              "key": "Content-Length",
+              "value": "263"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\"\n}"
+        },
+        {
+          "name": "New session with citizen card",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"CARD\",\n\t\"birthDate\" : \"1976-06-05\",\n\t\"name\": \"พารุณ พานิชผล\"\n}"
+            },
+            "url": {
+              "raw": "{{url}}/sessions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Encoding",
+              "value": "gzip"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"age\": 43,\n    \t\"height\": 170,\n    \t\"weigth\": 65.2,\n    \t\"bloodPressure\" : {\n    \t\t\"sys\": 110,\n    \t\t\"dia\" : 70,\n    \t\t\"level\": \"NORMAL\"\n    \t}\n    }\n}"
+        },
+        {
+          "name": "New session by typing citizen id",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"deviceId\": \"105487111\",\n\t\"citizenId\": \"1101401444873\",\n\t\"citizenIdInput\": \"TYPING\" \n}"
+            },
+            "url": {
+              "raw": "{{url}}/sessions",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "sessions"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Headers",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Methods",
+              "value": ""
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Access-Control-Expose-Headers",
+              "value": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Wed, 05 Jun 2019 05:55:03 GMT"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"107-TKfhgId2XQrLKOeCaLU0iA\""
+            },
+            {
+              "key": "Server",
+              "value": "nginx"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept-Encoding"
+            },
+            {
+              "key": "x-srv-span",
+              "value": "v=1;s=02182d390fa0958b"
+            },
+            {
+              "key": "x-srv-trace",
+              "value": "v=1;t=ec8dd327c00e6d03"
+            },
+            {
+              "key": "Content-Length",
+              "value": "263"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"sessionId\": \"bba8104c-8754-11e9-bc42-526af7764f64\",\n    \"subject\": {\n    \t\"type\": \"Person\",\n    \t\"height\": 170\n    }\n}"
 				}
 			]
 		},
@@ -850,7 +1512,13 @@
 					]
 				},
 				"method": "GET",
-				"header": [],
+        "header": [
+          {
+            "key": "X-Requested-By",
+            "value": "hii/7",
+            "type": "text"
+          }
+        ],
 				"url": {
 					"raw": "{{url}}/result",
 					"host": [
@@ -859,9 +1527,249 @@
 					"path": [
 						"result"
 					]
-				},
-				"description": "ร้องขอผลสรุปของการบริการวัดสัญญาณชีพครั้งนั้นๆ\n"
+        }
 			},
+      "response": [
+        {
+          "name": "Get Result",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/result",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "result"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n\t\"age\" : 43,\n    \"height\" : 170,\n    \"weight\": 70.5,\n    \"bmi\": 24.3944,\n    \"bloodPressure\": {\n        \"sys\": 120.6,\n        \"dia\": 78.5,\n        \"level\": \"RISK\"\n    },\n    \"suggestions\" : [\n    \t{\n    \t\t\"imgUrl\": \"https://generali.co.th/wp-content/uploads/2017/09/GenWellnessContent_Sep2017_%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%94%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%A5%E0%B8%AB%E0%B8%B4%E0%B8%95%E0%B8%AA%E0%B8%B9%E0%B8%87-1.jpg\",\n    \t    \"text\": \"คุณมีความเสี่ยงที่จะเป็นโรคความดันโลหิตสูง ควรออกกำลังกายเป็นประจำ และลดการทานเค็ม\",\n    \t\t\"causes\": [ \"bloodPressure\", \"age\" ]\n    \t},\n    \t{\n    \t\t\"text\": \"นำหนักตัวของคุณอยู่ในเกณฑ์ที่เหมาะสม\",\n    \t\t\"causes\": [ \"bmi\" ]\n    \t}\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get height history",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "86ef264c-8e09-4b84-8e4a-b5be394a3940",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Content-Type is present\", function () {",
+              "    pm.response.to.have.header(\"Content-Type\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Requested-By",
+            "type": "text",
+            "value": "hii/7"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/persons/98349534/height",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "persons",
+            "98349534",
+            "height"
+          ]
+        },
+        "description": "ร้องขอผลสรุปของการบริการวัดสัญญาณชีพครั้งนั้นๆ\n"
+      },
+      "response": [
+        {
+          "name": "Get Result",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/result",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "result"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n\t\"age\" : 43,\n    \"height\" : 170,\n    \"weight\": 70.5,\n    \"bmi\": 24.3944,\n    \"bloodPressure\": {\n        \"sys\": 120.6,\n        \"dia\": 78.5,\n        \"level\": \"RISK\"\n    },\n    \"suggestions\" : [\n    \t{\n    \t\t\"imgUrl\": \"https://generali.co.th/wp-content/uploads/2017/09/GenWellnessContent_Sep2017_%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%94%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%A5%E0%B8%AB%E0%B8%B4%E0%B8%95%E0%B8%AA%E0%B8%B9%E0%B8%87-1.jpg\",\n    \t    \"text\": \"คุณมีความเสี่ยงที่จะเป็นโรคความดันโลหิตสูง ควรออกกำลังกายเป็นประจำ และลดการทานเค็ม\",\n    \t\t\"causes\": [ \"bloodPressure\", \"age\" ]\n    \t},\n    \t{\n    \t\t\"text\": \"นำหนักตัวของคุณอยู่ในเกณฑ์ที่เหมาะสม\",\n    \t\t\"causes\": [ \"bmi\" ]\n    \t}\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get weight history",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "86ef264c-8e09-4b84-8e4a-b5be394a3940",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Content-Type is present\", function () {",
+              "    pm.response.to.have.header(\"Content-Type\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Requested-By",
+            "type": "text",
+            "value": "hii/7"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/persons/98349534/weight",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "persons",
+            "98349534",
+            "weight"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Result",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{url}}/result",
+              "host": [
+                "{{url}}"
+              ],
+              "path": [
+                "result"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n\t\"age\" : 43,\n    \"height\" : 170,\n    \"weight\": 70.5,\n    \"bmi\": 24.3944,\n    \"bloodPressure\": {\n        \"sys\": 120.6,\n        \"dia\": 78.5,\n        \"level\": \"RISK\"\n    },\n    \"suggestions\" : [\n    \t{\n    \t\t\"imgUrl\": \"https://generali.co.th/wp-content/uploads/2017/09/GenWellnessContent_Sep2017_%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1%E0%B8%94%E0%B8%B1%E0%B8%99%E0%B9%82%E0%B8%A5%E0%B8%AB%E0%B8%B4%E0%B8%95%E0%B8%AA%E0%B8%B9%E0%B8%87-1.jpg\",\n    \t    \"text\": \"คุณมีความเสี่ยงที่จะเป็นโรคความดันโลหิตสูง ควรออกกำลังกายเป็นประจำ และลดการทานเค็ม\",\n    \t\t\"causes\": [ \"bloodPressure\", \"age\" ]\n    \t},\n    \t{\n    \t\t\"text\": \"นำหนักตัวของคุณอยู่ในเกณฑ์ที่เหมาะสม\",\n    \t\t\"causes\": [ \"bmi\" ]\n    \t}\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get blood pressure history",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "86ef264c-8e09-4b84-8e4a-b5be394a3940",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Content-Type is present\", function () {",
+              "    pm.response.to.have.header(\"Content-Type\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Requested-By",
+            "type": "text",
+            "value": "hii/7"
+          }
+        ],
+        "url": {
+          "raw": "{{url}}/persons/98349534/bloodpressure",
+          "host": [
+            "{{url}}"
+          ],
+          "path": [
+            "persons",
+            "98349534",
+            "bloodpressure"
+          ]
+        }
+      },
 			"response": [
 				{
 					"name": "Get Result",

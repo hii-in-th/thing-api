@@ -1,0 +1,1538 @@
+{
+  "info": {
+    "_postman_id": "a1ae3805-b699-4c01-be5d-7c1e58cac987",
+    "name": "NHSO-hdfs Test",
+    "description": "rest api สำหรับสวทช.ส่งข้อมูลให้กับสปสช.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Root folder test create file.",
+      "item": [
+        {
+          "name": "Jwt-Auth",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "81488788-1f3c-4369-a064-5cbaacb8dcd7",
+                "exec": [
+                  "pm.test(\"Successful Login return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "",
+                  "pm.test(\"Have token\", function () {",
+                  "    pm.expect(jsonData).to.have.property('token');",
+                  "});",
+                  "",
+                  "pm.environment.set(\"accessToken\", \"JWT \"+jsonData.token);",
+                  "pm.environment.set(\"token\", jsonData.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"username\":\"{{username}}\",\n\t\"password\":\"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/auth-jwt",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "auth-jwt"
+              ]
+            },
+            "description": "api สำหรับ Authen เพื่อนำ token ใช้งาน"
+          },
+          "response": []
+        },
+        {
+          "name": "Init delete test file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "88580b2c-37bd-4345-bef3-ac9f6eeadad0",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/root-test.csv?op=DELETE",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "DELETE"
+                }
+              ]
+            },
+            "description": "api สำหรับลบไฟล์"
+          },
+          "response": []
+        },
+        {
+          "name": "CREATE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8807ae43-6396-4a4d-9623-3fd8fd7f67a3",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/D:/workspace/hii-in-th/thing-api/LICENSE"
+                }
+              ],
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/root-test.csv?op=CREATE",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "CREATE"
+                }
+              ]
+            },
+            "description": "api สำหรับส่งไฟล์มายัง Hadoop\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Read file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1cd81fbf-33d0-4d53-9a1b-351b58af4ead",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/root-test.csv?op=OPEN",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "OPEN"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "LISTSTATUS Check create file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1cd81fbf-33d0-4d53-9a1b-351b58af4ead",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "var file;",
+                  "let files = jsonData.FileStatuses.FileStatus;",
+                  "console.log(flag = false);",
+                  "",
+                  "_.each(files, (arrItem) => {",
+                  "    if (arrItem.pathSuffix === (\"root-test.csv\")){",
+                  "            console.log(flag = true);",
+                  "            file=arrItem;",
+                  "        }",
+                  "});",
+                  "",
+                  "pm.test(\"Have file\", function () {",
+                  "    if (flag === false) { throw new Error(\"Array Does NOT contains\") }",
+                  "    else{ pm.environment.set(\"fileSize\", file.length)  }",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/?op=LISTSTATUS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "LISTSTATUS"
+                }
+              ]
+            },
+            "description": "api สำหรับการแสดงรายละเอียดไฟล์บน Hadoop"
+          },
+          "response": []
+        },
+        {
+          "name": "APPEND",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5d923c61-7651-43d0-a337-7a6ff4453d6d",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/D:/workspace/hii-in-th/thing-api/gradlew.bat"
+                }
+              ],
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/root-test.csv?op=APPEND",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "APPEND"
+                }
+              ]
+            },
+            "description": "api สำหรับส่งข้อมูลต่อมายังไฟล์เดิม"
+          },
+          "response": []
+        },
+        {
+          "name": "LISTSTATUS Check append file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "94627d2b-ce63-40ae-b2f1-9a7e3c7ef1fc",
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "var file;",
+                  "let files = jsonData.FileStatuses.FileStatus;",
+                  "_.each(files, (arrItem) => {",
+                  "    if (arrItem.pathSuffix === (\"root-test.csv\")){",
+                  "            file=arrItem;",
+                  "        }",
+                  "});",
+                  "",
+                  "pm.test(\"Check file size\", function () {",
+                  "    let fileSize=pm.environment.get(\"fileSize\");",
+                  "    console.log(fileSize+\"<\"+file.length)",
+                  "    if(fileSize >= file.length){",
+                  "        throw new Error(\"\");",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/?op=LISTSTATUS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "LISTSTATUS"
+                }
+              ]
+            },
+            "description": "api สำหรับการแสดงรายละเอียดไฟล์บน Hadoop"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e8b98afe-8671-42ac-927b-d2923ddf7603",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/root-test.csv?op=DELETE",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "DELETE"
+                }
+              ]
+            },
+            "description": "api สำหรับลบไฟล์"
+          },
+          "response": []
+        },
+        {
+          "name": "LISTSTATUS Check delete file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "bdba8e25-fa34-4397-aee5-62fd60e3cabc",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "var file;",
+                  "let files = jsonData.FileStatuses.FileStatus;",
+                  "console.log( flag = false)",
+                  "",
+                  "_.each(files, (arrItem) => {",
+                  "    if (arrItem.pathSuffix === (\"root-test.csv\")){",
+                  "            console.log( flag = true);",
+                  "        }",
+                  "});",
+                  "",
+                  "pm.test(\"Check deleter\", function () {",
+                  "    if (flag === true) { throw new Error(\"\") }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/?op=LISTSTATUS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "LISTSTATUS"
+                }
+              ]
+            },
+            "description": "api สำหรับการแสดงรายละเอียดไฟล์บน Hadoop"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "apikey",
+        "apikey": [
+          {
+            "key": "value",
+            "value": "{{accessToken}}",
+            "type": "string"
+          },
+          {
+            "key": "key",
+            "value": "Authorization",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "06685688-fcf2-4967-b87f-a8fbb619511f",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "2d41c7f2-e8f3-48a0-a38f-5237ae32a867",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Root sub folder test create file.",
+      "item": [
+        {
+          "name": "Jwt-Auth",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "81488788-1f3c-4369-a064-5cbaacb8dcd7",
+                "exec": [
+                  "pm.test(\"Successful Login return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "",
+                  "pm.test(\"Have token\", function () {",
+                  "    pm.expect(jsonData).to.have.property('token');",
+                  "});",
+                  "",
+                  "pm.environment.set(\"accessToken\", \"JWT \"+jsonData.token);",
+                  "pm.environment.set(\"token\", jsonData.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"username\":\"{{username}}\",\n\t\"password\":\"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/auth-jwt",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "auth-jwt"
+              ]
+            },
+            "description": "api สำหรับ Authen เพื่อนำ token ใช้งาน"
+          },
+          "response": []
+        },
+        {
+          "name": "MKDIRS",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "39d432e2-8e21-41b5-816d-453610b412b6",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir?op=MKDIRS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "MKDIRS"
+                }
+              ]
+            },
+            "description": "api สำหรับสร้าง directory"
+          },
+          "response": []
+        },
+        {
+          "name": "Init delete test file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "88580b2c-37bd-4345-bef3-ac9f6eeadad0",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/root-test.csv?op=DELETE",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "DELETE"
+                }
+              ]
+            },
+            "description": "api สำหรับลบไฟล์"
+          },
+          "response": []
+        },
+        {
+          "name": "CREATE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8807ae43-6396-4a4d-9623-3fd8fd7f67a3",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/D:/workspace/hii-in-th/thing-api/LICENSE"
+                }
+              ],
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/root-test.csv?op=CREATE",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "CREATE"
+                }
+              ]
+            },
+            "description": "api สำหรับส่งไฟล์มายัง Hadoop\n"
+          },
+          "response": []
+        },
+        {
+          "name": "Read file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1cd81fbf-33d0-4d53-9a1b-351b58af4ead",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/root-test.csv?op=OPEN",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "OPEN"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "LISTSTATUS Check create file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "1cd81fbf-33d0-4d53-9a1b-351b58af4ead",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "var file;",
+                  "let files = jsonData.FileStatuses.FileStatus;",
+                  "console.log(flag = false);",
+                  "",
+                  "_.each(files, (arrItem) => {",
+                  "    if (arrItem.pathSuffix === (\"root-test.csv\")){",
+                  "            console.log(flag = true);",
+                  "            file=arrItem;",
+                  "        }",
+                  "});",
+                  "",
+                  "pm.test(\"Have file\", function () {",
+                  "    if (flag === false) { throw new Error(\"Array Does NOT contains\") }",
+                  "    else{ pm.environment.set(\"fileSize\", file.length)  }",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/?op=LISTSTATUS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "LISTSTATUS"
+                }
+              ]
+            },
+            "description": "api สำหรับการแสดงรายละเอียดไฟล์บน Hadoop"
+          },
+          "response": []
+        },
+        {
+          "name": "APPEND",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5d923c61-7651-43d0-a337-7a6ff4453d6d",
+                "exec": [
+                  "pm.test(\"Successful return code\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/D:/workspace/hii-in-th/thing-api/gradlew.bat"
+                }
+              ],
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/root-test.csv?op=APPEND",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "APPEND"
+                }
+              ]
+            },
+            "description": "api สำหรับส่งข้อมูลต่อมายังไฟล์เดิม"
+          },
+          "response": []
+        },
+        {
+          "name": "LISTSTATUS Check append file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "94627d2b-ce63-40ae-b2f1-9a7e3c7ef1fc",
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "var file;",
+                  "let files = jsonData.FileStatuses.FileStatus;",
+                  "_.each(files, (arrItem) => {",
+                  "    if (arrItem.pathSuffix === (\"root-test.csv\")){",
+                  "            file=arrItem;",
+                  "        }",
+                  "});",
+                  "",
+                  "pm.test(\"Check file size\", function () {",
+                  "    let fileSize=pm.environment.get(\"fileSize\");",
+                  "    console.log(fileSize+\"<\"+file.length)",
+                  "    if(fileSize >= file.length){",
+                  "        throw new Error(\"\");",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/?op=LISTSTATUS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "LISTSTATUS"
+                }
+              ]
+            },
+            "description": "api สำหรับการแสดงรายละเอียดไฟล์บน Hadoop"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "e8b98afe-8671-42ac-927b-d2923ddf7603",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/root-test.csv?op=DELETE",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                "root-test.csv"
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "DELETE"
+                }
+              ]
+            },
+            "description": "api สำหรับลบไฟล์"
+          },
+          "response": []
+        },
+        {
+          "name": "LISTSTATUS Check delete file.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "bdba8e25-fa34-4397-aee5-62fd60e3cabc",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "var file;",
+                  "let files = jsonData.FileStatuses.FileStatus;",
+                  "console.log( flag = false)",
+                  "",
+                  "_.each(files, (arrItem) => {",
+                  "    if (arrItem.pathSuffix === (\"root-test.csv\")){",
+                  "            console.log( flag = true);",
+                  "        }",
+                  "});",
+                  "",
+                  "pm.test(\"Check deleter\", function () {",
+                  "    if (flag === true ) { throw new Error(\"\") }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "Authorization",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Im5zdGRhaGRmc2FwaSIsIm9yaWdfaWF0IjoxNTY4MzY4ODAwLCJ1c2VyX2lkIjo5NTM3LCJlbWFpbCI6IiIsImV4cCI6MTU2ODQ1NTIzNn0.bsnhIDfG0oFBIzoBfMqHvwdBMd5b4wt_dyvOdL2_Gu8",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://hypercare.nhso.go.th/webhdfs/v1/nstda/testdir/?op=LISTSTATUS",
+              "protocol": "https",
+              "host": [
+                "hypercare",
+                "nhso",
+                "go",
+                "th"
+              ],
+              "path": [
+                "webhdfs",
+                "v1",
+                "nstda",
+                "testdir",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "op",
+                  "value": "LISTSTATUS"
+                }
+              ]
+            },
+            "description": "api สำหรับการแสดงรายละเอียดไฟล์บน Hadoop"
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "apikey",
+        "apikey": [
+          {
+            "key": "value",
+            "value": "{{accessToken}}",
+            "type": "string"
+          },
+          {
+            "key": "key",
+            "value": "Authorization",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "06685688-fcf2-4967-b87f-a8fbb619511f",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "2d41c7f2-e8f3-48a0-a38f-5237ae32a867",
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Jwt-Refresh",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"token\":\"{{token}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://hypercare.nhso.go.th/webhdfs/auth-jwt-refresh",
+          "protocol": "https",
+          "host": [
+            "hypercare",
+            "nhso",
+            "go",
+            "th"
+          ],
+          "path": [
+            "webhdfs",
+            "auth-jwt-refresh"
+          ]
+        },
+        "description": "api refresh token jwt"
+      },
+      "response": []
+    },
+    {
+      "name": "Jwt-Verify",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"token\": \"{{token}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://hypercare.nhso.go.th/webhdfs/auth-jwt-verify",
+          "protocol": "https",
+          "host": [
+            "hypercare",
+            "nhso",
+            "go",
+            "th"
+          ],
+          "path": [
+            "webhdfs",
+            "auth-jwt-verify"
+          ]
+        },
+        "description": "api verify token jwt"
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

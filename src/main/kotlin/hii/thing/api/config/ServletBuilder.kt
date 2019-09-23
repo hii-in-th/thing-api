@@ -23,8 +23,8 @@ import org.glassfish.jersey.servlet.ServletContainer
 
 internal object ServletBuilder {
 
-    val PATH_SPEC = "/v1/*"
-    val ROOT_PATH = ""
+    private const val PATH_SPEC = "/v1/*"
+    private const val ROOT_PATH = ""
 
     fun build(): ServletContextHandler {
         return ServletContextHandler(ServletContextHandler.SESSIONS).apply {

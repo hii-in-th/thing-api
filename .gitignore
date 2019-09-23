@@ -5,7 +5,7 @@
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
+**/CreateMasterKey.kt
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -114,10 +114,8 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-gradle/wrapper/gradle-wrapper.properties
-
 ### Gradle Patch ###
 **/build/
 
 # End of https://www.gitignore.io/api/java,intellij
+/src/test/kotlin/hii/thing/api/CreateMasterKey.kt
