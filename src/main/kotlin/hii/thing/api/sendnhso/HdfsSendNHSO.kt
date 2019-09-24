@@ -62,8 +62,7 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
 
     private fun createFile(firePath: String, message: String): Boolean {
         val createApi = "$endPoint$firePath?op=CREATE"
-        val dataPart =
-            InlineDataPart(content = message, name = "file", contentType = "multipart/form-data", filename = "file")
+        val dataPart = createMessageBody(message)
         val (_, response, _) = Fuel.upload(createApi, Method.PUT)
             .add(dataPart)
             .header(authHeader)
@@ -74,8 +73,7 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
     private fun append(dirPath: String, fileName: String, message: String, ret: (Boolean) -> Unit) {
         val appendApi = "$endPoint$dirPath$fileName?op=APPEND"
 
-        val dataPart =
-            InlineDataPart(content = message, name = "file", contentType = "multipart/form-data", filename = "file")
+        val dataPart = createMessageBody(message)
         val (_, appendResponse, _) = Fuel.upload(appendApi)
             .add(dataPart)
             .header(authHeader)
@@ -87,6 +85,14 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
         else ret(false)
 
     }
+
+    private fun createMessageBody(message: String) =
+        InlineDataPart(
+            content = message,
+            name = "file",
+            contentType = "multipart/form-data; charset=UTF-8",
+            filename = "file"
+        )
 
     private val authHeader: Pair<String, String> = "Authorization" to "JWT $token"
 
