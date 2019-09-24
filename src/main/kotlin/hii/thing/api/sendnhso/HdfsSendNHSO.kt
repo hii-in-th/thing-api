@@ -83,7 +83,6 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
         val statusCode = appendResponse.statusCode
         if (statusCode == 200 && length!! == 0L) ret(true)
         else ret(false)
-
     }
 
     private fun createMessageBody(message: String) =
