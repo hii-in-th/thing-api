@@ -45,6 +45,6 @@ data class SendMessage(
         "${height?.height}," +
         "${bp?.sys}," +
         "${bp?.dia}," +
-        "${bp?.pulse}"
+        "${bp?.pulse}\n"
             .replace("null", "")
 }
