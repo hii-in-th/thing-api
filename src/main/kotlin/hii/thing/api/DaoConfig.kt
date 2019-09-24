@@ -52,7 +52,7 @@ import org.joda.time.DateTime
 import redis.clients.jedis.HostAndPort
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.TimeZone
+import java.util.*
 
 /**
  * หากกำหนดค่า HII_ALONE ใน System env จะทำงานแบบ in memory ทั้งหมด
@@ -79,8 +79,8 @@ val dbProperties by lazy {
 
 // Redis configuration.
 val redisHost by lazy { property("RE_HOST") }
-val redisPort by lazy { property("RE_PORT").toInt() }
-val redisExpireSec by lazy { property("RE_EXPIRE_SEC").toInt() }
+val redisPort by lazy { propertyInt("RE_PORT") }
+val redisExpireSec by lazy { propertyInt("RE_EXPIRE_SEC") }
 
 val timeZone = ZoneId.of("Asia/Bangkok")!!
 
@@ -147,4 +147,9 @@ internal fun DateTime.toJavaTime(): LocalDateTime = LocalDateTime.of(
 private fun property(keyName: String): String {
     System.getProperty(keyName)?.let { return it }
     return System.getenv(keyName) ?: "null"
+}
+
+private fun propertyInt(keyName: String): Int {
+    val p = property(keyName)
+    return if (p == "null") 0 else p.toInt()
 }
