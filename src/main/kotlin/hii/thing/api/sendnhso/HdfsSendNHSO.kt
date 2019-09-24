@@ -18,6 +18,8 @@
 package hii.thing.api.sendnhso
 
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.InlineDataPart
+import com.github.kittinunf.fuel.core.Method
 import hii.thing.api.config.GsonJerseyProvider
 import hii.thing.api.config.toJson
 
@@ -34,19 +36,21 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
         autoMkdir: Boolean,
         ret: (Boolean) -> Unit
     ) {
-        val time = message.time
-        val dirPath = "/v1/nstda/kiosk/raw/${time.year}/${time.monthValue}/"
-        val fileName = "${time.dayOfMonth}.csv"
-        val csv = message.toCsv()
+        Thread {
+            val time = message.time
+            val dirPath = "v1/nstda/kiosk/raw/${time.year}/${time.monthValue}/"
+            val fileName = "${time.dayOfMonth}.csv"
+            val csv = message.toCsv()
 
-        append(dirPath, fileName, csv) {
-            if (!it) { // ถ้า append ไม่สำเร็จ
-                if (autoMkdir) mkdir(dirPath)
-                val createStatus = createFile("$dirPath$fileName", csv)
-                ret(createStatus)
-            } else
-                ret(true)
-        }
+            append(dirPath, fileName, csv) {
+                if (!it) { // ถ้า append ไม่สำเร็จ
+                    if (autoMkdir) mkdir(dirPath)
+                    val createStatus = createFile("$dirPath$fileName", csv)
+                    ret(createStatus)
+                } else
+                    ret(true)
+            }
+        }.start()
     }
 
     private fun mkdir(dirPath: String) {
@@ -58,22 +62,30 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
 
     private fun createFile(firePath: String, message: String): Boolean {
         val createApi = "$endPoint$firePath?op=CREATE"
-        val (_, response, _) = Fuel.put(createApi)  // Create file.
+        val dataPart =
+            InlineDataPart(content = message, name = "file", contentType = "multipart/form-data", filename = "file")
+        val (_, response, _) = Fuel.upload(createApi, Method.PUT)
+            .add(dataPart)
             .header(authHeader)
-            .body(message)
             .response()
         return response.statusCode == 201
     }
 
     private fun append(dirPath: String, fileName: String, message: String, ret: (Boolean) -> Unit) {
         val appendApi = "$endPoint$dirPath$fileName?op=APPEND"
-        Fuel.post(appendApi) // Append data.
+
+        val dataPart =
+            InlineDataPart(content = message, name = "file", contentType = "multipart/form-data", filename = "file")
+        val (_, appendResponse, _) = Fuel.upload(appendApi)
+            .add(dataPart)
             .header(authHeader)
-            .body(message)
-            .response { _, appendResponse, _ ->
-                if (appendResponse.statusCode == 404) ret(false)
-                else ret(true)
-            }
+            .response()
+
+        val length = appendResponse.body().length
+        val statusCode = appendResponse.statusCode
+        if (statusCode == 200 && length!! == 0L) ret(true)
+        else ret(false)
+
     }
 
     private val authHeader: Pair<String, String> = "Authorization" to "JWT $token"
@@ -82,7 +94,7 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
         get() {
             if (tokenExpire) {
                 val loginBody = LoginBody(nhsoUsername, nhsoPassword).toJson()
-                val (_, response, _) = Fuel.post("$endPoint/auth-jwt")
+                val (_, response, _) = Fuel.post("${endPoint}auth-jwt")
                     .header("Content-Type" to "application/json")
                     .body(loginBody)
                     .response()
@@ -97,7 +109,7 @@ class HdfsSendNHSO(endPoint: String = nhsoEndpoint) : SendNHSO {
     private val tokenExpire: Boolean
         get() {
             val tokenBody = TokenBody(accessToken).toJson()
-            val (_, response, _) = Fuel.post("$endPoint/auth-jwt-verify")
+            val (_, response, _) = Fuel.post("${endPoint}auth-jwt-verify")
                 .header("Content-Type" to "application/json")
                 .body(tokenBody)
                 .response()
